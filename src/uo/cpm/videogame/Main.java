@@ -12,6 +12,13 @@ import uo.cpm.videogame.ui.VentanaPrincipal;
 
 public class Main {
 
+	/**
+	 * 0 = 5 invasores aleatorios y uno de tipo líder
+	 * 1 = 5 invasores no aleatorios y todos de tipo líder
+	 * 2 = 5 invasores no aleatorios y todos de tipo no líder
+	 */
+	public final static int DEBUG = 0;
+	
 	public static void main(String[] args) 
 	{
 		Game game = new Game();

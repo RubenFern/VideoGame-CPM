@@ -6,16 +6,16 @@ public class Tienda
 	private String nombre;
 	private String icono;
 	
-	public Tienda(String codigo, String nombre, String icono)
+	public Tienda(String codigo, String nombre)
 	{
 		this.codigo = codigo;
 		this.nombre = nombre;
-		this.icono = icono;
+		this.icono = "/img/icono.png";
 	}
 	
 	public Tienda()
 	{
-		this("", "VideoGame", "/img/icono.png");
+		this("", "");
 	}
 
 	public String getCodigo() {
