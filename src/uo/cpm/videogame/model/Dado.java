@@ -1,11 +1,14 @@
 package uo.cpm.videogame.model;
 
-import uo.cpm.videogame.service.Game;
-
 public class Dado 
 {
 	public static int lanzar()
 	{ 
-		return ((int) (Math.random() * Game.NUMERO_INVASORES));
+		return ((int) (Math.random() * Reglas.NUMERO_INVASORES.getValor()));
 	}
+	
+	public static int posicionTablero()
+	{		
+		return ((int) (Math.random() * Tablero.FILAS * Tablero.COLUMNAS));
+	}	
 }

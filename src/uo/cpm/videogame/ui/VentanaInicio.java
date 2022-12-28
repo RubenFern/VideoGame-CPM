@@ -1,6 +1,5 @@
 package uo.cpm.videogame.ui;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -9,13 +8,15 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import uo.cpm.videogame.model.Ticket;
+import uo.cpm.videogame.service.Game;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -33,9 +34,7 @@ public class VentanaInicio extends JPanel
 	private ProcesaResizeInterfaz procesaResizeInterfaz;
 	private ProcesaPulsacionNumeroTicket procesaPulsacionNumeroTicket;
 	
-	private int h1;
-	private int h2;
-	private int texto;
+	private Game game;
 	
 	private JPanel pnNorteInicio;
 	private JPanel pnCentroInicio;
@@ -48,7 +47,7 @@ public class VentanaInicio extends JPanel
 	private JLabel lbNumeroTicket;
 	private JTextField txtNumeroTicket;
 	private JLabel lbCodigoTienda;
-	private JTextField txtoCodigoTienda;
+	private JTextField txtCodigoTienda;
 	private JButton btSiguiente;
 	private JLabel lbBienvenido;
 	private JLabel lbPedirTicket;
@@ -56,15 +55,15 @@ public class VentanaInicio extends JPanel
 	public VentanaInicio(VentanaPrincipal vp) 
 	{
 		this.vp = vp;
+		this.game = vp.getGame();
 		
 		procesaResizeInterfaz = new ProcesaResizeInterfaz();
 		procesaPulsacionNumeroTicket = new ProcesaPulsacionNumeroTicket();
 		procesaBotonSiguiente = new ProcesaAccionBotonSiguiente();
 		
 		// Asigno el tamaño por defecto de los textos
-		tamañoTextos(40, 20, 15);
+		vp.tamañoTextos(40, 20, 17, 15);
 		
-		setBounds(100, 100, 1100, 700);
 		setLayout(new BorderLayout(0, 0));
 		
 		add(getPnNorteInicio(), BorderLayout.NORTH);
@@ -109,24 +108,55 @@ public class VentanaInicio extends JPanel
 	
 	private void mostrarPantallaJuego() 
 	{
-		String codigo = this.getTxtoCodigoTienda().getText();
+		String codigo = this.getTxtCodigoTienda().getText();
 		String numero = this.getTxtNumeroTicket().getText();
 		
 		if ( codigo.equals("") )
 		{
-			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.codigoTicket"), vp.getGame().getNombreTienda(), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.codigoTicketVacio"), game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 		
 		if ( numero.equals("") )
 		{
-			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.numeroTicket"), vp.getGame().getNombreTienda(), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.numeroTicketVacio"), game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 		
-		// Si el ticket es válido muestro la pantalla del juego
-		if ( vp.getGame().ticketValido(codigo, Integer.parseInt( numero )) )
-			vp.mostrarPantallaJuego();
+		// Si no es válido detengo la ejecución
+		if ( !comprobarTicket(codigo, Integer.parseInt(numero)) )
+			return;
+			
+		// Si el ticket es válido muestro la pantalla del juego	
+		vp.mostrarPantallaJuego();
+	}
+	
+	private boolean comprobarTicket(String codigo, int numero)
+	{
+		Ticket ticket = game.ticketValido(codigo, numero);
+		
+		// El ticket no existe
+		if ( ticket == null )
+		{
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.ticketIncorrecto"), game.getNombreTienda(), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		
+		// Inferior a 20 euros
+		if ( ticket.getImporte() < 20 )
+		{
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.ticketImporteInferior"), game.getNombreTienda(), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		
+		// Código de tienda diferente
+		if ( !codigo.equals(game.getCodigoTienda()) )
+		{
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.codigoTiendaIncorrecto"), game.getNombreTienda(), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		
+		return true;
 	}
 	
 	private JPanel getPnNorteInicio() {
@@ -162,7 +192,7 @@ public class VentanaInicio extends JPanel
 	private JPanel getPnCampos() {
 		if (pnCampos == null) {
 			pnCampos = new JPanel();
-			pnCampos.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 15));
+			pnCampos.setLayout(new FlowLayout(FlowLayout.CENTER, 80, 15));
 			pnCampos.add(getPnTicket());
 			pnCampos.add(getPnCodigo());
 		}
@@ -185,22 +215,9 @@ public class VentanaInicio extends JPanel
 			// Tamaño de la etiqueta
 			lbImagenTicket.setBounds( new Rectangle(340, 250) );
 			
-			lbImagenTicket.setIcon( ajustarImagen(lbImagenTicket, "/img/ticket.png") );
+			lbImagenTicket.setIcon( vp.ajustarImagen(lbImagenTicket, "/img/ticket.png") );
 		}
 		return lbImagenTicket;
-	}
-	
-	/**
-	 * Escalona las imágenes según el tamaño de la etiqueta
-	 * 
-	 * @return La imagen escalonada
-	 */
-	private ImageIcon ajustarImagen(JLabel label, String path)
-	{
-		Image imgOriginal = new ImageIcon(VentanaPrincipal.class.getResource(path)).getImage();
-		Image imgEscalada = imgOriginal.getScaledInstance(lbImagenTicket.getWidth(), lbImagenTicket.getHeight(), Image.SCALE_FAST);
-		
-		return new ImageIcon(imgEscalada);
 	}
 	
 	private JPanel getPnTicket() {
@@ -218,7 +235,7 @@ public class VentanaInicio extends JPanel
 			pnCodigo = new JPanel();
 			pnCodigo.setLayout(new GridLayout(2, 1, 0, 0));
 			pnCodigo.add(getLbCodigoTienda());
-			pnCodigo.add(getTxtoCodigoTienda());
+			pnCodigo.add(getTxtCodigoTienda());
 		}
 		return pnCodigo;
 	}
@@ -227,7 +244,7 @@ public class VentanaInicio extends JPanel
 		if (lbNumeroTicket == null) {
 			lbNumeroTicket = new JLabel("");
 			lbNumeroTicket.setBorder(new EmptyBorder(10, 0, 5, 30));
-			lbNumeroTicket.setFont(new Font("Tahoma", Font.PLAIN, texto));
+			lbNumeroTicket.setFont(new Font("Tahoma", Font.PLAIN, vp.getTexto()));
 			lbNumeroTicket.setText( vp.getInternacionalizar().getTexto("inicio.pedirTicket") );
 		}
 		return lbNumeroTicket;
@@ -241,7 +258,10 @@ public class VentanaInicio extends JPanel
 			
 			txtNumeroTicket.setBounds(new Rectangle(0, 0, 300, 50));
 			txtNumeroTicket.setColumns(10);
-			txtNumeroTicket.setFont(new Font("Tahoma", Font.PLAIN, texto));
+			txtNumeroTicket.setFont(new Font("Tahoma", Font.PLAIN, vp.getTexto()));
+			
+			// TODO BORRAR
+			txtNumeroTicket.setText("12345");
 		}
 		return txtNumeroTicket;
 	}
@@ -249,19 +269,22 @@ public class VentanaInicio extends JPanel
 	private JLabel getLbCodigoTienda() {
 		if (lbCodigoTienda == null) {
 			lbCodigoTienda = new JLabel("");
-			lbCodigoTienda.setFont(new Font("Tahoma", Font.PLAIN, texto));
+			lbCodigoTienda.setFont(new Font("Tahoma", Font.PLAIN, vp.getTexto()));
 			lbCodigoTienda.setBorder(new EmptyBorder(10, 0, 5, 30));
 			lbCodigoTienda.setText( vp.getInternacionalizar().getTexto("inicio.pedirCodigo") );
 		}
 		return lbCodigoTienda;
 	}
-	private JTextField getTxtoCodigoTienda() {
-		if (txtoCodigoTienda == null) {
-			txtoCodigoTienda = new JTextField();
-			txtoCodigoTienda.setFont(new Font("Tahoma", Font.PLAIN, texto));
-			txtoCodigoTienda.setColumns(10);
+	private JTextField getTxtCodigoTienda() {
+		if (txtCodigoTienda == null) {
+			txtCodigoTienda = new JTextField();
+			txtCodigoTienda.setFont(new Font("Tahoma", Font.PLAIN, vp.getTexto()));
+			txtCodigoTienda.setColumns(10);
+			
+			// TODO BORRAR
+			txtCodigoTienda.setText("33429_01");
 		}
-		return txtoCodigoTienda;
+		return txtCodigoTienda;
 	}
 	
 	private JLabel getLbBienvenido() {
@@ -269,7 +292,7 @@ public class VentanaInicio extends JPanel
 			lbBienvenido = new JLabel("");
 			lbBienvenido.setBorder(new EmptyBorder(20, 0, 0, 0));
 			lbBienvenido.setHorizontalAlignment(SwingConstants.CENTER);
-			lbBienvenido.setFont(new Font("Tahoma", Font.BOLD, h1));
+			lbBienvenido.setFont(new Font("Tahoma", Font.BOLD, vp.getH1()));
 			lbBienvenido.setText( vp.getInternacionalizar().getTexto("inicio.bienvendida") );
 		}
 		return lbBienvenido;
@@ -277,7 +300,7 @@ public class VentanaInicio extends JPanel
 	private JLabel getLbPedirTicket() {
 		if (lbPedirTicket == null) {
 			lbPedirTicket = new JLabel("");
-			lbPedirTicket.setFont(new Font("Tahoma", Font.PLAIN, h2));
+			lbPedirTicket.setFont(new Font("Tahoma", Font.PLAIN, vp.getH2()));
 			lbPedirTicket.setHorizontalAlignment(SwingConstants.CENTER);
 			lbPedirTicket.setText( vp.getInternacionalizar().getTexto("inicio.informacionJuego") );
 		}
@@ -287,7 +310,7 @@ public class VentanaInicio extends JPanel
 	private JButton getBtSiguiente() {
 		if (btSiguiente == null) {
 			btSiguiente = new JButton("");
-			btSiguiente.setFont(new Font("Tahoma", Font.PLAIN, texto));
+			btSiguiente.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			btSiguiente.setBackground(new Color(0, 204, 255));
 			btSiguiente.setBorder(new EmptyBorder(5, 10, 5, 10));
 			btSiguiente.setActionCommand(VentanaPrincipal.PANTALLA_JUEGO);
@@ -299,28 +322,20 @@ public class VentanaInicio extends JPanel
 		return btSiguiente;
 	}
 	
-	private void tamañoTextos(int h1, int h2, int texto)
-	{
-		this.h1 = h1;
-		this.h2 = h2;
-		this.texto = texto;
-	}
-	
 	private void ajustaTextos()
 	{
+		getLbBienvenido().setFont(new Font("Tahoma", Font.BOLD, vp.getH1()));
+		getLbPedirTicket().setFont(new Font("Tahoma", Font.PLAIN, vp.getH2()));
+		
+		vp.tamañoTextos(40, 20, 17, 15);
+		getLbBienvenido().setBorder(new EmptyBorder(20, 0, 0, 0));
+		
 		if ( this.getWidth() < 980 )
-			tamañoTextos(32, 18, 15);
-		else
-			tamañoTextos(40, 20, 15);
+			vp.tamañoTextos(32, 18, 16, 15);	
 			
 		// Aumento el margen superior cuando está en pantalla completa
 		if ( this.getWidth() > 1300 && this.getHeight() > 800 )
 			getLbBienvenido().setBorder(new EmptyBorder(80, 0, 0, 0));
-		
-		getLbBienvenido().setFont(new Font("Tahoma", Font.BOLD, h1));
-		getLbPedirTicket().setFont(new Font("Tahoma", Font.PLAIN, h2));
-		
-		//System.out.println(this.getWidth());
 	}
 	
 	private void ajustarImagenTicket()

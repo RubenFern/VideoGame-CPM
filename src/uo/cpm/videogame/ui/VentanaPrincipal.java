@@ -1,6 +1,8 @@
 package uo.cpm.videogame.ui;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -9,6 +11,7 @@ import uo.cpm.videogame.service.Internacionalizar;
 
 import java.awt.Toolkit;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import javax.swing.JMenuBar;
@@ -26,14 +29,19 @@ public class VentanaPrincipal extends JFrame
 	public static final String PANTALLA_CARRITO = "pantallaCarrito";
 	public static final String PANTALLA_FINAL = "pantallaFinal";
 	
+	private int h1;
+	private int h2;
+	private int h3;
+	private int texto;
+	
 	private Game game;
 	private VentanaInicio pnPantallaInicio;
+	private VentanaJuego pnPantallaJuego;
 	
 	private Internacionalizar internacionalizar;
 	
 	private JPanel contentPane;
 	private JPanel pnPantallas;
-	private JPanel pnPantallaJuego;
 	private JPanel pnPantallaPremios;
 	private JPanel pnPantallaCarrito;
 	private JPanel pnPantallaFinal;
@@ -47,12 +55,15 @@ public class VentanaPrincipal extends JFrame
 		this.setGame(game);
 		
 		internacionalizar = new Internacionalizar();
+		
+		// Pantallas
 		pnPantallaInicio = new VentanaInicio(this);
+		pnPantallaJuego = new VentanaJuego(this);
 		
 		setTitle( game.getNombreTienda() );
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource( game.getIconoTienda() )));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1100, 700);
+		setBounds(100, 100, 1100, 800);
 		setLocationRelativeTo(null);
 		setJMenuBar(getBarraMenu());
 		contentPane = new JPanel();
@@ -74,6 +85,23 @@ public class VentanaPrincipal extends JFrame
 	
 	public void setGame(Game game) {
 		this.game = game;
+	}
+	
+	public int getH1() {
+		return h1;
+	}
+
+	public int getH2() {
+		return h2;
+	}
+
+	public int getH3()
+	{
+		return h3;
+	}
+	
+	public int getTexto() {
+		return texto;
 	}
 
 	protected void mostrarPantallaInicio() 
@@ -101,6 +129,27 @@ public class VentanaPrincipal extends JFrame
 		( (CardLayout) getPnPantallas().getLayout()).show(getPnPantallas(), PANTALLA_FINAL);
 	}
 	
+	protected void tamañoTextos(int h1, int h2, int h3, int texto)
+	{
+		this.h1 = h1;
+		this.h2 = h2;
+		this.h3 = h3;
+		this.texto = texto;
+	}
+	
+	/**
+	 * Escalona las imágenes según el tamaño de la etiqueta
+	 * 
+	 * @return La imagen escalonada
+	 */
+	protected ImageIcon ajustarImagen(JLabel label, String path)
+	{
+		Image imgOriginal = new ImageIcon(VentanaPrincipal.class.getResource(path)).getImage();
+		Image imgEscalada = imgOriginal.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_REPLICATE);
+		
+		return new ImageIcon(imgEscalada);
+	}
+	
 	private JPanel getPnPantallas() 
 	{
 		if (pnPantallas == null)
@@ -108,21 +157,13 @@ public class VentanaPrincipal extends JFrame
 			pnPantallas = new JPanel();
 			pnPantallas.setLayout(new CardLayout(0, 0));
 			pnPantallas.add(pnPantallaInicio, PANTALLA_INICIO);
-			pnPantallas.add(getPnPantallaJuego(), PANTALLA_JUEGO);
+			pnPantallas.add(pnPantallaJuego, PANTALLA_JUEGO);
 			pnPantallas.add(getPnPantallaPremios(), PANTALLA_PREMIOS);
 			pnPantallas.add(getPnPantallaCarrito(), PANTALLA_CARRITO);
 			pnPantallas.add(getPnPantallaFinal(), PANTALLA_FINAL);
 		}
 		
 		return pnPantallas;
-	}
-	
-	private JPanel getPnPantallaJuego() {
-		if (pnPantallaJuego == null) {
-			pnPantallaJuego = new JPanel();
-			pnPantallaJuego.setBackground(Color.YELLOW);
-		}
-		return pnPantallaJuego;
 	}
 	
 	private JPanel getPnPantallaPremios() {
@@ -149,8 +190,6 @@ public class VentanaPrincipal extends JFrame
 		return pnPantallaFinal;
 	}
 	
-	
-
 	private JMenuBar getBarraMenu() {
 		if (MenuBar == null) {
 			MenuBar = new JMenuBar();
@@ -173,17 +212,4 @@ public class VentanaPrincipal extends JFrame
 		}
 		return miAcercaDe;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

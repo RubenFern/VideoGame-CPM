@@ -3,36 +3,57 @@ package uo.cpm.videogame.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import uo.cpm.videogame.Main;
-import uo.cpm.videogame.model.Dado;
+import uo.cpm.videogame.model.Casilla;
 import uo.cpm.videogame.model.Invasor;
+import uo.cpm.videogame.model.Tablero;
 import uo.cpm.videogame.model.Ticket;
 import uo.cpm.videogame.model.Tienda;
 import uo.cpm.videogame.util.FileUtil;
 
 public class Game 
 {
-	public static final int NUMERO_INVASORES = 8;
-	public static final int POSICION_LIDER = 0;
-	public static final int INVASORES_POR_RONDA = 5;
-	public static final int RONDAS = 10;
-	
-	private Invasor[] invasores;
 	private Tienda tienda;
+	private Tablero tablero;
 	private List<Ticket> listaTickets;
+	private int ronda;
+	private Casilla casilla;
+	private boolean arrastra;
 	
 	public Game()
 	{	
-		// Genero el total de invasores del juego
-		generarInvasores();
-		
+		// Cargo la información de la tienda y de los tickets
 		tienda = new Tienda();
+		tablero = new Tablero();
 		listaTickets = new ArrayList<Ticket>();
+		casilla = new Casilla();		
 		
 		FileUtil.cargarDatosTienda("files/config.dat", tienda);
 		FileUtil.cargarDatosTickets("files/tickets.dat", listaTickets);
+		
+		this.setRonda(1);
 	}
 	
+	public int getRonda() {
+		return ronda;
+	}
+
+	public void setRonda(int ronda) {
+		this.ronda = ronda;
+	}
+	
+	public boolean isArrastra() {
+		return arrastra;
+	}
+
+	public void setArrastra(boolean arrastra) {
+		this.arrastra = arrastra;
+	}
+	
+	public Invasor getInvasor(int numeroInvasor)
+	{
+		return tablero.getInvasores()[numeroInvasor - 1];
+	}
+
 	public void inicializar()
 	{
 		// Cargo de nuevo los tickets disponibles
@@ -55,68 +76,56 @@ public class Game
 		return tienda.getIcono();
 	}
 	
-	/**
-	 * Crea un array con el número total de invasores que participan en el juego
-	 */
-	public void generarInvasores()
+	public Invasor[] getTablero()
 	{
-		invasores = new Invasor[NUMERO_INVASORES];
-		
-		// Cargo los invasores
-		for ( int i = 0; i < invasores.length; i++ )
-			invasores[i] = new Invasor( (i + 1), false );
-		
-		// Asigno el líder de la invasión
-		invasores[POSICION_LIDER].setLider(true);
+		return tablero.getTablero();
 	}
 	
-	/**
-	 * Genera al azar 5 invasores eligiendolos del array de invasores
-	 * 
-	 * @return Los invasores de cada ronda
-	 */
 	public Invasor[] getRondaInvasores()
 	{
-		Invasor[] rondaInvasores = new Invasor[INVASORES_POR_RONDA];
-		
-		switch ( Main.DEBUG ) 
-		{
-			case 0: 
-			{
-				for ( int i = 0; i < rondaInvasores.length; i++ )
-					rondaInvasores[i] = invasores[Dado.lanzar()];
-			
-				break;
-			}
-			case 1: 
-			{
-				for ( int i = 0; i < rondaInvasores.length; i++ )
-				{
-					rondaInvasores[i] = invasores[0];
-					rondaInvasores[i].setLider(true);
-				}
-				break;
-			}
-			case 2:
-			{
-				for ( int i = 0; i < rondaInvasores.length; i++ )
-				{
-					rondaInvasores[i] = invasores[0];
-					rondaInvasores[i].setLider(false);
-				}
-				break;
-			}
-		}	
-		
-		return rondaInvasores;
+		return tablero.getRondaInvasores();
 	}
 	
-	public boolean ticketValido(String codigo, int numero)
+	public Casilla getCasilla()
 	{
-		return false;
+		return casilla;
 	}
 	
+	public void setNumeroInvasorCasilla(int numeroInvasor)
+	{
+		casilla.setNumeroInvasor(numeroInvasor);
+	}
 	
+	public void setPosicionTableroCasilla(int posicionTablero)
+	{
+		casilla.setPosicionTablero(posicionTablero);
+	}
+	
+	public void añadirInvasorAlTablero(Casilla casilla)
+	{
+		tablero.añadirInvasorAlTablero(casilla);
+	}
+	
+	/**
+	 * Recorre la lista de tickets y cuando encuentra un ticket con el mismo número de ticket lo devuelve
+	 * 
+	 * @param codigo Código del ticket
+	 * @param numero Número del ticket
+	 * @return Devuelve el ticket encontrado o null si no lo ha encontrado
+	 */
+	public Ticket ticketValido(String codigo, int numero)
+	{
+		for ( Ticket t : listaTickets )
+			if ( t.getNumero() == numero )
+				return t;
+		
+		return null;
+	}
+	
+	public boolean EsPosicionValida(int posicion)
+	{
+		return tablero.EsPosicionValida(posicion);
+	}
 	
 	
 }

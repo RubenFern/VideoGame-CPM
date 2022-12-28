@@ -1,31 +1,35 @@
 package uo.cpm.videogame.model;
 
+
 public class Casilla 
 {
-	private String imagen;
-	private int numero;
+	private int numeroInvasor;
+	private int posicionTablero;
 	
-	public Casilla(String imagen, int numero)
+	public Casilla(int numeroInvasor, int posicionTablero) 
 	{
-		this.imagen = imagen;
-		this.numero = numero;
-	}
-
-	public String getImagen() {
-		return imagen;
-	}
-
-	public void setImagen(String imagen) {
-		this.imagen = imagen;
-	}
-
-	public int getNumero() {
-		return numero;
-	}
-
-	public void setNumero(int numero) {
-		this.numero = numero;
+		this.numeroInvasor = numeroInvasor;
+		this.posicionTablero = posicionTablero;
 	}
 	
-	
+	public Casilla()
+	{
+		this(0, 0);
+	}
+
+	public int getNumeroInvasor() {
+		return numeroInvasor;
+	}
+
+	public void setNumeroInvasor(int numeroInvasor) {
+		this.numeroInvasor = numeroInvasor;
+	}
+
+	public int getPosicionTablero() {
+		return posicionTablero;
+	}
+
+	public void setPosicionTablero(int posicionTablero) {
+		this.posicionTablero = posicionTablero;
+	}
 }
