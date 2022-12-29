@@ -8,13 +8,14 @@ public class Tablero
 	public static final int COLUMNAS = 7;
 	
 	private boolean[] posicionesValidas;
-	private Invasor[] tablero;
+	private Casilla[] tablero;
 	private Invasor[] invasores;
+	private int numeroInvasoresEnTablero;
 	
 	public Tablero()
 	{
 		posicionesValidas = new boolean[ this.getDimensionTablero() ]; 
-		tablero = new Invasor[ this.getDimensionTablero() ];
+		tablero = new Casilla[ this.getDimensionTablero() ];
 		
 		// Genero el tablero que contiene las posiciones válidas
 		generarPosicionesValidas();
@@ -25,10 +26,10 @@ public class Tablero
 		// Genero el tablero con los invasores iniciales
 		generarTablero();
 		
-		imprimirTablero();
+		//imprimirTablero();
 	}
 	
-	public Invasor[] getTablero() {
+	public Casilla[] getTablero() {
 		return tablero;
 	}
 	
@@ -37,14 +38,28 @@ public class Tablero
 		return invasores;
 	}
 	
+	public int getNumeroInvasoresEnTablero() {
+		return numeroInvasoresEnTablero;
+	}
+
+	public void setNumeroInvasoresEnTablero(int numeroInvasoresEnTablero) {
+		this.numeroInvasoresEnTablero = numeroInvasoresEnTablero;
+	}
+
 	public void añadirInvasorAlTablero(Casilla casilla)
 	{
-		int numeroInvasor = casilla.getNumeroInvasor();
+		int numeroInvasor = casilla.getInvasor().getNumero();
 		int posicionTablero = casilla.getPosicionTablero();
 		
-		tablero[posicionTablero] = invasores[numeroInvasor - 1];
-		
-		imprimirTablero();
+		// Añado el invasor en el tablero y asigno su posición como no válida
+		if ( posicionesValidas[posicionTablero] )
+		{
+			tablero[posicionTablero].setInvasor( invasores[numeroInvasor - 1] );
+			posicionesValidas[posicionTablero] = false;
+			
+			this.setNumeroInvasoresEnTablero( this.getNumeroInvasoresEnTablero() + 1 );
+		}
+		//imprimirTablero();
 	}
 	
 	public int getDimensionTablero()
@@ -118,8 +133,16 @@ public class Tablero
 		// Genero los 5 invasores iniciales que se colocan en el tablero
 		Invasor[] ronda = this.getRondaInvasores();
 		
+		// Genero el tablero
+		for ( int i = 0; i < this.getDimensionTablero(); i++ )
+			tablero[i] = new Casilla();
+		
+		// Genero los 5 invasores inicialies
 		for ( int i = 0; i < ronda.length; i++ )
 			this.colocarInvasor(ronda[i]);
+		
+		// Sumo a 5 los invasores del tablero
+		this.setNumeroInvasoresEnTablero( ronda.length );
 	}
 	
 	/**
@@ -132,10 +155,10 @@ public class Tablero
 		int posicion = Dado.posicionTablero();
 		
 		// Si es una posición inválida o ya tiene un invasor vuelvo a generar posición
-		while ( !EsPosicionValida(posicion) || tablero[posicion] != null )
+		while ( !EsPosicionValida(posicion) || tablero[posicion].getInvasor() != null )
 			posicion = Dado.posicionTablero();
 		
-		tablero[posicion] = invasor;
+		tablero[posicion].setInvasor(invasor);
 	}
 	
 	/**
@@ -179,16 +202,195 @@ public class Tablero
 		return rondaInvasores;
 	}
 	
-	private void imprimirTablero()
+	public void imprimirTablero()
+	{
+		System.out.println("Número de invasores: " + this.getNumeroInvasoresEnTablero());
+		
+		for ( int i = 0; i < tablero.length; i++ )
+		{
+			if ( i % 7 == 0 && i != 0 )
+				System.out.println();
+			
+			System.out.print( tablero[i].getInvasor() + " " );
+		}
+		System.out.println();
+		System.out.println();
+	}
+	
+	public void imprPosicionesValidas()
 	{
 		for ( int i = 0; i < tablero.length; i++ )
 		{
 			if ( i % 7 == 0 && i != 0 )
 				System.out.println();
 			
-			System.out.print( tablero[i] + " " );
+			System.out.print( posicionesValidas[i] + " " );
 		}
 		System.out.println();
 		System.out.println();
+	}
+	
+	public int eliminarColonias()
+	{
+		int puntosTotales = 0;
+		
+		/**
+		 * Recorro el tablero, cuando encuentro un invasor comprueba si tiene un invasor de su mismo tipo alrdededor
+		 * Si lo tiene llamo a calcular puntos
+		 */
+		for ( int i = 0; i < this.getDimensionTablero(); i++ )
+			// Si hay un invasor y la casilla no se marcó para borrar compruebo si tiene colonias
+			if ( tablero[i].getInvasor() != null && !tablero[i].isBorrar() )
+					puntosTotales += comprobarColonia( tablero[i].getInvasor(), i );
+
+		// Borro las colonias marcadas
+		if ( puntosTotales > 0 )
+			actualizarTablero();
+		
+		return puntosTotales;
+	}
+	
+	/**
+	 * Borra los invasores marcados para borrar y reinicia su estado
+	 */
+	private void actualizarTablero()
+	{
+		for ( int i = 0; i < this.getDimensionTablero(); i++ )
+			if ( tablero[i].isBorrar() )
+			{
+				posicionesValidas[i] = true;
+				tablero[i].setInvasor(null);
+				tablero[i].setBorrar(false);
+				this.setNumeroInvasoresEnTablero( this.getNumeroInvasoresEnTablero() - 1 );
+			}
+		
+		// Resto uno más para compensar con el que se añade en el drag and drop
+		this.setNumeroInvasoresEnTablero( this.getNumeroInvasoresEnTablero() - 1 );
+	}
+	
+	/**
+	 * Cuando se encuentra en el tablero un invasor que tiene un invasor adyacente del mismo tipo se llama a esta función
+	 * que calcula el tamaño de la colonia y suma los puntos
+	 * 
+	 * @return Los puntos de una colonia de invasores
+	 */
+	private int comprobarColonia(Invasor invasor, int posicionTablero)
+	{
+		int derecha = posicionTablero + 1;
+		int abajo = posicionTablero + COLUMNAS;
+		
+		int puntos = 0;
+		
+		// Si tiene un invasor igual a su derecha
+		if ( derecha < this.getDimensionTablero() && tablero[derecha].getInvasor() != null && tablero[derecha].getInvasor().equals(invasor) )
+		{
+			int tamañoColonia = this.calcularTamañoColoniaFila(invasor, derecha);
+			
+			if ( tamañoColonia >= 3 )
+			{
+				marcarCasillasBorrado( posicionTablero, tamañoColonia, 1 );
+				
+				puntos += getPuntuacion(tamañoColonia);
+			}
+		}
+		
+		if ( abajo < this.getDimensionTablero() && tablero[abajo].getInvasor() != null && tablero[abajo].getInvasor().equals(invasor) )
+		{
+			int tamañoColonia = this.calcularTamañoColoniaColumna(invasor, abajo);
+			
+			if ( tamañoColonia >= 3 )
+			{
+				marcarCasillasBorrado( posicionTablero, tamañoColonia, COLUMNAS );
+				
+				puntos += getPuntuacion(tamañoColonia);
+			}
+		}
+		
+		/*for ( int i = 0; i < tablero.length; i++ )
+		{
+			if ( i % 7 == 0 && i != 0 )
+				System.out.println();
+			
+			System.out.print( tablero[i].isBorrar() + " " );
+		}
+		System.out.println();
+		System.out.println();*/
+		
+		return puntos;
+	}
+	
+	private void marcarCasillasBorrado(int posicionTablero, int tamañoColonia, int suma)
+	{
+		for ( int i = 0; i < tamañoColonia; i++ )
+		{
+			//System.out.println("-------------------" + (posicionTablero + (suma * i)));
+
+			tablero[(posicionTablero + (suma * i))].setBorrar(true);
+		}
+	}
+	
+	private int getPuntuacion(int tamañoColonia)
+	{
+		if ( tamañoColonia == Puntuacion.COLONIA_3.getTamaño() )
+			return Puntuacion.COLONIA_3.getPuntos();
+		
+		if ( tamañoColonia == Puntuacion.COLONIA_4.getTamaño() )
+			return Puntuacion.COLONIA_4.getPuntos();
+		
+		if ( tamañoColonia == Puntuacion.COLONIA_5.getTamaño() )
+			return Puntuacion.COLONIA_5.getPuntos();
+		
+		if ( tamañoColonia == Puntuacion.COLONIA_6.getTamaño() )
+			return Puntuacion.COLONIA_6.getPuntos();
+		
+		if ( tamañoColonia == Puntuacion.COLONIA_7.getTamaño() )
+			return Puntuacion.COLONIA_7.getPuntos();
+		
+		return 0;
+	}
+	
+	/**
+	 * Calcula el número de invasores iguales en la misma fila
+	 * 
+	 * @param invasor
+	 * @return
+	 */
+	private int calcularTamañoColoniaFila(Invasor invasor, int posicionTablero)
+	{
+		// Cuando entra en el método siempre hay 2 invasores iguales
+		int tamañoColonia = 2;
+		int i = 1;
+		
+		// Mientras coincida el invasor y siga en la misma fila
+		while ( tablero[posicionTablero + i].getInvasor() != null && tablero[posicionTablero + i].getInvasor().equals(invasor) && (posicionTablero + i) % 7 != 0 )
+		{
+			tamañoColonia++;
+			i++;
+		}
+			
+		return tamañoColonia;
+	}
+	
+	/**
+	 * Calcula el número de invasores iguales en la misma fila
+	 * 
+	 * @param invasor
+	 * @return
+	 */
+	private int calcularTamañoColoniaColumna(Invasor invasor, int posicionTablero)
+	{
+		// Cuando entra en el método siempre hay 2 invasores iguales
+		int tamañoColonia = 2;
+		int i = COLUMNAS;
+		
+		// Mientras coincida el invasor y siga en la misma fila
+		while ((posicionTablero + i) < this.getDimensionTablero() && tablero[posicionTablero + i].getInvasor() != null
+				&& tablero[posicionTablero + i].getInvasor().equals(invasor)) 
+		{
+			tamañoColonia++;
+			i += COLUMNAS;
+		}
+			
+		return tamañoColonia;
 	}
 }

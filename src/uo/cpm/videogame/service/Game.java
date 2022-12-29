@@ -5,6 +5,7 @@ import java.util.List;
 
 import uo.cpm.videogame.model.Casilla;
 import uo.cpm.videogame.model.Invasor;
+import uo.cpm.videogame.model.Reglas;
 import uo.cpm.videogame.model.Tablero;
 import uo.cpm.videogame.model.Ticket;
 import uo.cpm.videogame.model.Tienda;
@@ -16,6 +17,8 @@ public class Game
 	private Tablero tablero;
 	private List<Ticket> listaTickets;
 	private int ronda;
+	private int puntos;
+	private int movimientos;
 	private Casilla casilla;
 	private boolean arrastra;
 	
@@ -31,6 +34,7 @@ public class Game
 		FileUtil.cargarDatosTickets("files/tickets.dat", listaTickets);
 		
 		this.setRonda(1);
+		this.setMovimientos( Reglas.INVASORES_POR_RONDA.getValor() );
 	}
 	
 	public int getRonda() {
@@ -41,6 +45,27 @@ public class Game
 		this.ronda = ronda;
 	}
 	
+	public void aumentarRonda()
+	{
+		this.setRonda( this.getRonda() + 1 );
+	}
+	
+	public int getPuntos() {
+		return puntos;
+	}
+
+	public void setPuntos(int puntos) {
+		this.puntos = puntos;
+	}
+	
+	public int getMovimientos() {
+		return movimientos;
+	}
+
+	public void setMovimientos(int movimientos) {
+		this.movimientos = movimientos;
+	}
+
 	public boolean isArrastra() {
 		return arrastra;
 	}
@@ -76,7 +101,7 @@ public class Game
 		return tienda.getIcono();
 	}
 	
-	public Invasor[] getTablero()
+	public Casilla[] getTablero()
 	{
 		return tablero.getTablero();
 	}
@@ -93,7 +118,7 @@ public class Game
 	
 	public void setNumeroInvasorCasilla(int numeroInvasor)
 	{
-		casilla.setNumeroInvasor(numeroInvasor);
+		casilla.setInvasor( this.getInvasor(numeroInvasor) );
 	}
 	
 	public void setPosicionTableroCasilla(int posicionTablero)
@@ -127,5 +152,29 @@ public class Game
 		return tablero.EsPosicionValida(posicion);
 	}
 	
+	public int getNumeroInvasoresTablero()
+	{
+		return tablero.getNumeroInvasoresEnTablero();
+	}
 	
+	public int getNumeroInvasoresTableroMaximo()
+	{
+		// El tamaño total del tablero menos las 5 posiciones no válidas del tablero
+		return tablero.getDimensionTablero() - Reglas.NUM_POSICIONES_NO_VALIDAS.getValor();
+	}
+	
+	public int eliminarColonias()
+	{
+		return tablero.eliminarColonias();
+	}
+	
+	public void imprimirTablero()
+	{
+		tablero.imprimirTablero();
+	}
+	
+	public void imprPosicionesValidas()
+	{
+		tablero.imprPosicionesValidas();
+	}
 }

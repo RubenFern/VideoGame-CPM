@@ -41,7 +41,7 @@ public class Invasor
 
 	@Override
 	public String toString() {
-		return "Invasor [imagen=" + imagen + ", numero=" + numero + ", lider=" + lider + "]";
+		return "Invasor-" + numero;
 	}	
 	
 }

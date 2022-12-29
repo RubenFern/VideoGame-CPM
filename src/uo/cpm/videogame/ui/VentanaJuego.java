@@ -10,8 +10,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 
 import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
@@ -21,11 +21,14 @@ import java.awt.Font;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import uo.cpm.videogame.model.Casilla;
 import uo.cpm.videogame.model.Invasor;
 import uo.cpm.videogame.model.Reglas;
 import uo.cpm.videogame.service.Game;
 
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaJuego extends JPanel 
 {
@@ -115,6 +118,9 @@ public class VentanaJuego extends JPanel
 					int posicionTablero = lbPulsada.getId();
 					game.setPosicionTableroCasilla(posicionTablero);
 					
+					// Resto 1 movimiento en la ronda
+					game.setMovimientos( game.getMovimientos() - 1 );
+					System.out.println("------ MOVIMIENTOS: " + game.getMovimientos());
 					// Añado el invasor en la casilla
 					game.añadirInvasorAlTablero( game.getCasilla() );
 					
@@ -122,12 +128,16 @@ public class VentanaJuego extends JPanel
 					marcarMovimientoUsado(movimiento);
 					
 					// Si el invasor movido es el líder lo marco
-					if ( game.getCasilla().getNumeroInvasor() == 1 )
+					if ( game.getCasilla().getInvasor().getNumero() == 1 )
 						marcarLider(game.getCasilla().getPosicionTablero());
 					
 					// Compruebo el estado de la ronda
-					ronda();
+					if ( game.getMovimientos() == 0 )
+						siguienteRonda();
 										
+					game.imprimirTablero();
+					game.imprPosicionesValidas();
+					
 					game.setArrastra(false);
 				}
 			}
@@ -175,9 +185,78 @@ public class VentanaJuego extends JPanel
 	 * Comprueba el número de movimientos del usuario, cuado llegan a 0 pasa a la siguiente ronda
 	 * y comprueba los puntos 
 	 */
-	private void ronda()
+	private void siguienteRonda()
 	{
+		// Aumento la ronda
+		game.aumentarRonda();
+		this.getLbRonda().setText( String.format("%s %d/%d", vp.getInternacionalizar().getTexto("juego.ronda"), game.getRonda(), Reglas.RONDAS.getValor() ) );
 		
+		int puntosGanados = eliminarColonias();
+		
+		// Si retornó puntos significa que hubo eliminación de colonias
+		if ( puntosGanados > 0 )
+		{		
+			this.getPnTablero().removeAll();
+			pintaTablero();
+			
+			game.setPuntos( game.getPuntos() + puntosGanados );
+			this.getTxtPuntos().setText( String.format("%d", game.getPuntos() ));
+		}
+		
+		// Genero nuevo invasores
+		generarNuevosMovimientos();
+			
+		if ( compruebaFin() )
+			return;		
+	}
+	
+	private int eliminarColonias()
+	{
+		return game.eliminarColonias();
+	}
+	
+	private boolean compruebaFin()
+	{
+		// Si se ha llenado el tablero de invasores (aunque esté en la ronda 10 finaliza con derrota)
+		if ( game.getNumeroInvasoresTablero() == game.getNumeroInvasoresTableroMaximo() )
+		{
+			finalizarPartida(false);
+			return true;
+		}
+		
+		// Superó la ronda 10
+		if ( game.getRonda() > Reglas.RONDAS.getValor() )
+		{
+			finalizarPartida(true);
+			return true;
+		}
+		
+		// Elimino una colonia de más de 5 líderes
+		
+		return false;
+	}
+	
+	private void generarNuevosMovimientos()
+	{
+		game.setMovimientos( Reglas.INVASORES_POR_RONDA.getValor() );
+		
+		this.getPnMovimientos().removeAll();
+		pintaMovimientos();
+	}
+	
+	private void finalizarPartida(boolean victoria)
+	{
+		if ( victoria )
+		{
+			
+		}
+		else
+		{
+			game.setPuntos(0);
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("juego.derrota"), game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE);
+
+			// Inicializa y vuelve a la pantalla puntos
+		}
 	}
 	
 	private JPanel getPnNorte() {
@@ -221,6 +300,11 @@ public class VentanaJuego extends JPanel
 	private JButton getBtSalir() {
 		if (btSalir == null) {
 			btSalir = new JButton("");
+			btSalir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println( game.getNumeroInvasoresTablero() );
+				}
+			});
 			btSalir.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			btSalir.setText(vp.getInternacionalizar().getTexto("boton.salir"));
 		}
@@ -258,7 +342,7 @@ public class VentanaJuego extends JPanel
 		if (lbRonda == null) {
 			lbRonda = new JLabel("");
 			lbRonda.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
-			lbRonda.setText( String.format("%s %d/%d", vp.getInternacionalizar().getTexto("juego.ronda"), game.getRonda(), Reglas.RONDAS.getValor()));
+			lbRonda.setText( String.format("%s %d/%d", vp.getInternacionalizar().getTexto("juego.ronda"), game.getRonda(), Reglas.RONDAS.getValor()) );
 		}
 		return lbRonda;
 	}
@@ -266,7 +350,7 @@ public class VentanaJuego extends JPanel
 		if (txtPuntos == null) {
 			txtPuntos = new JTextField();
 			txtPuntos.setHorizontalAlignment(SwingConstants.CENTER);
-			txtPuntos.setText("0");
+			txtPuntos.setText( String.format("%d", game.getPuntos()) );
 			txtPuntos.setEditable(false);
 			txtPuntos.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			txtPuntos.setColumns(10);
@@ -280,13 +364,26 @@ public class VentanaJuego extends JPanel
 			pnTablero.setLayout(new GridLayout(7, 7, 0, 0));
 			pnTablero.setBackground(Color.BLACK);
 			
-			Invasor[] tablero = game.getTablero();
-			
-			for ( int i = 0; i < tablero.length; i++ )
-				pnTablero.add(pintaCasilla( tablero[i], game.EsPosicionValida(i), i ) );	
+			pintaTablero();
 		}
 		
 		return pnTablero;
+	}
+	
+	private void pintaTablero()
+	{
+		Casilla[] tablero = game.getTablero();
+		
+		for ( int i = 0; i < tablero.length; i++ )
+			pnTablero.add(pintaCasilla( tablero[i].getInvasor(), game.EsPosicionValida(i), i ) );
+	}
+	
+	private void pintaMovimientos()
+	{
+		Invasor[] movimientos = game.getRondaInvasores();
+		
+		for ( int i = 0; i < movimientos.length; i++ )
+			pnMovimientos.add(pintaMovimiento(movimientos[i], i));
 	}
 	
 	private JPanel getPnMovimientos() {
@@ -294,10 +391,7 @@ public class VentanaJuego extends JPanel
 			pnMovimientos = new JPanel();
 			pnMovimientos.setLayout(new GridLayout(1, 5, 0, 0));
 			
-			Invasor[] movimientos = game.getRondaInvasores();
-						
-			for ( int i = 0; i < movimientos.length; i++ )
-				pnMovimientos.add(pintaMovimiento(movimientos[i], i));
+			pintaMovimientos();
 		}
 		return pnMovimientos;
 	}
