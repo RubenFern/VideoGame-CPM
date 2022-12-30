@@ -1,5 +1,6 @@
 package uo.cpm.videogame.ui;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -113,13 +114,15 @@ public class VentanaInicio extends JPanel
 		
 		if ( codigo.equals("") )
 		{
-			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.codigoTicketVacio"), game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.codigoTicketVacio"),
+					game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(game.getIconoTienda()));
 			return;
 		}
 		
 		if ( numero.equals("") )
 		{
-			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.numeroTicketVacio"), game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.numeroTicketVacio"),
+					game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(game.getIconoTienda()));
 			return;
 		}
 		
@@ -138,21 +141,21 @@ public class VentanaInicio extends JPanel
 		// El ticket no existe
 		if ( ticket == null )
 		{
-			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.ticketIncorrecto"), game.getNombreTienda(), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.ticketIncorrecto"), game.getNombreTienda(), JOptionPane.ERROR_MESSAGE, new ImageIcon( game.getIconoTienda() ));
 			return false;
 		}
 		
 		// Inferior a 20 euros
 		if ( ticket.getImporte() < 20 )
 		{
-			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.ticketImporteInferior"), game.getNombreTienda(), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.ticketImporteInferior"), game.getNombreTienda(), JOptionPane.ERROR_MESSAGE, new ImageIcon( game.getIconoTienda() ));
 			return false;
 		}
 		
 		// Código de tienda diferente
 		if ( !codigo.equals(game.getCodigoTienda()) )
 		{
-			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.codigoTiendaIncorrecto"), game.getNombreTienda(), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.codigoTiendaIncorrecto"), game.getNombreTienda(), JOptionPane.ERROR_MESSAGE, new ImageIcon( game.getIconoTienda() ));
 			return false;
 		}
 		

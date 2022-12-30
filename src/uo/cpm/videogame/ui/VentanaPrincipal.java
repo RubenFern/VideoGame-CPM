@@ -10,6 +10,8 @@ import uo.cpm.videogame.service.Game;
 import uo.cpm.videogame.service.Internacionalizar;
 
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.BorderLayout;
@@ -17,6 +19,7 @@ import java.awt.CardLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 
 public class VentanaPrincipal extends JFrame 
@@ -37,29 +40,35 @@ public class VentanaPrincipal extends JFrame
 	private Game game;
 	private VentanaInicio pnPantallaInicio;
 	private VentanaJuego pnPantallaJuego;
+	private VentanaPremios pnPantallaPremios;
+	private VentanaCarrito pnPantallaCarrito;
+	private VentanaFinal pnPantallaFinal;
+	
+	private ProcesaAccionSalir pAS;
 	
 	private Internacionalizar internacionalizar;
 	
 	private JPanel contentPane;
 	private JPanel pnPantallas;
-	private JPanel pnPantallaPremios;
-	private JPanel pnPantallaCarrito;
-	private JPanel pnPantallaFinal;
 	private JMenuBar MenuBar;
 	private JMenu mnAyuda;
 	private JMenuItem miAcercaDe;
 	
 	public VentanaPrincipal(Game game) 
 	{
-		setBackground(Color.DARK_GRAY);
 		this.setGame(game);
+		this.pAS = new ProcesaAccionSalir();
 		
 		internacionalizar = new Internacionalizar();
 		
 		// Pantallas
 		pnPantallaInicio = new VentanaInicio(this);
 		pnPantallaJuego = new VentanaJuego(this);
+		pnPantallaPremios = new VentanaPremios(this);
+		pnPantallaCarrito = new VentanaCarrito(this);
+		pnPantallaFinal = new VentanaFinal(this);
 		
+		setBackground(Color.DARK_GRAY);
 		setTitle( game.getNombreTienda() );
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource( game.getIconoTienda() )));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,6 +82,78 @@ public class VentanaPrincipal extends JFrame
 		contentPane.add(getPnPantallas());
 
 		setContentPane(contentPane);
+		
+		// BORRAR
+		mostrarPantallaPremios();
+	}
+	
+	class ProcesaAccionSalir implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			salir();
+		}
+	}
+	
+	public VentanaInicio getPnPantallaInicio() {
+		return pnPantallaInicio;
+	}
+
+	public VentanaJuego getPnPantallaJuego() {
+		return pnPantallaJuego;
+	}
+
+	public VentanaPremios getPnPantallaPremios() {
+		return pnPantallaPremios;
+	}
+	
+	public VentanaCarrito getPnPantallaCarrito()
+	{
+		return pnPantallaCarrito;
+	}
+	
+	public VentanaFinal getPnPantallaFinal()
+	{
+		return pnPantallaFinal;
+	}
+
+	public ProcesaAccionSalir getProcesaAccionSalir() {
+		return pAS;
+	}
+
+	private void salir()
+	{
+		if ( confirmarSalir() )
+		{
+			this.inicializarJuego();
+			
+			this.mostrarPantallaInicio();
+		}		
+	}
+	
+	private boolean confirmarSalir()
+	{		
+		int respuesta = JOptionPane.showConfirmDialog(this, this.getInternacionalizar().getTexto("boton.mensajeSalir"));
+		
+		if ( respuesta == JOptionPane.YES_OPTION )
+			return true;
+		
+		return false;
+	}
+	
+	/**
+	 * Reinicia los puntos, ronda, tablero y movimientos
+	 */
+	public void inicializarJuego()
+	{
+		game.inicializar();
+		
+		pnPantallaJuego.getPnTablero().removeAll();
+		pnPantallaJuego.getPnMovimientos().removeAll();
+		
+		pnPantallaJuego.pintaTablero();
+		pnPantallaJuego.pintaMovimientos();
 	}
 	
 	public Internacionalizar getInternacionalizar() {
@@ -150,6 +231,14 @@ public class VentanaPrincipal extends JFrame
 		return new ImageIcon(imgEscalada);
 	}
 	
+	protected ImageIcon ajustarImagen(int w, int h, String path)
+	{
+		Image imgOriginal = new ImageIcon(VentanaPrincipal.class.getResource(path)).getImage();
+		Image imgEscalada = imgOriginal.getScaledInstance(w, h, Image.SCALE_REPLICATE);
+		
+		return new ImageIcon(imgEscalada);
+	}
+	
 	private JPanel getPnPantallas() 
 	{
 		if (pnPantallas == null)
@@ -158,36 +247,12 @@ public class VentanaPrincipal extends JFrame
 			pnPantallas.setLayout(new CardLayout(0, 0));
 			pnPantallas.add(pnPantallaInicio, PANTALLA_INICIO);
 			pnPantallas.add(pnPantallaJuego, PANTALLA_JUEGO);
-			pnPantallas.add(getPnPantallaPremios(), PANTALLA_PREMIOS);
-			pnPantallas.add(getPnPantallaCarrito(), PANTALLA_CARRITO);
+			pnPantallas.add(pnPantallaPremios, PANTALLA_PREMIOS);
+			pnPantallas.add(pnPantallaCarrito, PANTALLA_CARRITO);
 			pnPantallas.add(getPnPantallaFinal(), PANTALLA_FINAL);
 		}
 		
 		return pnPantallas;
-	}
-	
-	private JPanel getPnPantallaPremios() {
-		if (pnPantallaPremios == null) {
-			pnPantallaPremios = new JPanel();
-			pnPantallaPremios.setBackground(Color.GREEN);
-		}
-		return pnPantallaPremios;
-	}
-	
-	private JPanel getPnPantallaCarrito() {
-		if (pnPantallaCarrito == null) {
-			pnPantallaCarrito = new JPanel();
-			pnPantallaCarrito.setBackground(Color.MAGENTA);
-		}
-		return pnPantallaCarrito;
-	}
-	
-	private JPanel getPnPantallaFinal() {
-		if (pnPantallaFinal == null) {
-			pnPantallaFinal = new JPanel();
-			pnPantallaFinal.setBackground(Color.PINK);
-		}
-		return pnPantallaFinal;
 	}
 	
 	private JMenuBar getBarraMenu() {

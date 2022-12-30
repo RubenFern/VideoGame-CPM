@@ -5,6 +5,7 @@ import java.util.List;
 
 import uo.cpm.videogame.model.Casilla;
 import uo.cpm.videogame.model.Invasor;
+import uo.cpm.videogame.model.Partida;
 import uo.cpm.videogame.model.Reglas;
 import uo.cpm.videogame.model.Tablero;
 import uo.cpm.videogame.model.Ticket;
@@ -15,11 +16,12 @@ public class Game
 {
 	private Tienda tienda;
 	private Tablero tablero;
-	private List<Ticket> listaTickets;
-	private int ronda;
-	private int puntos;
-	private int movimientos;
 	private Casilla casilla;
+	
+	private List<Ticket> listaTickets;
+	
+	private int movimientos; // Posible añadirlo en Partida
+	
 	private boolean arrastra;
 	
 	public Game()
@@ -27,35 +29,31 @@ public class Game
 		// Cargo la información de la tienda y de los tickets
 		tienda = new Tienda();
 		tablero = new Tablero();
+		casilla = new Casilla();	
+		
 		listaTickets = new ArrayList<Ticket>();
-		casilla = new Casilla();		
 		
 		FileUtil.cargarDatosTienda("files/config.dat", tienda);
 		FileUtil.cargarDatosTickets("files/tickets.dat", listaTickets);
 		
-		this.setRonda(1);
 		this.setMovimientos( Reglas.INVASORES_POR_RONDA.getValor() );
 	}
 	
 	public int getRonda() {
-		return ronda;
-	}
-
-	public void setRonda(int ronda) {
-		this.ronda = ronda;
+		return tablero.getPartida().getRonda();
 	}
 	
 	public void aumentarRonda()
 	{
-		this.setRonda( this.getRonda() + 1 );
+		tablero.getPartida().setRonda( tablero.getPartida().getRonda() + 1 );
 	}
 	
 	public int getPuntos() {
-		return puntos;
+		return tablero.getPartida().getPuntos();
 	}
 
 	public void setPuntos(int puntos) {
-		this.puntos = puntos;
+		tablero.getPartida().setPuntos(puntos);
 	}
 	
 	public int getMovimientos() {
@@ -78,12 +76,18 @@ public class Game
 	{
 		return tablero.getInvasores()[numeroInvasor - 1];
 	}
-
+	
 	public void inicializar()
 	{
 		// Cargo de nuevo los tickets disponibles
 		listaTickets.clear();
 		FileUtil.cargarDatosTickets("files/tickets.dat", listaTickets);
+		
+		// Reinicio la partida
+		tablero.setPartida( new Partida() );
+		
+		// Reinicio el tablero
+		tablero.reiniciarTablero();
 	}
 	
 	public String getCodigoTienda()
@@ -168,13 +172,14 @@ public class Game
 		return tablero.eliminarColonias();
 	}
 	
+	public boolean isPartidaFinalizada()
+	{
+		return tablero.getPartida().isFinalizada();
+	}
+	
 	public void imprimirTablero()
 	{
 		tablero.imprimirTablero();
 	}
 	
-	public void imprPosicionesValidas()
-	{
-		tablero.imprPosicionesValidas();
-	}
 }

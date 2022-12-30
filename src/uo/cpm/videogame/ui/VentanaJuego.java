@@ -11,6 +11,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import java.awt.FlowLayout;
@@ -23,12 +24,11 @@ import javax.swing.border.LineBorder;
 
 import uo.cpm.videogame.model.Casilla;
 import uo.cpm.videogame.model.Invasor;
+import uo.cpm.videogame.model.MiLabel;
 import uo.cpm.videogame.model.Reglas;
 import uo.cpm.videogame.service.Game;
 
 import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class VentanaJuego extends JPanel 
 {
@@ -61,6 +61,7 @@ public class VentanaJuego extends JPanel
 
 		this.pDAD = new ProcesaDragAndDrop();
 		this.pLT = new ProcesaLabelTablero();
+		
 		
 		setLayout(new BorderLayout(0, 0));
 		add(getPnNorte(), BorderLayout.NORTH);
@@ -131,13 +132,14 @@ public class VentanaJuego extends JPanel
 					if ( game.getCasilla().getInvasor().getNumero() == 1 )
 						marcarLider(game.getCasilla().getPosicionTablero());
 					
-					// Compruebo el estado de la ronda
+					// Compruebo el estado de la ronda o si el tablero está lleno
 					if ( game.getMovimientos() == 0 )
 						siguienteRonda();
-										
-					game.imprimirTablero();
-					game.imprPosicionesValidas();
+					else if ( game.getNumeroInvasoresTablero() == game.getNumeroInvasoresTableroMaximo() )
+						finalizarPartida(false);
 					
+					game.imprimirTablero();
+										
 					game.setArrastra(false);
 				}
 			}
@@ -189,9 +191,11 @@ public class VentanaJuego extends JPanel
 	{
 		// Aumento la ronda
 		game.aumentarRonda();
-		this.getLbRonda().setText( String.format("%s %d/%d", vp.getInternacionalizar().getTexto("juego.ronda"), game.getRonda(), Reglas.RONDAS.getValor() ) );
 		
-		int puntosGanados = eliminarColonias();
+		//Partida partida = game.eliminarColonias();
+		int puntosGanados = game.eliminarColonias();
+		
+		//int puntosGanados = partida.getPuntos();
 		
 		// Si retornó puntos significa que hubo eliminación de colonias
 		if ( puntosGanados > 0 )
@@ -199,24 +203,22 @@ public class VentanaJuego extends JPanel
 			this.getPnTablero().removeAll();
 			pintaTablero();
 			
-			game.setPuntos( game.getPuntos() + puntosGanados );
 			this.getTxtPuntos().setText( String.format("%d", game.getPuntos() ));
 		}
 		
-		// Genero nuevo invasores
-		generarNuevosMovimientos();
+		if ( !compruebaFin(game.isPartidaFinalizada()) )
+		{
+			// Imprimo la ronda
+			this.getLbRonda().setText( String.format("%s %d/%d", vp.getInternacionalizar().getTexto("juego.ronda"), game.getRonda(), Reglas.RONDAS.getValor() ) );
 			
-		if ( compruebaFin() )
-			return;		
+			// Genero nuevo invasores
+			generarNuevosMovimientos();
+		}
 	}
 	
-	private int eliminarColonias()
-	{
-		return game.eliminarColonias();
-	}
-	
-	private boolean compruebaFin()
-	{
+	private boolean compruebaFin(boolean finalizada)
+	{	
+		System.out.println("MAXIMO: " + game.getNumeroInvasoresTableroMaximo());
 		// Si se ha llenado el tablero de invasores (aunque esté en la ronda 10 finaliza con derrota)
 		if ( game.getNumeroInvasoresTablero() == game.getNumeroInvasoresTableroMaximo() )
 		{
@@ -225,13 +227,11 @@ public class VentanaJuego extends JPanel
 		}
 		
 		// Superó la ronda 10
-		if ( game.getRonda() > Reglas.RONDAS.getValor() )
+		if ( finalizada || game.getRonda() > Reglas.RONDAS.getValor() )
 		{
 			finalizarPartida(true);
 			return true;
 		}
-		
-		// Elimino una colonia de más de 5 líderes
 		
 		return false;
 	}
@@ -245,17 +245,30 @@ public class VentanaJuego extends JPanel
 	}
 	
 	private void finalizarPartida(boolean victoria)
-	{
-		if ( victoria )
+	{		
+		if (victoria) 
 		{
+			this.getPnTablero().validate();
+
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("juego.victoria"),
+					game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE,
+					new ImageIcon( game.getIconoTienda() ));
 			
+			// Inicializa y va a la pantalla premios
+			vp.inicializarJuego();
+			
+			vp.mostrarPantallaPremios();
 		}
-		else
+		else 
 		{
 			game.setPuntos(0);
-			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("juego.derrota"), game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("juego.derrota"),
+					game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(game.getIconoTienda()));
 
-			// Inicializa y vuelve a la pantalla puntos
+			// Inicializa y vuelve a la pantalla de inicio
+			vp.inicializarJuego();
+			
+			vp.mostrarPantallaInicio();
 		}
 	}
 	
@@ -300,13 +313,10 @@ public class VentanaJuego extends JPanel
 	private JButton getBtSalir() {
 		if (btSalir == null) {
 			btSalir = new JButton("");
-			btSalir.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					System.out.println( game.getNumeroInvasoresTablero() );
-				}
-			});
 			btSalir.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			btSalir.setText(vp.getInternacionalizar().getTexto("boton.salir"));
+			
+			btSalir.addActionListener( vp.getProcesaAccionSalir() );
 		}
 		return btSalir;
 	}
@@ -357,7 +367,7 @@ public class VentanaJuego extends JPanel
 		}
 		return txtPuntos;
 	}
-	private JPanel getPnTablero() {
+	public JPanel getPnTablero() {
 		if (pnTablero == null) {
 			pnTablero = new JPanel();
 			pnTablero.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -370,7 +380,7 @@ public class VentanaJuego extends JPanel
 		return pnTablero;
 	}
 	
-	private void pintaTablero()
+	public void pintaTablero()
 	{
 		Casilla[] tablero = game.getTablero();
 		
@@ -378,7 +388,7 @@ public class VentanaJuego extends JPanel
 			pnTablero.add(pintaCasilla( tablero[i].getInvasor(), game.EsPosicionValida(i), i ) );
 	}
 	
-	private void pintaMovimientos()
+	public void pintaMovimientos()
 	{
 		Invasor[] movimientos = game.getRondaInvasores();
 		
@@ -386,7 +396,7 @@ public class VentanaJuego extends JPanel
 			pnMovimientos.add(pintaMovimiento(movimientos[i], i));
 	}
 	
-	private JPanel getPnMovimientos() {
+	public JPanel getPnMovimientos() {
 		if (pnMovimientos == null) {
 			pnMovimientos = new JPanel();
 			pnMovimientos.setLayout(new GridLayout(1, 5, 0, 0));
@@ -426,22 +436,21 @@ public class VentanaJuego extends JPanel
 		label.setId(i);
 		
 		// Evento arrastrar
-		label.setTransferHandler( new TransferHandler("icon") );
-		label.addPropertyChangeListener(pLT);
+		if ( valida && invasor == null )
+		{
+			label.setTransferHandler( new TransferHandler("icon") );
+			label.addPropertyChangeListener(pLT);
+		}
 		
 		// Es una posición no válida
 		if ( !valida )
-		{
 			label.setIcon( vp.ajustarImagen(label, "/img/casilla_invalida.png") );
-			label.setTransferHandler(null); // Evito que se suelte sobre una casilla inválida
-		}
-			
+		
 		// En la posición hay un invasor
 		if ( invasor != null )
 		{
 			label.setNumeroInvasor(invasor.getNumero()); // Asigno el número del invasor a la etiqueta
 			label.setIcon( vp.ajustarImagen(label, invasor.getImagen()) ); // Asigno la imagen del invasor
-			label.setTransferHandler(null); // Evito que se suelte sobre una casilla ocupada
 			
 			// Si es líder lo marco
 			if ( invasor.isLider() )

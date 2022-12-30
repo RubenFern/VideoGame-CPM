@@ -3,6 +3,8 @@ package uo.cpm.videogame.util;
 import java.io.*;
 import java.util.List;
 
+import uo.cpm.videogame.model.Categoria;
+import uo.cpm.videogame.model.Premio;
 import uo.cpm.videogame.model.Ticket;
 import uo.cpm.videogame.model.Tienda;
 
@@ -65,4 +67,48 @@ public abstract class FileUtil
 			new RuntimeException("Error de entrada/salida."); 
 		}
 	}
+	
+	public static void cargarPremios(String nombreFichero, List<Premio> premios)
+	{
+		String linea;
+		String[] datos = null;
+
+		try {
+			BufferedReader fichero = new BufferedReader(new FileReader(nombreFichero));
+			
+			while (fichero.ready()) 
+			{
+				linea = fichero.readLine();
+				datos = linea.split("@");
+				
+				premios.add( new Premio( datos[0], datos[1], datos[2], getCategoria(datos[3]), Integer.parseInt(datos[4]) ));
+			}
+			
+			fichero.close();
+		} 
+		catch (FileNotFoundException fnfe) 
+		{ 
+			System.out.println("El archivo no se ha encontrado."); 
+		} 
+		catch (IOException ioe) 
+		{ 
+			new RuntimeException("Error de entrada/salida."); 
+		}
+	}
+	
+	private static Categoria getCategoria(String c)
+	{
+		if ( c.equals("Accesorios") )
+			return Categoria.ACCESORIOS;
+		
+		if ( c.equals("Consolas") )
+			return Categoria.CONSOLAS;
+		
+		if ( c.equals("Videojuegos") )
+			return Categoria.VIDEOJUEGOS;
+			
+		return null;
+	}
+	
+	
 }

@@ -41,7 +41,7 @@ public class Invasor
 
 	@Override
 	public String toString() {
-		return "Invasor-" + numero;
+		return "In-" + numero;
 	}	
 	
 }

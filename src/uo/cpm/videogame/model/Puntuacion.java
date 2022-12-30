@@ -6,7 +6,8 @@ public enum Puntuacion
 	COLONIA_4(4, 200),
 	COLONIA_5(5, 1000),
 	COLONIA_6(6, 5000),
-	COLONIA_7(7, 10000);
+	COLONIA_7(7, 10000),
+	COLONIA_LIDERES(5, 20000);
 	
 	private final int tamaño;
 	private final int puntos;
