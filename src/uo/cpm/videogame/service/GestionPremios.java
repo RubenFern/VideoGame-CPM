@@ -2,10 +2,14 @@ package uo.cpm.videogame.service;
 
 import uo.cpm.videogame.model.Carrito;
 import uo.cpm.videogame.model.Catalogo;
+import uo.cpm.videogame.model.Entrega;
 import uo.cpm.videogame.model.Premio;
+import uo.cpm.videogame.util.FileUtil;
 
 public class GestionPremios 
 {
+	public static final String FICHERO_ENTREGAS = "files/entregas.dat";
+	
 	private Catalogo catalogo;
 	private Carrito carrito;
 	
@@ -40,13 +44,15 @@ public class GestionPremios
 		return carrito.getNumeroPremios();
 	}
 	
-	public void añadirPremioAlCarrito(Premio p)
+	public void añadirPremioAlCarrito(Game game, Premio p)
 	{
+		game.setPuntos( game.getPuntos() - p.getCostePuntos() );
 		carrito.añadirAlCarrito(p);
 	}
 	
-	public void eliminarDelCarrito(Premio p)
+	public void eliminarDelCarrito(Game game, Premio p)
 	{
+		game.setPuntos( game.getPuntos() + p.getCostePuntos() );
 		carrito.eliminarDelCarrito(p);
 	}
 	
@@ -69,4 +75,17 @@ public class GestionPremios
 	{
 		return carrito.getVideojuegos();
 	}
+	
+	public void entrega(String dni, String codigoTienda)
+	{
+		Premio[] listaPremios = this.getCarrito();
+		
+		String[] codigosPremios = new String[listaPremios.length];
+		
+		for ( int i = 0; i < listaPremios.length; i++ )
+			codigosPremios[i] = listaPremios[i].getCodigo();
+		
+		FileUtil.añadirEntrega(FICHERO_ENTREGAS, new Entrega(dni, codigoTienda, codigosPremios));
+	}
+	
 }

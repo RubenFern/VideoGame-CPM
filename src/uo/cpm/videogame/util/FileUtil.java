@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.List;
 
 import uo.cpm.videogame.model.Categoria;
+import uo.cpm.videogame.model.Entrega;
 import uo.cpm.videogame.model.Premio;
 import uo.cpm.videogame.model.Ticket;
 import uo.cpm.videogame.model.Tienda;
@@ -110,5 +111,20 @@ public abstract class FileUtil
 		return null;
 	}
 	
+	public static void añadirEntrega(String fichero, Entrega entrega)
+	{
+		try {
+			BufferedWriter f = new BufferedWriter(new FileWriter(fichero) );
+			
+			f.write( entrega.toString() );
+			f.close();
+		}
+
+		catch (FileNotFoundException fnfe) {
+			System.out.println("El archivo no se ha podido guardar");
+		} catch (IOException ioe) {
+			new RuntimeException("Error de entrada/salida");
+		}
+	}	
 	
 }

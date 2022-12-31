@@ -135,6 +135,7 @@ public class VentanaPremios extends JPanel
 		vp.getPnPantallaCarrito().mostrarPremios(TODO);
 		vp.getPnPantallaCarrito().getRdTodo().setSelected(true);
 		vp.getPnPantallaCarrito().getPnPremios().validate();
+		vp.getPnPantallaCarrito().getTxtPuntos().setText(String.format("%d", game.getPuntos()));
 	}
 
 	private void filtrar(String accion)
@@ -216,14 +217,14 @@ public class VentanaPremios extends JPanel
 		return lbPuntos;
 	}
 	
-	private JTextField getTxtPuntos() {
+	public JTextField getTxtPuntos() {
 		if (txtPuntos == null) {
 			txtPuntos = new JTextField();
 			txtPuntos.setHorizontalAlignment(SwingConstants.CENTER);
-			txtPuntos.setText( String.format("%d", game.getPuntos()) );
 			txtPuntos.setEditable(false);
 			txtPuntos.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			txtPuntos.setColumns(10);
+			txtPuntos.setText( String.format("%d", game.getPuntos()) );
 		}
 		return txtPuntos;
 	}

@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import uo.cpm.videogame.model.Premio;
+import uo.cpm.videogame.service.Game;
 import uo.cpm.videogame.service.GestionPremios;
 
 import java.awt.GridLayout;
@@ -12,12 +13,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
@@ -27,6 +31,7 @@ public class PanelPremio extends JPanel
 
 	private VentanaPrincipal vp;
 	private Premio p;
+	private Game game;
 	private GestionPremios gestionPremios;
 	
 	private ProcesaAñadirPremio pAP;
@@ -45,6 +50,7 @@ public class PanelPremio extends JPanel
 		setBounds(new Rectangle(0, 0, 500, 300));
 		this.vp = vp;
 		this.p = p;
+		this.game = vp.getGame();
 		this.gestionPremios = gestionPremios;
 		this.pAP = new ProcesaAñadirPremio();
 		
@@ -65,8 +71,16 @@ public class PanelPremio extends JPanel
 	
 	private void añadirPremio()
 	{
-		gestionPremios.añadirPremioAlCarrito(p);
+		if ( game.getPuntos() < p.getCostePuntos() )
+		{
+			JOptionPane.showMessageDialog(vp.getPnPantallaPremios(), vp.getInternacionalizar().getTexto("error.faltapuntos"),
+					game.getNombreTienda(), JOptionPane.WARNING_MESSAGE, new ImageIcon(game.getIconoTienda()));
+			return;
+		}
 		
+		gestionPremios.añadirPremioAlCarrito(game, p);
+		
+		vp.getPnPantallaPremios().getTxtPuntos().setText( String.format("%d", game.getPuntos()) );
 		vp.getPnPantallaPremios().getBtCarrito().setText( "(" + gestionPremios.getNumeroPremios() + ")" );
 	}
 
@@ -93,7 +107,6 @@ public class PanelPremio extends JPanel
 		if (lbImagen == null) {
 			lbImagen = new JLabel("");
 			lbImagen.setBorder(new EmptyBorder(5, 5, 5, 5));
-			//lbImagen.setBounds( new Rectangle( this.getPnImagen().getWidth(), this.getPnImagen().getHeight() ) );
 			lbImagen.setBounds( new Rectangle( 100, 100 ) );
 			
 			lbImagen.setIcon( vp.ajustarImagen(lbImagen, p.getImagen()) );

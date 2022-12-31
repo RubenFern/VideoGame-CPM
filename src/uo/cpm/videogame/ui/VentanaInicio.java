@@ -130,6 +130,8 @@ public class VentanaInicio extends JPanel
 		if ( !comprobarTicket(codigo, Integer.parseInt(numero)) )
 			return;
 			
+		vp.getPnPantallaJuego().inicializar();
+		
 		// Si el ticket es válido muestro la pantalla del juego	
 		vp.mostrarPantallaJuego();
 	}

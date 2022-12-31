@@ -104,7 +104,7 @@ public class VentanaCarrito extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			atras();
+			vp.mostrarPantallaPremios();
 		}
 	}
 	
@@ -151,11 +151,6 @@ public class VentanaCarrito extends JPanel
 				break;
 			}
 		}
-	}
-	
-	private void atras()
-	{
-		vp.mostrarPantallaPremios();
 	}
 
 	private JPanel getPnNorte() {
@@ -225,7 +220,7 @@ public class VentanaCarrito extends JPanel
 		return lbPuntos;
 	}
 	
-	private JTextField getTxtPuntos() {
+	public JTextField getTxtPuntos() {
 		if (txtPuntos == null) {
 			txtPuntos = new JTextField();
 			txtPuntos.setEditable(false);
@@ -388,20 +383,6 @@ public class VentanaCarrito extends JPanel
 			mostrarPremios(TODO);
 		}
 		return pnPremios;
-	}
-	
-	public void mostrarPremios(String filtro, boolean comprobarCarrito)
-	{
-		Premio[] listaPremios = this.getListaPremios(filtro);
-		
-		// Si no hay productos en el carrito vuelvo a la pantalla de premios
-		if ( comprobarCarrito && listaPremios.length == 0 )
-		{
-			vp.mostrarPantallaPremios();
-			return;
-		}
-		
-		mostrarPremios(filtro);
 	}
 	
 	public void mostrarPremios(String filtro)

@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import uo.cpm.videogame.model.Premio;
+import uo.cpm.videogame.service.Game;
 import uo.cpm.videogame.service.GestionPremios;
 
 import java.awt.GridLayout;
@@ -30,6 +31,7 @@ public class PanelPremioCarrito extends JPanel
 	private VentanaPrincipal vp;
 	private Premio p;
 	private GestionPremios gestionPremios;
+	private Game game;
 	
 	private ProcesaEliminarPremio pEP;
 	
@@ -51,6 +53,7 @@ public class PanelPremioCarrito extends JPanel
 		this.vp = vp;
 		this.p = p;
 		this.gestionPremios = gestionPremios;
+		this.game = vp.getGame();
 		this.pEP = new ProcesaEliminarPremio();
 		
 		setBorder(new LineBorder( Color.black ));
@@ -70,11 +73,20 @@ public class PanelPremioCarrito extends JPanel
 	
 	private void eliminarPremio()
 	{
-		gestionPremios.eliminarDelCarrito(p);
+		gestionPremios.eliminarDelCarrito(game, p);
 		
+		// Actualizo el número de árticulos del carrito
 		vp.getPnPantallaPremios().getBtCarrito().setText( "(" + gestionPremios.getNumeroPremios() + ")" );
-		vp.getPnPantallaCarrito();
-		vp.getPnPantallaCarrito().mostrarPremios( VentanaCarrito.TODO, true );
+		
+		// Actualizo los puntos de la pantalla premios y carrito
+		vp.getPnPantallaPremios().getTxtPuntos().setText( String.format("%d", game.getPuntos()) );
+		vp.getPnPantallaCarrito().getTxtPuntos().setText( String.format("%d", game.getPuntos()) );
+		
+		// Si no hay premios en el carrito vuelvo a la pantalla de premios
+		if ( gestionPremios.getCarrito().length == 0 )
+			vp.mostrarPantallaPremios();
+		else		
+			vp.getPnPantallaCarrito().mostrarPremios( VentanaCarrito.TODO );
 	}
 
 	private JPanel getPnImagen() {
@@ -117,7 +129,7 @@ public class PanelPremioCarrito extends JPanel
 	}
 	private JLabel getLbDenominacion() {
 		if (lbDenominacion == null) {
-			lbDenominacion = new JLabel((String) null);
+			lbDenominacion = new JLabel("");
 			lbDenominacion.setHorizontalAlignment(SwingConstants.CENTER);
 			lbDenominacion.setBorder(new EmptyBorder(5, 0, 5, 0));
 			lbDenominacion.setText( p.getDenominacion() );
@@ -127,7 +139,7 @@ public class PanelPremioCarrito extends JPanel
 	}
 	private JTextArea getLbDescripcion() {
 		if (lbDescripcion == null) {
-			lbDescripcion = new JTextArea((String) null);
+			lbDescripcion = new JTextArea("");
 			lbDescripcion.setLineWrap(true);
 			lbDescripcion.setEditable(false);
 			lbDescripcion.setBorder(new EmptyBorder(5, 0, 5, 0));

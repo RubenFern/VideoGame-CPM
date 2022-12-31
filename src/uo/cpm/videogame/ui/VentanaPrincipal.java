@@ -20,6 +20,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
 
 
 public class VentanaPrincipal extends JFrame 
@@ -52,7 +53,6 @@ public class VentanaPrincipal extends JFrame
 	private JPanel pnPantallas;
 	private JMenuBar MenuBar;
 	private JMenu mnAyuda;
-	private JMenuItem miAcercaDe;
 	
 	public VentanaPrincipal(Game game) 
 	{
@@ -74,6 +74,7 @@ public class VentanaPrincipal extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1100, 800);
 		setLocationRelativeTo(null);
+		
 		setJMenuBar(getBarraMenu());
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.BLACK);
@@ -83,8 +84,7 @@ public class VentanaPrincipal extends JFrame
 
 		setContentPane(contentPane);
 		
-		// BORRAR
-		mostrarPantallaPremios();
+		mostrarPantallaInicio();
 	}
 	
 	class ProcesaAccionSalir implements ActionListener
@@ -249,7 +249,7 @@ public class VentanaPrincipal extends JFrame
 			pnPantallas.add(pnPantallaJuego, PANTALLA_JUEGO);
 			pnPantallas.add(pnPantallaPremios, PANTALLA_PREMIOS);
 			pnPantallas.add(pnPantallaCarrito, PANTALLA_CARRITO);
-			pnPantallas.add(getPnPantallaFinal(), PANTALLA_FINAL);
+			pnPantallas.add(pnPantallaFinal, PANTALLA_FINAL);
 		}
 		
 		return pnPantallas;
@@ -262,19 +262,14 @@ public class VentanaPrincipal extends JFrame
 		}
 		return MenuBar;
 	}
+	
 	private JMenu getMnAyuda() {
 		if (mnAyuda == null) {
 			mnAyuda = new JMenu("");
-			mnAyuda.add(getMiAcercaDe());
 			mnAyuda.setText( internacionalizar.getTexto("menu.ayuda") );
 		}
 		return mnAyuda;
 	}
-	private JMenuItem getMiAcercaDe() {
-		if (miAcercaDe == null) {
-			miAcercaDe = new JMenuItem("");
-			miAcercaDe.setText( internacionalizar.getTexto("menu.acercade") );
-		}
-		return miAcercaDe;
-	}
+	
+	
 }

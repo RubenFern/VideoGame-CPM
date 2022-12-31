@@ -69,6 +69,13 @@ public class VentanaJuego extends JPanel
 		add(getPnSur(), BorderLayout.SOUTH);
 	}
 	
+	// Inicializa los datos de la pantalla
+	public void inicializar()
+	{
+		this.getTxtPuntos().setText( String.format("%d", game.getPuntos()) );
+		this.getLbRonda().setText( String.format("%s %d/%d", vp.getInternacionalizar().getTexto("juego.ronda"), game.getRonda(), Reglas.RONDAS.getValor()) );
+	}
+	
 	class ProcesaDragAndDrop extends MouseAdapter
 	{
 		@Override
@@ -121,7 +128,7 @@ public class VentanaJuego extends JPanel
 					
 					// Resto 1 movimiento en la ronda
 					game.setMovimientos( game.getMovimientos() - 1 );
-					System.out.println("------ MOVIMIENTOS: " + game.getMovimientos());
+
 					// Añado el invasor en la casilla
 					game.añadirInvasorAlTablero( game.getCasilla() );
 					
@@ -138,7 +145,7 @@ public class VentanaJuego extends JPanel
 					else if ( game.getNumeroInvasoresTablero() == game.getNumeroInvasoresTableroMaximo() )
 						finalizarPartida(false);
 					
-					game.imprimirTablero();
+					//game.imprimirTablero();
 										
 					game.setArrastra(false);
 				}
@@ -218,7 +225,6 @@ public class VentanaJuego extends JPanel
 	
 	private boolean compruebaFin(boolean finalizada)
 	{	
-		System.out.println("MAXIMO: " + game.getNumeroInvasoresTableroMaximo());
 		// Si se ha llenado el tablero de invasores (aunque esté en la ronda 10 finaliza con derrota)
 		if ( game.getNumeroInvasoresTablero() == game.getNumeroInvasoresTableroMaximo() )
 		{
@@ -254,9 +260,7 @@ public class VentanaJuego extends JPanel
 					game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE,
 					new ImageIcon( game.getIconoTienda() ));
 			
-			// Inicializa y va a la pantalla premios
-			vp.inicializarJuego();
-			
+			vp.getPnPantallaPremios().getTxtPuntos().setText( String.format("%d", game.getPuntos()) );
 			vp.mostrarPantallaPremios();
 		}
 		else 

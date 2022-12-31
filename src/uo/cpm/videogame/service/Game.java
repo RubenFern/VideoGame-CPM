@@ -14,6 +14,9 @@ import uo.cpm.videogame.util.FileUtil;
 
 public class Game 
 {
+	public static final String FICHERO_TIENDA = "files/config.dat";
+	public static final String FICHERO_TICKETS = "files/tickets.dat";
+	
 	private Tienda tienda;
 	private Tablero tablero;
 	private Casilla casilla;
@@ -33,8 +36,8 @@ public class Game
 		
 		listaTickets = new ArrayList<Ticket>();
 		
-		FileUtil.cargarDatosTienda("files/config.dat", tienda);
-		FileUtil.cargarDatosTickets("files/tickets.dat", listaTickets);
+		FileUtil.cargarDatosTienda(FICHERO_TIENDA, tienda);
+		FileUtil.cargarDatosTickets(FICHERO_TICKETS, listaTickets);
 		
 		this.setMovimientos( Reglas.INVASORES_POR_RONDA.getValor() );
 	}
@@ -85,6 +88,8 @@ public class Game
 		
 		// Reinicio la partida
 		tablero.setPartida( new Partida() );
+		
+		this.setMovimientos(Reglas.INVASORES_POR_RONDA.getValor());
 		
 		// Reinicio el tablero
 		tablero.reiniciarTablero();

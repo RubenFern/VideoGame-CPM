@@ -17,7 +17,7 @@ public class Main {
 	 * 1 = 5 invasores no aleatorios y todos de tipo líder
 	 * 2 = 5 invasores no aleatorios y todos de tipo no líder
 	 */
-	public final static int DEBUG = 0;
+	public final static int DEBUG = 1;
 	
 	public static void main(String[] args) 
 	{
