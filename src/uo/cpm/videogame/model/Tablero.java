@@ -28,6 +28,15 @@ public class Tablero
 		generarTablero();		
 	}
 	
+	public void inicializar()
+	{
+		// Reinicio la partida
+		setPartida( new Partida() );
+				
+		// Reinicio el tablero
+		reiniciarTablero();
+	}
+	
 	public Casilla[] getTablero() {
 		return tablero;
 	}
@@ -119,7 +128,7 @@ public class Tablero
 	}
 	
 	/**
-	 * Crea un array con el n�mero total de invasores que participan en el juego
+	 * Crea un array con el número total de invasores que participan en el juego
 	 */
 	private void generarInvasores()
 	{
@@ -129,7 +138,7 @@ public class Tablero
 		for ( int i = 0; i < invasores.length; i++ )
 			invasores[i] = new Invasor( (i + 1), false );
 		
-		// Asigno el l�der de la invasi�n
+		// Asigno el líder de la invasión
 		invasores[Reglas.POSICION_LIDER.getValor()].setLider(true);
 	}
 	
@@ -151,15 +160,15 @@ public class Tablero
 	}
 	
 	/**
-	 * Coloca un invasor en una posici�n v�lida del tablero
+	 * Coloca un invasor en una posición válida del tablero
 	 * 
-	 * @param invasor Invasor que se a�ade
+	 * @param invasor Invasor que se añade
 	 */
 	private void colocarInvasor(Invasor invasor)
 	{
 		int posicion = Dado.posicionTablero();
 		
-		// Si es una posici�n inv�lida o ya tiene un invasor vuelvo a generar posici�n
+		// Si es una posición inválida o ya tiene un invasor vuelvo a generar posición
 		while ( !EsPosicionValida(posicion) || tablero[posicion].getInvasor() != null )
 			posicion = Dado.posicionTablero();
 		
@@ -378,9 +387,13 @@ public class Tablero
 		return tamanoColonia;
 	}
 	
-	public void reiniciarTablero()
+	private void reiniciarTablero()
 	{
+		// Reinicio el tablero
 		generarTablero();
+		
+		// Reinicio las posiciones válidas
+		generarPosicionesValidas();
 	}
 	
 	

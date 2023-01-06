@@ -13,7 +13,7 @@ public class Carrito
 		inicializar();
 	}
 	
-	private void inicializar()
+	public void inicializar()
 	{
 		carrito.clear();
 	}

@@ -5,7 +5,6 @@ import java.util.List;
 
 import uo.cpm.videogame.model.Casilla;
 import uo.cpm.videogame.model.Invasor;
-import uo.cpm.videogame.model.Partida;
 import uo.cpm.videogame.model.Reglas;
 import uo.cpm.videogame.model.Tablero;
 import uo.cpm.videogame.model.Ticket;
@@ -36,8 +35,6 @@ public class Game
 		
 		FileUtil.cargarDatosTienda(FICHERO_TIENDA, tienda);
 		FileUtil.cargarDatosTickets(FICHERO_TICKETS, listaTickets);
-		
-		this.setMovimientos( Reglas.INVASORES_POR_RONDA.getValor() );
 	}
 	
 	public int getRonda() {
@@ -89,13 +86,8 @@ public class Game
 		listaTickets.clear();
 		FileUtil.cargarDatosTickets("files/tickets.dat", listaTickets);
 		
-		// Reinicio la partida
-		tablero.setPartida( new Partida() );
-		
-		this.setMovimientos(Reglas.INVASORES_POR_RONDA.getValor());
-		
-		// Reinicio el tablero
-		tablero.reiniciarTablero();
+		// Inicializo el tablero
+		tablero.inicializar();
 	}
 	
 	public String getCodigoTienda()
@@ -144,10 +136,10 @@ public class Game
 	}
 	
 	/**
-	 * Recorre la lista de tickets y cuando encuentra un ticket con el mismo n�mero de ticket lo devuelve
+	 * Recorre la lista de tickets y cuando encuentra un ticket con el mismo número de ticket lo devuelve
 	 * 
-	 * @param codigo C�digo del ticket
-	 * @param numero N�mero del ticket
+	 * @param codigo Código del ticket
+	 * @param numero Número del ticket
 	 * @return Devuelve el ticket encontrado o null si no lo ha encontrado
 	 */
 	public Ticket ticketValido(String codigo, int numero)
@@ -157,6 +149,15 @@ public class Game
 				return t;
 		
 		return null;
+	}
+	
+	public void eliminarTicket(Ticket ticket)
+	{
+		for ( int i = 0; i < listaTickets.size(); i++ )
+			if ( listaTickets.get(i).equals(ticket) )
+				listaTickets.remove(i);
+		
+		FileUtil.actualizarDatosTickets(FICHERO_TICKETS, listaTickets);
 	}
 	
 	public boolean EsPosicionValida(int posicion)

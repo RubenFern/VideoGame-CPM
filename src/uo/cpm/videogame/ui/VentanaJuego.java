@@ -74,6 +74,17 @@ public class VentanaJuego extends JPanel
 	// Inicializa los datos de la pantalla
 	public void inicializar()
 	{
+		actualizarPartida();
+		
+		this.getPnTablero().removeAll();
+		this.getPnMovimientos().removeAll();
+		
+		this.pintaTablero();
+		this.pintaMovimientos();
+	}
+	
+	public void actualizarPartida()
+	{
 		this.getTxtPuntos().setText( String.format("%d", game.getPuntos()) );
 		this.getLbRonda().setText( String.format("%s %d/%d", vp.getInternacionalizar().getTexto("juego.ronda"), game.getRonda(), Reglas.RONDAS.getValor()) );
 	}
@@ -269,9 +280,8 @@ public class VentanaJuego extends JPanel
 			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("juego.derrota"),
 					game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(game.getIconoTienda()));
 
-			// Inicializa y vuelve a la pantalla de inicio
+			// Inicializa el juego y muestro la pantalla inicio
 			vp.inicializarJuego();
-			
 			vp.mostrarPantallaInicio();
 		}
 	}

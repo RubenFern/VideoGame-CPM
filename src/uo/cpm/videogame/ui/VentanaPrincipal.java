@@ -69,7 +69,7 @@ public class VentanaPrincipal extends JFrame
 	private JMenuItem miAcercaDe;
 	private JMenu mnJuego;
 	private JMenuItem miSalir;
-	private JMenu mnOpciones;
+	private JMenu mnIdioma;
 	private JRadioButtonMenuItem miEspanol;
 	private JRadioButtonMenuItem miIngles;
 	
@@ -167,7 +167,7 @@ public class VentanaPrincipal extends JFrame
 		this.getMnAyuda().setText( internacionalizar.getTexto("menu.ayuda") );
 		this.getMiAyuda().setText( internacionalizar.getTexto("menu.ayuda") );
 		this.getMiAcercaDe().setText( internacionalizar.getTexto("menu.acercade") );
-		this.getMnOpciones().setText( internacionalizar.getTexto("menu.opciones") );
+		this.getMnIdioma().setText( internacionalizar.getTexto("menu.idioma") );
 		this.getMiEspanol().setText( internacionalizar.getTexto("menu.espanol") );
 		this.getMiIngles().setText( internacionalizar.getTexto("menu.ingles") );
 		
@@ -254,7 +254,7 @@ public class VentanaPrincipal extends JFrame
 	{
 		if ( confirmarSalir() )
 		{
-			this.inicializarJuego();
+			this.inicializarAplicacion();
 			
 			this.mostrarPantallaInicio();
 		}		
@@ -270,6 +270,18 @@ public class VentanaPrincipal extends JFrame
 		return false;
 	}
 	
+	public void inicializarAplicacion()
+	{
+		// Inicializo el juego
+		inicializarJuego();
+		
+		// Inicializo la gestión de premios
+		inicializarGestionPremios();
+		
+		// Muestro la pantalla de inicio
+		mostrarPantallaInicio();
+	}
+	
 	/**
 	 * Reinicia los puntos, ronda, tablero y movimientos
 	 */
@@ -277,11 +289,20 @@ public class VentanaPrincipal extends JFrame
 	{
 		game.inicializar();
 		
-		pnPantallaJuego.getPnTablero().removeAll();
-		pnPantallaJuego.getPnMovimientos().removeAll();
+		this.getPnPantallaInicio().inicializar();
+		this.getPnPantallaJuego().inicializar();
+	}
+	
+	/**
+	 * Reinicia el carrito y los premios
+	 */
+	private void inicializarGestionPremios()
+	{
+		gestionPremios.inicializar();
 		
-		pnPantallaJuego.pintaTablero();
-		pnPantallaJuego.pintaMovimientos();
+		this.getPnPantallaPremios().inicializar();
+		this.getPnPantallaCarrito().inicializar();
+		this.getPnPantallaFinal().inicializar();
 	}
 	
 	public Internacionalizar getInternacionalizar() {
@@ -372,14 +393,6 @@ public class VentanaPrincipal extends JFrame
 		return new ImageIcon(imgEscalada);
 	}
 	
-	/*protected ImageIcon ajustarImagen(JPanel panel, String path)
-	{
-		Image imgOriginal = new ImageIcon(VentanaPrincipal.class.getResource(path)).getImage();
-		Image imgEscalada = imgOriginal.getScaledInstance(panel.getWidth(), panel.getHeight(), Image.SCALE_FAST);
-		
-		return new ImageIcon(imgEscalada);
-	}*/
-	
 	protected ImageIcon ajustarImagen(int w, int h, String path)
 	{
 		Image imgOriginal = new ImageIcon(VentanaPrincipal.class.getResource(path)).getImage();
@@ -408,7 +421,7 @@ public class VentanaPrincipal extends JFrame
 		if (MenuBar == null) {
 			MenuBar = new JMenuBar();
 			MenuBar.add(getMnJuego());
-			MenuBar.add(getMnOpciones());
+			MenuBar.add(getMnIdioma());
 			MenuBar.add(getMnAyuda());
 		}
 		return MenuBar;
@@ -471,19 +484,19 @@ public class VentanaPrincipal extends JFrame
 		return miAcercaDe;
 	}
 	
-	private JMenu getMnOpciones() {
-		if (mnOpciones == null) {
-			mnOpciones = new JMenu("");
-			mnOpciones.setText( internacionalizar.getTexto("menu.opciones") );
-			mnOpciones.add(getMiEspanol());
-			mnOpciones.add(getMiIngles());
+	private JMenu getMnIdioma() {
+		if (mnIdioma == null) {
+			mnIdioma = new JMenu("");
+			mnIdioma.setText( internacionalizar.getTexto("menu.idioma") );
+			mnIdioma.add(getMiEspanol());
+			mnIdioma.add(getMiIngles());
 			
 			ButtonGroup groupOpciones = new ButtonGroup();
 			
 			groupOpciones.add( getMiEspanol() );
 			groupOpciones.add( getMiIngles() );
 		}
-		return mnOpciones;
+		return mnIdioma;
 	}
 	
 	private JRadioButtonMenuItem getMiEspanol() {

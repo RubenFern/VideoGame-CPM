@@ -69,6 +69,34 @@ public abstract class FileUtil
 		}
 	}
 	
+	public static void actualizarDatosTickets(String nombreFichero, List<Ticket> tickets)
+	{
+		try {
+			// Borro el fichero
+			BufferedWriter borrar = new BufferedWriter(new FileWriter(nombreFichero));
+			borrar.write("");
+			borrar.close();
+			
+			// Actualizo los tickets
+			BufferedWriter fichero= new BufferedWriter(new FileWriter(nombreFichero, true));
+			
+			for ( Ticket t : tickets )
+			{
+				fichero.write( t.toString() + "\n" );
+			}
+			
+			fichero.close();
+		} 
+		catch (FileNotFoundException fnfe) 
+		{ 
+			System.out.println("El archivo no se ha encontrado."); 
+		} 
+		catch (IOException ioe) 
+		{ 
+			new RuntimeException("Error de entrada/salida."); 
+		}
+	}
+	
 	public static void cargarPremios(String nombreFichero, List<Premio> premios)
 	{
 		String linea;
@@ -111,13 +139,13 @@ public abstract class FileUtil
 		return null;
 	}
 	
-	public static void anadirEntrega(String fichero, Entrega entrega)
+	public static void anadirEntrega(String nombreFichero, Entrega entrega)
 	{
 		try {
-			BufferedWriter f = new BufferedWriter(new FileWriter(fichero, true) );
+			BufferedWriter fichero = new BufferedWriter(new FileWriter(nombreFichero, true) );
 			
-			f.write( entrega.toString() + "\n" );
-			f.close();
+			fichero.write( entrega.toString() + "\n" );
+			fichero.close();
 		}
 
 		catch (FileNotFoundException fnfe) {

@@ -91,6 +91,11 @@ public class VentanaCarrito extends JPanel
 		addComponentListener(pRI);
 	}
 	
+	public void inicializar()
+	{
+		this.getRdTodo().setSelected(true);
+	}
+	
 	class ProcesaAccionFiltroCategorias implements ActionListener
 	{
 		@Override

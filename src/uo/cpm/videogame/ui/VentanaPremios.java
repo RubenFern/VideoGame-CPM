@@ -100,6 +100,16 @@ public class VentanaPremios extends JPanel
 		addComponentListener(pRI);
 	}
 	
+	public void inicializar()
+	{
+		this.getBtCarrito().setText( "(" + gestionPremios.getNumeroPremios() + ")" );
+		
+		this.getRdTodo().setSelected(true);
+		this.getCbRegalosDisponibles().setSelected(false);
+		
+		this.mostrarPremios(TODO, false);
+	}
+	
 	class ProcesaAccionFiltroCategorias implements ActionListener
 	{
 		@Override
@@ -163,7 +173,7 @@ public class VentanaPremios extends JPanel
 		}
 			
 		vp.mostrarPantallaCarrito();
-		vp.getPnPantallaCarrito().mostrarPremios(TODO); // Muestro todos los artículos del carrito
+		vp.getPnPantallaCarrito().mostrarPremios(); // Muestro todos los artículos del carrito
 		vp.getPnPantallaCarrito().getPnPremios().validate();
 		vp.getPnPantallaCarrito().getTxtPuntos().setText(String.format("%d", game.getPuntos())); // Muestro los puntos actuales del usuario
 	}

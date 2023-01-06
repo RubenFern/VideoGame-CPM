@@ -22,6 +22,11 @@ public class GestionPremios
 		carrito = new Carrito();
 	}
 	
+	public void inicializar()
+	{
+		carrito.inicializar();
+	}
+	
 	public Premio[] getListaPremios(boolean soloDisponibles, int puntos)
 	{
 		if ( soloDisponibles )

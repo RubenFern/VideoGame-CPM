@@ -55,6 +55,11 @@ public class VentanaFinal extends JPanel
 		add(getPnCentro(), BorderLayout.CENTER);
 	}
 	
+	public void inicializar()
+	{
+		this.getTxtDNI().setText("");
+	}
+	
 	class ProcesaBotonAtras implements ActionListener
 	{
 		@Override
@@ -93,8 +98,8 @@ public class VentanaFinal extends JPanel
 		{
 			gestionPremios.entrega(dni, game.getCodigoTienda());
 			
-			// Inicializa y va a la pantalla premios
-			vp.inicializarJuego();
+			// Inicializa toda la aplicación
+			vp.inicializarAplicacion();
 			
 			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("final.entrega"),
 					game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(game.getIconoTienda()));

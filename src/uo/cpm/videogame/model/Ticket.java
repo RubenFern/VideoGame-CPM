@@ -38,7 +38,8 @@ public class Ticket
 	}
 
 	@Override
-	public String toString() {
-		return "Ticket [codigoTienda=" + codigoTienda + ", numero=" + numero + ", importe=" + importe + "]";
+	public String toString() 
+	{
+		return codigoTienda + "@" + numero + "@" + importe;
 	}
 }

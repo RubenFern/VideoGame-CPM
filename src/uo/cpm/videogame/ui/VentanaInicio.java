@@ -31,7 +31,7 @@ public class VentanaInicio extends JPanel
 	private static final long serialVersionUID = 1L;
 
 	private VentanaPrincipal vp;
-	private ProcesaAccionBotonSiguiente pBS;
+	private ProcesaAccionBotonJugar pBJ;
 	private ProcesaResizeInterfaz pRI;
 	private ProcesaPulsacionNumeroTicket pPNT;
 	
@@ -65,7 +65,7 @@ public class VentanaInicio extends JPanel
 		
 		pRI = new ProcesaResizeInterfaz();
 		pPNT = new ProcesaPulsacionNumeroTicket();
-		pBS = new ProcesaAccionBotonSiguiente();
+		pBJ = new ProcesaAccionBotonJugar();
 		
 		// Asigno el tamaño por defecto de los textos
 		vp.tamanoTextos(40, 20, 17, 15);
@@ -81,7 +81,13 @@ public class VentanaInicio extends JPanel
 		addComponentListener( pRI );
 	}
 	
-	class ProcesaAccionBotonSiguiente implements ActionListener
+	public void inicializar()
+	{
+		this.getTxtNumeroTicket().setText("");
+		this.getTxtCodigoTienda().setText("");
+	}
+	
+	class ProcesaAccionBotonJugar implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) 
@@ -132,13 +138,14 @@ public class VentanaInicio extends JPanel
 			return;
 		}
 		
-		// Si no es v�lido detengo la ejecuci�n
+		// Si no es válido detengo la ejecución
 		if ( !comprobarTicket(codigo, Integer.parseInt(numero)) )
 			return;
 			
-		vp.getPnPantallaJuego().inicializar();
+		// Muestro los datos de la partida
+		vp.getPnPantallaJuego().actualizarPartida();
 		
-		// Si el ticket es v�lido muestro la pantalla del juego	
+		// Si el ticket es válido muestro la pantalla del juego	
 		vp.mostrarPantallaJuego();
 	}
 	
@@ -160,12 +167,15 @@ public class VentanaInicio extends JPanel
 			return false;
 		}
 		
-		// C�digo de tienda diferente
+		// Código de tienda diferente
 		if ( !codigo.equals(game.getCodigoTienda()) )
 		{
 			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.codigoTiendaIncorrecto"), game.getNombreTienda(), JOptionPane.ERROR_MESSAGE, new ImageIcon( game.getIconoTienda() ));
 			return false;
 		}
+		
+		// Elimino el ticket 
+		game.eliminarTicket( ticket );
 		
 		return true;
 	}
@@ -270,9 +280,6 @@ public class VentanaInicio extends JPanel
 			txtNumeroTicket.setBounds(new Rectangle(0, 0, 300, 50));
 			txtNumeroTicket.setColumns(10);
 			txtNumeroTicket.setFont(new Font("Tahoma", Font.PLAIN, vp.getTexto()));
-			
-			// TODO BORRAR
-			txtNumeroTicket.setText("12345");
 		}
 		return txtNumeroTicket;
 	}
@@ -291,9 +298,6 @@ public class VentanaInicio extends JPanel
 			txtCodigoTienda = new JTextField();
 			txtCodigoTienda.setFont(new Font("Tahoma", Font.PLAIN, vp.getTexto()));
 			txtCodigoTienda.setColumns(10);
-			
-			// TODO BORRAR
-			txtCodigoTienda.setText("33429_01");
 		}
 		return txtCodigoTienda;
 	}
@@ -325,10 +329,10 @@ public class VentanaInicio extends JPanel
 			btSiguiente.setBackground(new Color(0, 204, 255));
 			btSiguiente.setBorder(new EmptyBorder(5, 10, 5, 10));
 			btSiguiente.setActionCommand(VentanaPrincipal.PANTALLA_JUEGO);
-			btSiguiente.setFocusPainted(false); // Elimina la l�nea naranja			
+			//btSiguiente.setFocusPainted(false); // Elimina la línea naranja			
 			btSiguiente.setText( vp.getInternacionalizar().getTexto("boton.jugar") );
 			
-			btSiguiente.addActionListener( pBS );
+			btSiguiente.addActionListener( pBJ );
 		}
 		return btSiguiente;
 	}
