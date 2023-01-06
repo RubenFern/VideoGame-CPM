@@ -5,6 +5,18 @@
 
 <toc version="1.0">
   
-  <tocitem text="" target=""/>
+  <tocitem text="Acceder al juego" target="introduccion"/>
+  
+  <tocitem text="Juego">
+  	<tocitem text="Cómo jugar" target="como_jugar"/>
+  	<tocitem text="Reglas del juego" target="reglas_juego"/>
+  </tocitem>
+  
+  <tocitem text="Selección de premios">
+  	<tocitem text="Añadir un premio al carrito" target="anadir_premio"/>
+  	<tocitem text="Eliminar un premio del carrito" target="eliminar_premio"/>
+  </tocitem>
+  
+  <tocitem text="Recoger los premios" target="recoger_premios"/>
 
 </toc>

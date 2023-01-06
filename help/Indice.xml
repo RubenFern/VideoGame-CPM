@@ -5,6 +5,18 @@
 
 <index version="1.0">
 
-  <indexitem text="" target="" />
+  <indexitem text="Acceder al juego" target="introduccion" />
+  
+  <indexitem text="Juego">
+	<indexitem text="Cómo jugar" target="como_jugar" />
+	<indexitem text="Reglas del juego" target="reglas_juego" />
+  </indexitem> 
+  
+  <indexitem text="Selección de premios">
+	<indexitem text="Añadir un premio al carrito" target="anadir_premio" />
+	<indexitem text="Eliminar un premio del carrito" target="eliminar_premio" />
+  </indexitem>
+  
+  <indexitem text="Recoger los premios" target="recoger_premios" />
     
 </index>

@@ -22,14 +22,12 @@ public class Game
 	private Casilla casilla;
 	
 	private List<Ticket> listaTickets;
-	
-	private int movimientos; // Posible añadirlo en Partida
-	
+		
 	private boolean arrastra;
 	
 	public Game()
 	{	
-		// Cargo la información de la tienda y de los tickets
+		// Cargo la informaciÃ³n de la tienda y de los tickets
 		tienda = new Tienda();
 		tablero = new Tablero();
 		casilla = new Casilla();	
@@ -60,11 +58,16 @@ public class Game
 	}
 	
 	public int getMovimientos() {
-		return movimientos;
+		return tablero.getPartida().getMovimientos();
 	}
 
 	public void setMovimientos(int movimientos) {
-		this.movimientos = movimientos;
+		tablero.getPartida().setMovimientos(movimientos);
+	}
+	
+	public void disminuirMovimientos()
+	{
+		tablero.getPartida().setMovimientos( tablero.getPartida().getMovimientos() - 1 );
 	}
 
 	public boolean isArrastra() {
@@ -135,16 +138,16 @@ public class Game
 		casilla.setPosicionTablero(posicionTablero);
 	}
 	
-	public void añadirInvasorAlTablero(Casilla casilla)
+	public void anadirInvasorAlTablero(Casilla casilla)
 	{
-		tablero.añadirInvasorAlTablero(casilla);
+		tablero.anadirInvasorAlTablero(casilla);
 	}
 	
 	/**
-	 * Recorre la lista de tickets y cuando encuentra un ticket con el mismo número de ticket lo devuelve
+	 * Recorre la lista de tickets y cuando encuentra un ticket con el mismo nï¿½mero de ticket lo devuelve
 	 * 
-	 * @param codigo Código del ticket
-	 * @param numero Número del ticket
+	 * @param codigo Cï¿½digo del ticket
+	 * @param numero Nï¿½mero del ticket
 	 * @return Devuelve el ticket encontrado o null si no lo ha encontrado
 	 */
 	public Ticket ticketValido(String codigo, int numero)
@@ -168,7 +171,7 @@ public class Game
 	
 	public int getNumeroInvasoresTableroMaximo()
 	{
-		// El tamaño total del tablero menos las 5 posiciones no válidas del tablero
+		// El tamaï¿½o total del tablero menos las 5 posiciones no vï¿½lidas del tablero
 		return tablero.getDimensionTablero() - Reglas.NUM_POSICIONES_NO_VALIDAS.getValor();
 	}
 	

@@ -111,12 +111,12 @@ public abstract class FileUtil
 		return null;
 	}
 	
-	public static void añadirEntrega(String fichero, Entrega entrega)
+	public static void anadirEntrega(String fichero, Entrega entrega)
 	{
 		try {
-			BufferedWriter f = new BufferedWriter(new FileWriter(fichero) );
+			BufferedWriter f = new BufferedWriter(new FileWriter(fichero, true) );
 			
-			f.write( entrega.toString() );
+			f.write( entrega.toString() + "\n" );
 			f.close();
 		}
 

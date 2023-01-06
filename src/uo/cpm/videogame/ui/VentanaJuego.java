@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
 import javax.swing.JTextField;
 import java.awt.Font;
+
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
@@ -53,6 +54,8 @@ public class VentanaJuego extends JPanel
 	private JLabel lbRonda;
 	private JTextField txtPuntos;
 	private JPanel pnTablero;
+	private JPanel pnComoJugar;
+	private JButton btComoJugar;
 	
 	public VentanaJuego(VentanaPrincipal vp) 
 	{
@@ -61,8 +64,7 @@ public class VentanaJuego extends JPanel
 
 		this.pDAD = new ProcesaDragAndDrop();
 		this.pLT = new ProcesaLabelTablero();
-		
-		
+				
 		setLayout(new BorderLayout(0, 0));
 		add(getPnNorte(), BorderLayout.NORTH);
 		add(getPnCentro(), BorderLayout.CENTER);
@@ -88,10 +90,10 @@ public class VentanaJuego extends JPanel
 			// Guardo el invasor que se quiere arrastar
 			int numeroInvasor = ((MiLabel) c).getNumeroInvasor();
 			
-			// Posición del invasor que se arrastra
+			// Posiciï¿½n del invasor que se arrastra
 			int posicionInvasor = ((MiLabel) c).getId();
 
-			// Bloqueo los demás movimientos para que solo pueda colocar invasores en el tablero
+			// Bloqueo los demï¿½s movimientos para que solo pueda colocar invasores en el tablero
 			bloqueoMovimientos(posicionInvasor);
 			
 			game.setNumeroInvasorCasilla(numeroInvasor);
@@ -113,37 +115,37 @@ public class VentanaJuego extends JPanel
 		@Override
 		public void propertyChange(PropertyChangeEvent e) 
 		{			
-			// Si hubo un cambio en la propiedad ImageIcon significa que se arrastró un invasor
+			// Si hubo un cambio en la propiedad ImageIcon significa que se arrastrï¿½ un invasor
 			if ( e.getPropertyName().equals("icon") && (e.getNewValue() != null) && (e.getNewValue().getClass().toString().contains("ImageIcon") ))
 			{
-				// El usuario arrastró un invasor
+				// El usuario arrastrï¿½ un invasor
 				if ( game.isArrastra() )
 				{
 					MiLabel lbPulsada = (MiLabel) e.getSource();
-					lbPulsada.setTransferHandler(null); // Impido volver a colocar un invasor en esa posición
+					lbPulsada.setTransferHandler(null); // Impido volver a colocar un invasor en esa posiciï¿½n
 
-					// Guardo la posición del tablero donde se colocó el invasor
+					// Guardo la posiciï¿½n del tablero donde se colocï¿½ el invasor
 					int posicionTablero = lbPulsada.getId();
 					game.setPosicionTableroCasilla(posicionTablero);
 					
 					// Resto 1 movimiento en la ronda
-					game.setMovimientos( game.getMovimientos() - 1 );
+					game.disminuirMovimientos();
 
-					// Añado el invasor en la casilla
-					game.añadirInvasorAlTablero( game.getCasilla() );
+					// AÃ±ado el invasor en la casilla
+					game.anadirInvasorAlTablero( game.getCasilla() );
 					
 					// Marco el movimiento como usado
 					marcarMovimientoUsado(movimiento);
 					
-					// Si el invasor movido es el líder lo marco
-					if ( game.getCasilla().getInvasor().getNumero() == 1 )
+					// Si el invasor movido es el lÃ­der lo marco
+					if ( game.getCasilla().getInvasor().isLider() )
 						marcarLider(game.getCasilla().getPosicionTablero());
 					
-					// Compruebo el estado de la ronda o si el tablero está lleno
+					// Compruebo el estado de la ronda o si el tablero estï¿½ lleno
 					if ( game.getMovimientos() == 0 )
 						siguienteRonda();
-					else if ( game.getNumeroInvasoresTablero() == game.getNumeroInvasoresTableroMaximo() )
-						finalizarPartida(false);
+					/*else if ( game.getNumeroInvasoresTablero() == game.getNumeroInvasoresTableroMaximo() )
+						finalizarPartida(false);*/
 					
 					//game.imprimirTablero();
 										
@@ -191,7 +193,7 @@ public class VentanaJuego extends JPanel
 	}
 
 	/**
-	 * Comprueba el número de movimientos del usuario, cuado llegan a 0 pasa a la siguiente ronda
+	 * Comprueba el nï¿½mero de movimientos del usuario, cuado llegan a 0 pasa a la siguiente ronda
 	 * y comprueba los puntos 
 	 */
 	private void siguienteRonda()
@@ -199,12 +201,10 @@ public class VentanaJuego extends JPanel
 		// Aumento la ronda
 		game.aumentarRonda();
 		
-		//Partida partida = game.eliminarColonias();
 		int puntosGanados = game.eliminarColonias();
 		
-		//int puntosGanados = partida.getPuntos();
 		
-		// Si retornó puntos significa que hubo eliminación de colonias
+		// Si retornÃ³ puntos significa que hubo eliminaciÃ³n de colonias
 		if ( puntosGanados > 0 )
 		{		
 			this.getPnTablero().removeAll();
@@ -225,14 +225,14 @@ public class VentanaJuego extends JPanel
 	
 	private boolean compruebaFin(boolean finalizada)
 	{	
-		// Si se ha llenado el tablero de invasores (aunque esté en la ronda 10 finaliza con derrota)
+		// Si se ha llenado el tablero de invasores (aunque estÃ¡ en la ronda 10 finaliza con derrota)
 		if ( game.getNumeroInvasoresTablero() == game.getNumeroInvasoresTableroMaximo() )
 		{
 			finalizarPartida(false);
 			return true;
 		}
 		
-		// Superó la ronda 10
+		// SuperÃ³ la ronda 10
 		if ( finalizada || game.getRonda() > Reglas.RONDAS.getValor() )
 		{
 			finalizarPartida(true);
@@ -280,10 +280,11 @@ public class VentanaJuego extends JPanel
 		if (pnNorte == null) {
 			pnNorte = new JPanel();
 			pnNorte.setBorder(new EmptyBorder(15, 0, 20, 0));
-			pnNorte.setLayout(new GridLayout(1, 3, 0, 0));
+			pnNorte.setLayout(new GridLayout(0, 4, 0, 0));
 			pnNorte.add(getPnSalir());
 			pnNorte.add(getPnPuntos());
 			pnNorte.add(getPnRonda());
+			pnNorte.add(getPnComoJugar());
 		}
 		return pnNorte;
 	}
@@ -314,7 +315,7 @@ public class VentanaJuego extends JPanel
 		return pnSalir;
 	}
 	
-	private JButton getBtSalir() {
+	public JButton getBtSalir() {
 		if (btSalir == null) {
 			btSalir = new JButton("");
 			btSalir.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
@@ -334,7 +335,7 @@ public class VentanaJuego extends JPanel
 		return pnPuntos;
 	}
 	
-	private JLabel getLbPuntos() {
+	public JLabel getLbPuntos() {
 		if (lbPuntos == null) {
 			lbPuntos = new JLabel("");
 			lbPuntos.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
@@ -352,7 +353,7 @@ public class VentanaJuego extends JPanel
 		return pnRonda;
 	}
 	
-	private JLabel getLbRonda() {
+	public JLabel getLbRonda() {
 		if (lbRonda == null) {
 			lbRonda = new JLabel("");
 			lbRonda.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
@@ -376,8 +377,7 @@ public class VentanaJuego extends JPanel
 			pnTablero = new JPanel();
 			pnTablero.setBorder(new LineBorder(new Color(0, 0, 0)));
 			pnTablero.setLayout(new GridLayout(7, 7, 0, 0));
-			pnTablero.setBackground(Color.BLACK);
-			
+		
 			pintaTablero();
 		}
 		
@@ -420,7 +420,7 @@ public class VentanaJuego extends JPanel
 		// Asigno la imagen del invasor
 		label.setIcon( vp.ajustarImagen(label, invasor.getImagen()) );
 		
-		// Asigno el número del invasor a la etiqueta
+		// Asigno el nï¿½mero del invasor a la etiqueta
 		label.setNumeroInvasor(invasor.getNumero());
 		label.setId(i);
 				
@@ -442,26 +442,41 @@ public class VentanaJuego extends JPanel
 		// Evento arrastrar
 		if ( valida && invasor == null )
 		{
+			label.setIcon(  vp.ajustarImagen(label, "/img/casilla_libre.jpg") );
 			label.setTransferHandler( new TransferHandler("icon") );
 			label.addPropertyChangeListener(pLT);
 		}
 		
-		// Es una posición no válida
+		// Es una posiciÃ³n no vÃ¡lida
 		if ( !valida )
-			label.setIcon( vp.ajustarImagen(label, "/img/casilla_invalida.png") );
+			label.setIcon( vp.ajustarImagen(label, "/img/casilla_invalida.jpg") );
 		
-		// En la posición hay un invasor
+		// En la posiciÃ³n hay un invasor
 		if ( invasor != null )
 		{
-			label.setNumeroInvasor(invasor.getNumero()); // Asigno el número del invasor a la etiqueta
+			label.setNumeroInvasor(invasor.getNumero()); // Asigno el nÃºmero del invasor a la etiqueta
 			label.setIcon( vp.ajustarImagen(label, invasor.getImagen()) ); // Asigno la imagen del invasor
 			
-			// Si es líder lo marco
+			// Si es lÃ­der lo marco
 			if ( invasor.isLider() )
 				label.setBorder( new LineBorder(Color.YELLOW) );
 		}		
 		
 		return label;
 	}
-	
+	private JPanel getPnComoJugar() {
+		if (pnComoJugar == null) {
+			pnComoJugar = new JPanel();
+			pnComoJugar.add(getBtComoJugar());
+		}
+		return pnComoJugar;
+	}
+	public JButton getBtComoJugar() {
+		if (btComoJugar == null) {
+			btComoJugar = new JButton("");
+			btComoJugar.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
+			btComoJugar.setText( vp.getInternacionalizar().getTexto("boton.comojugar") );
+		}
+		return btComoJugar;
+	}
 }

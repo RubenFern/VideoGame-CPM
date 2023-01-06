@@ -75,12 +75,16 @@ public class PanelPremioCarrito extends JPanel
 	{
 		gestionPremios.eliminarDelCarrito(game, p);
 		
-		// Actualizo el número de árticulos del carrito
+		// Actualizo el nï¿½mero de ï¿½rticulos del carrito
 		vp.getPnPantallaPremios().getBtCarrito().setText( "(" + gestionPremios.getNumeroPremios() + ")" );
 		
 		// Actualizo los puntos de la pantalla premios y carrito
 		vp.getPnPantallaPremios().getTxtPuntos().setText( String.format("%d", game.getPuntos()) );
 		vp.getPnPantallaCarrito().getTxtPuntos().setText( String.format("%d", game.getPuntos()) );
+		
+		// Actulizo los premios disponibles si estÃ¡ activada la opciÃ³n de mostrar sÃ³lo los disponibles
+		if ( vp.getPnPantallaPremios().getCbRegalosDisponibles().isSelected() )
+			vp.getPnPantallaPremios().mostrarPremios(true);
 		
 		// Si no hay premios en el carrito vuelvo a la pantalla de premios
 		if ( gestionPremios.getCarrito().length == 0 )

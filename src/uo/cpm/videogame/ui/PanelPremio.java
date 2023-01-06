@@ -34,7 +34,7 @@ public class PanelPremio extends JPanel
 	private Game game;
 	private GestionPremios gestionPremios;
 	
-	private ProcesaAñadirPremio pAP;
+	private ProcesaAnadirPremio pAP;
 	
 	private JPanel pnImagen;
 	private JPanel pnPremio;
@@ -43,7 +43,7 @@ public class PanelPremio extends JPanel
 	private JTextArea lbDescripcion;
 	private JPanel pnInferior;
 	private JLabel lbPuntos;
-	private JButton btAñadir;
+	private JButton btAnadir;
 	
 	public PanelPremio(VentanaPrincipal vp, Premio p, GestionPremios gestionPremios)
 	{
@@ -52,7 +52,7 @@ public class PanelPremio extends JPanel
 		this.p = p;
 		this.game = vp.getGame();
 		this.gestionPremios = gestionPremios;
-		this.pAP = new ProcesaAñadirPremio();
+		this.pAP = new ProcesaAnadirPremio();
 		
 		setBorder(new LineBorder( Color.black ));
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -60,16 +60,16 @@ public class PanelPremio extends JPanel
 		add(getPnPremio());
 	}
 	
-	class ProcesaAñadirPremio implements ActionListener
+	class ProcesaAnadirPremio implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			añadirPremio();
+			anadirPremio();
 		}
 	}
 	
-	private void añadirPremio()
+	private void anadirPremio()
 	{
 		if ( game.getPuntos() < p.getCostePuntos() )
 		{
@@ -78,10 +78,14 @@ public class PanelPremio extends JPanel
 			return;
 		}
 		
-		gestionPremios.añadirPremioAlCarrito(game, p);
+		gestionPremios.anadirPremioAlCarrito(game, p);
 		
 		vp.getPnPantallaPremios().getTxtPuntos().setText( String.format("%d", game.getPuntos()) );
 		vp.getPnPantallaPremios().getBtCarrito().setText( "(" + gestionPremios.getNumeroPremios() + ")" );
+		
+		// Muestro de nuevo los premios si estÃ¡ activado el mostrar sÃ³lo los disponibles
+		if ( vp.getPnPantallaPremios().getCbRegalosDisponibles().isSelected() )
+			vp.getPnPantallaPremios().mostrarPremios(true);
 	}
 
 	private JPanel getPnImagen() {
@@ -139,7 +143,7 @@ public class PanelPremio extends JPanel
 			pnInferior.setBorder(new EmptyBorder(5, 0, 5, 0));
 			pnInferior.setLayout(new GridLayout(0, 2, 0, 0));
 			pnInferior.add(getLbPuntos());
-			pnInferior.add(getBtAñadir());
+			pnInferior.add(getBtAnadir());
 		}
 		return pnInferior;
 	}
@@ -152,14 +156,14 @@ public class PanelPremio extends JPanel
 		}
 		return lbPuntos;
 	}
-	private JButton getBtAñadir() {
-		if (btAñadir == null) {
-			btAñadir = new JButton("");
-			btAñadir.setText( vp.getInternacionalizar().getTexto("boton.añadir") );
-			btAñadir.setFont(new Font("Tahoma", Font.BOLD, vp.getTexto()));
+	private JButton getBtAnadir() {
+		if (btAnadir == null) {
+			btAnadir = new JButton("");
+			btAnadir.setText( vp.getInternacionalizar().getTexto("boton.anadir") );
+			btAnadir.setFont(new Font("Tahoma", Font.BOLD, vp.getTexto()));
 			
-			btAñadir.addActionListener(pAP);
+			btAnadir.addActionListener(pAP);
 		}
-		return btAñadir;
+		return btAnadir;
 	}
 }

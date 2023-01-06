@@ -1,5 +1,8 @@
 package uo.cpm.videogame.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import uo.cpm.videogame.model.Carrito;
 import uo.cpm.videogame.model.Catalogo;
 import uo.cpm.videogame.model.Entrega;
@@ -19,24 +22,47 @@ public class GestionPremios
 		carrito = new Carrito();
 	}
 	
-	public Premio[] getListaPremios()
+	public Premio[] getListaPremios(boolean soloDisponibles, int puntos)
 	{
+		if ( soloDisponibles )
+			return getSoloPremiosDisponibles(catalogo.getListaPremios(), puntos);
+			
 		return catalogo.getListaPremios();
 	}
 	
-	public Premio[] getAccesorios()
+	public Premio[] getAccesorios(boolean soloDisponibles, int puntos)
 	{
+		if ( soloDisponibles )
+			return getSoloPremiosDisponibles(catalogo.getAccesorios(), puntos);
+		
 		return catalogo.getAccesorios();
 	}
 	
-	public Premio[] getConsolas()
+	public Premio[] getConsolas(boolean soloDisponibles, int puntos)
 	{
+		if ( soloDisponibles )
+			return getSoloPremiosDisponibles(catalogo.getConsolas(), puntos);
+			
 		return catalogo.getConsolas();
 	}
 	
-	public Premio[] getVideojuegos()
+	public Premio[] getVideojuegos(boolean soloDisponibles, int puntos)
 	{
+		if ( soloDisponibles )
+			return getSoloPremiosDisponibles(catalogo.getVideojuegos(), puntos);
+		
 		return catalogo.getVideojuegos();
+	}
+	
+	public Premio[] getSoloPremiosDisponibles(Premio[] listaPremios, int puntos)
+	{
+		List<Premio> disponibles = new ArrayList<Premio>();
+		
+		for ( Premio p : listaPremios )
+			if ( p.getCostePuntos() <= puntos ) // Si el premio cuesta menos o los mismos puntos
+				disponibles.add(p);
+		
+		return disponibles.toArray( new Premio[disponibles.size()] );
 	}
 	
 	public int getNumeroPremios() 
@@ -44,10 +70,10 @@ public class GestionPremios
 		return carrito.getNumeroPremios();
 	}
 	
-	public void añadirPremioAlCarrito(Game game, Premio p)
+	public void anadirPremioAlCarrito(Game game, Premio p)
 	{
 		game.setPuntos( game.getPuntos() - p.getCostePuntos() );
-		carrito.añadirAlCarrito(p);
+		carrito.anadirAlCarrito(p);
 	}
 	
 	public void eliminarDelCarrito(Game game, Premio p)
@@ -59,6 +85,14 @@ public class GestionPremios
 	public Premio[] getCarrito()
 	{
 		return carrito.getCarrito();
+	}
+	
+	/**
+	 * Actualiza el carrito en caso de que se haya cambiado el idioma de la apliaciÃ³n
+	 */
+	public void actualizarCarrito(boolean soloDisponibles, int puntos)
+	{
+		carrito.actualizarCarrito( this.getListaPremios(soloDisponibles, puntos) );
 	}
 	
 	public Premio[] getAccesoriosCarrito()
@@ -85,7 +119,11 @@ public class GestionPremios
 		for ( int i = 0; i < listaPremios.length; i++ )
 			codigosPremios[i] = listaPremios[i].getCodigo();
 		
-		FileUtil.añadirEntrega(FICHERO_ENTREGAS, new Entrega(dni, codigoTienda, codigosPremios));
+		FileUtil.anadirEntrega(FICHERO_ENTREGAS, new Entrega(dni, codigoTienda, codigosPremios));
 	}
 	
+	public void cargarArticulos(Internacionalizar i)
+	{
+		catalogo.cargarArticulos(i);
+	}
 }

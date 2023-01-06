@@ -1,0 +1,117 @@
+<html>
+
+<head>
+	<title>VideoGame - Parque Principado</title>
+	<link rel=StyleSheet type="text/css" href="css/estilo.css" /> 
+	<meta charset="UTF-8">
+</head>
+
+<body>
+	<h1>Reglas del juego</h1>
+
+	<h3>Invasores:</h3>
+
+	<p>
+		El juego cuenta con 8 tipos de invasores:
+	</p>
+
+	<div class="center">
+		<img class="invasor" src="img/invasor1.png" alt="invasor1.png">
+		<img class="invasor" src="img/invasor2.png" alt="invasor2.png">
+		<img class="invasor" src="img/invasor3.png" alt="invasor3.png">
+		<img class="invasor" src="img/invasor4.png" alt="invasor4.png">
+		<img class="invasor" src="img/invasor5.png" alt="invasor5.png">
+		<img class="invasor" src="img/invasor6.png" alt="invasor6.png">
+		<img class="invasor" src="img/invasor7.png" alt="invasor7.png">
+		<img class="invasor" src="img/invasor8.png" alt="invasor8.png">
+	</div>
+	
+
+	<p id="lider">
+		El invasor 1 es el líder de la invasión y se representa en el juego con un cuadro amarillo rodeándole:
+	</p>
+
+	<div class="center">
+		<img src="img/lider.png" alt="lider.png">
+	</div>
+	
+	<h3>Objetivo:</h3>
+
+	<p>
+		El objetivo es eliminar tantos invasores como sea posible durante las 10 rondas que dura el juego.
+	</p>
+
+	<p>
+		El juego empieza en la ronda 1 donde aparecerán 5 invasores iniciales. Para poder eliminarlos tendrá disponible los 5 movimientos que se reiniciarán con el final de cada ronda.
+		Cuando se usa movimiento no podrá volver a utilizarse hasta la siguiente ronda, tampoco podrá cambiarlo de casilla una vez colocado en el tablero.
+	</p>
+
+	<h3>Eliminar invasores:</h3>
+
+	<p>
+		Para eliminar a los invasores del tablero debe formar colonias de 3 o más invasores del mismo tipo. Estas colonias puede estar en la misma fila  o columna, pero no en diagonal ya que no
+		será válido.
+	</p>
+
+	<p>
+		Colonia válida:
+	</p>
+
+	<div class="center">
+		<img src="img/colonia_fila.png" alt="colonia_fila.png">
+		<img src="img/colonia_columna.png" alt="colonia_columna.png">
+	</div>
+
+	<p>Colonia no válida:</p>
+
+	<div class="center">
+		<img src="img/colonia_invalida.png" alt="colonia_invalida.png">
+	</div>
+
+	<p>
+		Tampoco será posible eliminar los invasores que se encuentren en una fila diferente a la que contiene la colonia de 3 o más, por lo que el tamaño máximo de una colonia será de 7 invasores.
+		Pasa lo mismo con las colonias en columna.
+	</p>
+
+	<p>
+		Una vez colocados los 5 movimientos de la ronda, esta finalizará eliminando todas las colonias válidas del tablero y pasando a la siguiente ronda, siempre y cuando no  sea la ronda 10, en la siguiente
+		ronda se volverá a tener 5 movimientos para usar.
+	</p>
+
+	<h3>Puntuación:</h3>
+
+	<p>
+		El coste de puntos ganado para las colonias de invasores eliminados varía según el tamaño de la colonia. Por lo que si se elimina una colonia de:
+	</p>
+
+	<ul>
+		<li>3 invasores: Recibirás 50 puntos.</li>
+		<li>4 invasores: Recibirás 200 puntos.</li>
+		<li>5 invasores: Recibirás 1000 puntos.</li>
+		<li>6 invasores: Recibirás 5000 puntos.</li>
+		<li>7 invasores: Recibirás 10000 puntos.</li>
+	</ul>
+
+	<p>Si en una ronda se eliminan varias colonias, se sumarán los puntos ganados de cada una al total de puntos del juego.</p>
+
+	<h3>Fin de la partida:</h3>
+
+	<p>
+		Cuando se finaliza la partida puede ganar pudiendo acceder directamente a los premios disponibles o perder regresando a la pantalla inicial pudiendo probar suerte con otro ticket.
+	</p>
+
+	<p>Formas de ganar la partida:</p>
+
+	<ul>
+		<li>Cuando se elimina una colonia de 5 o más invasores de tipo <a href="#lider">líder</a>. Además, se sumarán 20000 puntos adicionales a su puntuación total.</li>
+		<li>Cuando se termina la ronda 10 y queda algún hueco libre en tablero. Se finalizará la partida con los puntos que se ha obtenido.</li>
+	</ul>
+
+	<p>Formas de perder la partida:</p>
+
+	<ul>
+		<li>Cuando el tablero se llena de invasores y no queda ningún hueco libre se finalizará la partida con derrota y se perderán todos los puntos obtenidos.</li>
+	</ul>
+</body>
+
+</html>

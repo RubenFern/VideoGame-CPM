@@ -3,18 +3,18 @@ package uo.cpm.videogame.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import uo.cpm.videogame.service.Internacionalizar;
 import uo.cpm.videogame.util.FileUtil;
 
 public class Catalogo 
 {
-	private static final String FICHERO = "files/premios.dat";
 	private List<Premio> listaPremios;
 	
 	public Catalogo()
 	{
 		listaPremios = new ArrayList<Premio>();
 		
-		cargarArticulos();
+		cargarArticulos( new Internacionalizar() );
 	}
 	
 	public Premio[] getListaPremios()
@@ -48,8 +48,8 @@ public class Catalogo
 		return lista.toArray( new Premio[lista.size()] );
 	}
 	
-	private void cargarArticulos()
+	public void cargarArticulos(Internacionalizar i)
 	{
-		FileUtil.cargarPremios(FICHERO, listaPremios);
+		FileUtil.cargarPremios(i.getTexto("archivos.premios"), listaPremios);
 	}
 }

@@ -46,10 +46,10 @@ public class VentanaFinal extends JPanel
 	{
 		this.vp = vp;
 		this.game = vp.getGame();
-		this.gestionPremios = vp.getPnPantallaPremios().getGestionPremios();
+		this.gestionPremios = vp.getGestionPremios();
 		this.pBA = new ProcesaBotonAtras();
 		this.pCP = new ProcesaConfirmarPremios();
-		
+				
 		setLayout(new BorderLayout(0, 0));
 		add(getPnNorte(), BorderLayout.NORTH);
 		add(getPnCentro(), BorderLayout.CENTER);
@@ -135,7 +135,7 @@ public class VentanaFinal extends JPanel
 		}
 		return pnAtras;
 	}
-	private JButton getBtAtras() {
+	public JButton getBtAtras() {
 		if (btAtras == null) {
 			btAtras = new JButton("");
 			btAtras.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
@@ -156,7 +156,7 @@ public class VentanaFinal extends JPanel
 		}
 		return pnLabel;
 	}
-	private JLabel getLbIntroducirDNI() {
+	public JLabel getLbIntroducirDNI() {
 		if (lbIntroducirDNI == null) {
 			lbIntroducirDNI = new JLabel("");
 			lbIntroducirDNI.setBorder(new EmptyBorder(30, 25, 20, 25));
@@ -190,7 +190,7 @@ public class VentanaFinal extends JPanel
 		}
 		return pnRecogerPremios;
 	}
-	private JButton getBtRecogerPremios() {
+	public JButton getBtRecogerPremios() {
 		if (btRecogerPremios == null) {
 			btRecogerPremios = new JButton("");
 			btRecogerPremios.setText( vp.getInternacionalizar().getTexto("boton.recoger") );

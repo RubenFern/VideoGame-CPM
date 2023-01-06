@@ -10,17 +10,6 @@ public class Premio
 	private String imagen;
 	private int unidades;
 	
-	public Premio(String codigo, String denominacion, String descripcion, Categoria categoria, int costePuntos) 
-	{
-		this.codigo = codigo;
-		this.denominacion = denominacion;
-		this.descripcion = descripcion;
-		this.categoria = categoria;
-		this.costePuntos = costePuntos;
-		this.imagen = "/img/" + codigo + ".png";
-		this.unidades = 1;
-	}
-	
 	public Premio(String codigo, String denominacion, String descripcion, Categoria categoria, int costePuntos, int unidades) 
 	{
 		this.codigo = codigo;
@@ -30,6 +19,11 @@ public class Premio
 		this.costePuntos = costePuntos;
 		this.imagen = "/img/" + codigo + ".png";
 		this.unidades = unidades;
+	}
+	
+	public Premio(String codigo, String denominacion, String descripcion, Categoria categoria, int costePuntos) 
+	{
+		this(codigo, denominacion, descripcion, categoria, costePuntos, 1);
 	}
 	
 	public String getCodigo() {

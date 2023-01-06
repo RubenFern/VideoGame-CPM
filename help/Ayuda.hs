@@ -6,11 +6,11 @@
 
 <helpset version="1.0">
   <!-- title -->
-  <title></title>
+  <title>Video Game - Parque Principado</title>
 
   <!-- maps -->
   <maps>
-     <homeID></homeID>
+     <homeID>introduccion</homeID>
      <mapref location="Map.jhm"/>
   </maps>
 

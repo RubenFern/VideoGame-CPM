@@ -9,18 +9,18 @@ public enum Puntuacion
 	COLONIA_7(7, 10000),
 	COLONIA_LIDERES(5, 20000);
 	
-	private final int tamaño;
+	private final int tamano;
 	private final int puntos;
 	
-	Puntuacion(int tamaño, int puntos) 
+	Puntuacion(int tamano, int puntos) 
 	{
-		this.tamaño = tamaño;
+		this.tamano = tamano;
 		this.puntos = puntos;
 	}
 
-	public int getTamaño()
+	public int getTamano()
 	{
-		return tamaño;
+		return tamano;
 	}
 	
 	public int getPuntos() {

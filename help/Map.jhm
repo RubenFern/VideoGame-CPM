@@ -5,6 +5,11 @@
 
 <map version="1.0">
 
-<mapID target="" url="" />
+	<mapID target="introduccion" url="Fuentes/introduccion.html" />
+	<mapID target="como_jugar" url="Fuentes/como_jugar.html" />
+	<mapID target="reglas_juego" url="Fuentes/reglas_juego.html" />
+	<mapID target="anadir_premio" url="Fuentes/anadir_premio.html" />
+	<mapID target="eliminar_premio" url="Fuentes/eliminar_premio.html" />
+	<mapID target="recoger_premios" url="Fuentes/recoger_premios.html" />
 
 </map>

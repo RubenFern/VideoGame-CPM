@@ -8,20 +8,22 @@ import javax.swing.UIManager;
 import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 
 import uo.cpm.videogame.service.Game;
+import uo.cpm.videogame.service.GestionPremios;
 import uo.cpm.videogame.ui.VentanaPrincipal;
 
-public class Main {
-
+public class Main 
+{
 	/**
-	 * 0 = 5 invasores aleatorios y uno de tipo líder
-	 * 1 = 5 invasores no aleatorios y todos de tipo líder
-	 * 2 = 5 invasores no aleatorios y todos de tipo no líder
+	 * 0 = 5 invasores aleatorios y uno de tipo lÃ­der
+	 * 1 = 5 invasores no aleatorios y todos de tipo lÃ­der
+	 * 2 = 5 invasores no aleatorios y todos de tipo no lÃ­der
 	 */
 	public final static int DEBUG = 1;
 	
 	public static void main(String[] args) 
 	{
 		Game game = new Game();
+		GestionPremios gestionPremios = new GestionPremios();
 		
 		EventQueue.invokeLater(new Runnable() 
 		{	
@@ -32,7 +34,7 @@ public class Main {
 			    	HiFiLookAndFeel.setCurrentTheme(props);
 					UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
 					
-					VentanaPrincipal frame = new VentanaPrincipal(game);
+					VentanaPrincipal frame = new VentanaPrincipal(game, gestionPremios);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

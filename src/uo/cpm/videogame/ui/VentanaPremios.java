@@ -42,6 +42,7 @@ public class VentanaPremios extends JPanel
 	private ProcesaAccionFiltroCategorias pAFC;
 	private ProcesaAccionCarrito pAC;
 	private ProcesaResizeInterfaz pRI;
+	private ProcesaAccionRegalosDisponibles pARD;
 	
 	ButtonGroup groupFiltro;
 	
@@ -49,6 +50,9 @@ public class VentanaPremios extends JPanel
 	private final static String ACCESORIOS = "accesorios";
 	private final static String CONSOLAS = "consolas";
 	private final static String VIDEOJUEGOS = "videojuegos";
+	
+	private int anchoVentana;
+	private String filtroActivo;
 	
 	private JPanel pnNorte;
 	private JPanel pnSalir;
@@ -78,13 +82,16 @@ public class VentanaPremios extends JPanel
 	{
 		this.vp = vp;
 		this.game = vp.getGame();
-		this.gestionPremios = new GestionPremios();
+		this.gestionPremios = vp.getGestionPremios();
 		this.pAFC = new ProcesaAccionFiltroCategorias();
 		this.pAC = new ProcesaAccionCarrito();
 		this.pRI = new ProcesaResizeInterfaz();
+		this.pARD = new ProcesaAccionRegalosDisponibles();
+		
+		anchoVentana = this.getWidth();
 		
 		groupFiltro = new ButtonGroup();
-		
+				
 		setLayout(new BorderLayout(0, 0));
 		add(getPnNorte(), BorderLayout.NORTH);
 		add(getPnCentro(), BorderLayout.CENTER);
@@ -118,8 +125,32 @@ public class VentanaPremios extends JPanel
 		@Override
 		public void componentResized(ComponentEvent e) 
 		{
-			mostrarPremios(TODO);
+			redimensionarPremios();
 		}
+	}
+	
+	class ProcesaAccionRegalosDisponibles implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			mostrarSoloPremiosDisponibles();
+		}
+	}
+	
+	private void mostrarSoloPremiosDisponibles()
+	{
+		if ( gestionPremios.getCarrito().length > 0 )
+			mostrarPremios( this.getCbRegalosDisponibles().isSelected() );
+	}
+	
+	private void redimensionarPremios()
+	{
+		// Si está disminuyendo la pantalla redimensiono los premios
+		if ( this.getWidth() < anchoVentana )
+			mostrarPremios(false);
+		
+		anchoVentana = this.getWidth();
 	}
 	
 	private void mostrarCarrito()
@@ -132,10 +163,9 @@ public class VentanaPremios extends JPanel
 		}
 			
 		vp.mostrarPantallaCarrito();
-		vp.getPnPantallaCarrito().mostrarPremios(TODO);
-		vp.getPnPantallaCarrito().getRdTodo().setSelected(true);
+		vp.getPnPantallaCarrito().mostrarPremios(TODO); // Muestro todos los artículos del carrito
 		vp.getPnPantallaCarrito().getPnPremios().validate();
-		vp.getPnPantallaCarrito().getTxtPuntos().setText(String.format("%d", game.getPuntos()));
+		vp.getPnPantallaCarrito().getTxtPuntos().setText(String.format("%d", game.getPuntos())); // Muestro los puntos actuales del usuario
 	}
 
 	private void filtrar(String accion)
@@ -144,22 +174,22 @@ public class VentanaPremios extends JPanel
 		{
 			case TODO: 
 			{
-				mostrarPremios(TODO);
+				mostrarPremios(TODO, this.getCbRegalosDisponibles().isSelected());
 				break;
 			}
 			case ACCESORIOS: 
 			{
-				mostrarPremios(ACCESORIOS);
+				mostrarPremios(ACCESORIOS, this.getCbRegalosDisponibles().isSelected());
 				break;
 			}
 			case CONSOLAS: 
 			{
-				mostrarPremios(CONSOLAS);
+				mostrarPremios(CONSOLAS, this.getCbRegalosDisponibles().isSelected());
 				break;
 			}
 			case VIDEOJUEGOS: 
 			{
-				mostrarPremios(VIDEOJUEGOS);
+				mostrarPremios(VIDEOJUEGOS, this.getCbRegalosDisponibles().isSelected());
 				break;
 			}
 		}
@@ -188,7 +218,7 @@ public class VentanaPremios extends JPanel
 		}
 		return pnSalir;
 	}
-	private JButton getBtSalir() {
+	public JButton getBtSalir() {
 		if (btSalir == null) {
 			btSalir = new JButton("");
 			btSalir.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
@@ -207,7 +237,7 @@ public class VentanaPremios extends JPanel
 		return pnPuntos;
 	}
 	
-	private JLabel getLbPuntos() {
+	public JLabel getLbPuntos() {
 		if (lbPuntos == null) {
 			lbPuntos = new JLabel("");
 			lbPuntos.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
@@ -281,16 +311,19 @@ public class VentanaPremios extends JPanel
 			pnPremios = new JPanel();
 			pnPremios.setBorder(new EmptyBorder(10, 10, 10, 10));
 			
-			mostrarPremios(TODO);
+			mostrarPremios(TODO, false);
 		}
 		return pnPremios;
 	}
 	
-	private void mostrarPremios(String filtro)
+	private void mostrarPremios(String filtro, boolean soloDisponibles)
 	{
-		this.getPnPremios().removeAll();
+		filtroActivo = filtro;
 		
-		Premio[] listaPremios = this.getListaPremios(filtro);
+		this.getPnPremios().removeAll();
+		this.getPnPremios().repaint();
+		
+		Premio[] listaPremios = this.getListaPremios(filtro, soloDisponibles);
 		
 		getPnPremios().setLayout(new GridLayout(0, 2, 10, 10));
 		
@@ -307,19 +340,24 @@ public class VentanaPremios extends JPanel
 		this.getPnPremios().validate();
 	}
 	
-	private Premio[] getListaPremios(String filtro)
+	public void mostrarPremios(boolean soloDisponibles)
+	{
+		mostrarPremios(filtroActivo, soloDisponibles);
+	}
+	
+	private Premio[] getListaPremios(String filtro, boolean soloDisponibles)
 	{
 		if ( filtro.equals(TODO) )
-			return gestionPremios.getListaPremios();
+			return gestionPremios.getListaPremios(soloDisponibles, game.getPuntos());
 		
 		if ( filtro.equals(ACCESORIOS) )
-			return gestionPremios.getAccesorios();
+			return gestionPremios.getAccesorios(soloDisponibles, game.getPuntos());
 		
 		if ( filtro.equals(CONSOLAS) )
-			return gestionPremios.getConsolas();
+			return gestionPremios.getConsolas(soloDisponibles, game.getPuntos());
 		
 		if ( filtro.equals(VIDEOJUEGOS) )
-			return gestionPremios.getVideojuegos();
+			return gestionPremios.getVideojuegos(soloDisponibles, game.getPuntos());
 		
 		return null;
 	}
@@ -345,7 +383,7 @@ public class VentanaPremios extends JPanel
 		return pnLabelFiltro;
 	}
 	
-	private JLabel getLbFiltrar() {
+	public JLabel getLbFiltrar() {
 		if (lbFiltrar == null) {
 			lbFiltrar = new JLabel("");
 			lbFiltrar.setText( vp.getInternacionalizar().getTexto("premios.filtrar") );
@@ -354,7 +392,7 @@ public class VentanaPremios extends JPanel
 		return lbFiltrar;
 	}
 	
-	private JLabel getLbCategorias() {
+	public JLabel getLbCategorias() {
 		if (lbCategorias == null) {
 			lbCategorias = new JLabel("");
 			lbCategorias.setText( vp.getInternacionalizar().getTexto("premios.categorias") );
@@ -376,7 +414,7 @@ public class VentanaPremios extends JPanel
 			pnCategorias.add(getSpFiltro());
 			pnCategorias.add(getCbRegalosDisponibles());
 			
-			// Creo un grupo para seleccionar s�lo uno a la vez
+			// Creo un grupo para seleccionar sólo uno a la vez
 			groupFiltro.add(getRdTodo());
 			groupFiltro.add(getRdAccesorios());
 			groupFiltro.add(getRdConsolas());
@@ -384,7 +422,7 @@ public class VentanaPremios extends JPanel
 		}
 		return pnCategorias;
 	}
-	private JRadioButton getRdTodo() {
+	public JRadioButton getRdTodo() {
 		if (rdTodo == null) {
 			rdTodo = new JRadioButton("");
 			rdTodo.setSelected(true);
@@ -395,7 +433,7 @@ public class VentanaPremios extends JPanel
 		}
 		return rdTodo;
 	}
-	private JRadioButton getRdAccesorios() {
+	public JRadioButton getRdAccesorios() {
 		if (rdAccesorios == null) {
 			rdAccesorios = new JRadioButton("");
 			rdAccesorios.setText( vp.getInternacionalizar().getTexto("premios.accesorios") );
@@ -406,7 +444,7 @@ public class VentanaPremios extends JPanel
 		}
 		return rdAccesorios;
 	}
-	private JRadioButton getRdConsolas() {
+	public JRadioButton getRdConsolas() {
 		if (rdConsolas == null) {
 			rdConsolas = new JRadioButton("");
 			rdConsolas.setText( vp.getInternacionalizar().getTexto("premios.consolas") );
@@ -417,7 +455,7 @@ public class VentanaPremios extends JPanel
 		}
 		return rdConsolas;
 	}
-	private JRadioButton getRdVideojuegos() {
+	public JRadioButton getRdVideojuegos() {
 		if (rdVideojuegos == null) {
 			rdVideojuegos = new JRadioButton("");
 			rdVideojuegos.setText( vp.getInternacionalizar().getTexto("premios.videojuegos") );
@@ -434,10 +472,12 @@ public class VentanaPremios extends JPanel
 		}
 		return spFiltro;
 	}
-	private JCheckBox getCbRegalosDisponibles() {
+	public JCheckBox getCbRegalosDisponibles() {
 		if (cbRegalosDisponibles == null) {
 			cbRegalosDisponibles = new JCheckBox("");
 			cbRegalosDisponibles.setText( vp.getInternacionalizar().getTexto("premios.regalosdisponibles") );
+			
+			cbRegalosDisponibles.addActionListener( pARD );
 		}
 		return cbRegalosDisponibles;
 	}

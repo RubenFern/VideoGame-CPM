@@ -1,9 +1,36 @@
- body { font-size:14pt;
+ body 
+ { 
+	font-size:14pt;
 	font-family: Helvetica, Geneva, Arial, sans-serif;
-	color: white } 
+	background-color: black;
+	color: white;
+	padding-left: 20px;
+	padding-bottom: 20px;
+} 
 
- h1 { 	font-size:24px;
+h1 
+{ 	
 	font-family: Helvetica, Geneva, Arial, sans-serif;
-	color: red } 
+	color: white; 
+} 
 
- ul {	list-style-type: circle;}
+p, a, ul
+{
+	color: #DBDBDB;
+}
+
+ul 
+{	
+	list-style-type: disc;
+}
+
+.invasor 
+{
+	width: 120px;
+}
+
+.center
+{
+	display: flex;
+	justify-content: center;
+}

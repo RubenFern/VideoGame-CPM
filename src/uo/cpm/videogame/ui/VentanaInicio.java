@@ -31,9 +31,9 @@ public class VentanaInicio extends JPanel
 	private static final long serialVersionUID = 1L;
 
 	private VentanaPrincipal vp;
-	private ProcesaAccionBotonSiguiente procesaBotonSiguiente;
-	private ProcesaResizeInterfaz procesaResizeInterfaz;
-	private ProcesaPulsacionNumeroTicket procesaPulsacionNumeroTicket;
+	private ProcesaAccionBotonSiguiente pBS;
+	private ProcesaResizeInterfaz pRI;
+	private ProcesaPulsacionNumeroTicket pPNT;
 	
 	private Game game;
 	
@@ -52,27 +52,33 @@ public class VentanaInicio extends JPanel
 	private JButton btSiguiente;
 	private JLabel lbBienvenido;
 	private JLabel lbPedirTicket;
+	private JPanel pnEsteInicio;
+	private JButton btEspanol;
+	private JButton btIngles;
+	private JPanel pnEspanol;
+	private JPanel pnIngles;
 		
 	public VentanaInicio(VentanaPrincipal vp) 
 	{
 		this.vp = vp;
 		this.game = vp.getGame();
 		
-		procesaResizeInterfaz = new ProcesaResizeInterfaz();
-		procesaPulsacionNumeroTicket = new ProcesaPulsacionNumeroTicket();
-		procesaBotonSiguiente = new ProcesaAccionBotonSiguiente();
+		pRI = new ProcesaResizeInterfaz();
+		pPNT = new ProcesaPulsacionNumeroTicket();
+		pBS = new ProcesaAccionBotonSiguiente();
 		
-		// Asigno el tamaño por defecto de los textos
-		vp.tamañoTextos(40, 20, 17, 15);
+		// Asigno el tamaÃ±o por defecto de los textos
+		vp.tamanoTextos(40, 20, 17, 15);
 		
 		setLayout(new BorderLayout(0, 0));
 		
 		add(getPnNorteInicio(), BorderLayout.NORTH);
 		add(getPnCentroInicio(), BorderLayout.CENTER);
 		add(getPnBotonesInicio(), BorderLayout.SOUTH);
+		add(getPnEsteInicio(), BorderLayout.EAST);
 		
 		// Escalono la pantalla
-		addComponentListener( procesaResizeInterfaz );
+		addComponentListener( pRI );
 	}
 	
 	class ProcesaAccionBotonSiguiente implements ActionListener
@@ -91,7 +97,7 @@ public class VentanaInicio extends JPanel
 		{
 			char tecla = e.getKeyChar();
 			
-			// Si no es un dígito evito que se añada en el campo de texto
+			// Si no es un dÃ­gito evito que se aï¿½ada en el campo de texto
 			if ( !Character.isDigit(tecla) )
 				e.consume();
 		}
@@ -126,13 +132,13 @@ public class VentanaInicio extends JPanel
 			return;
 		}
 		
-		// Si no es válido detengo la ejecución
+		// Si no es vï¿½lido detengo la ejecuciï¿½n
 		if ( !comprobarTicket(codigo, Integer.parseInt(numero)) )
 			return;
 			
 		vp.getPnPantallaJuego().inicializar();
 		
-		// Si el ticket es válido muestro la pantalla del juego	
+		// Si el ticket es vï¿½lido muestro la pantalla del juego	
 		vp.mostrarPantallaJuego();
 	}
 	
@@ -154,7 +160,7 @@ public class VentanaInicio extends JPanel
 			return false;
 		}
 		
-		// Código de tienda diferente
+		// Cï¿½digo de tienda diferente
 		if ( !codigo.equals(game.getCodigoTienda()) )
 		{
 			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.codigoTiendaIncorrecto"), game.getNombreTienda(), JOptionPane.ERROR_MESSAGE, new ImageIcon( game.getIconoTienda() ));
@@ -217,7 +223,7 @@ public class VentanaInicio extends JPanel
 		if (lbImagenTicket == null) {
 			lbImagenTicket = new JLabel("");
 			
-			// Tamaño de la etiqueta
+			// TamaÃ±o de la etiqueta
 			lbImagenTicket.setBounds( new Rectangle(340, 250) );
 			
 			lbImagenTicket.setIcon( vp.ajustarImagen(lbImagenTicket, "/img/ticket.png") );
@@ -245,7 +251,7 @@ public class VentanaInicio extends JPanel
 		return pnCodigo;
 	}
 	
-	private JLabel getLbNumeroTicket() {
+	public JLabel getLbNumeroTicket() {
 		if (lbNumeroTicket == null) {
 			lbNumeroTicket = new JLabel("");
 			lbNumeroTicket.setBorder(new EmptyBorder(10, 0, 5, 30));
@@ -259,7 +265,7 @@ public class VentanaInicio extends JPanel
 		if (txtNumeroTicket == null) {
 			txtNumeroTicket = new JTextField();
 			
-			txtNumeroTicket.addKeyListener( procesaPulsacionNumeroTicket );
+			txtNumeroTicket.addKeyListener( pPNT );
 			
 			txtNumeroTicket.setBounds(new Rectangle(0, 0, 300, 50));
 			txtNumeroTicket.setColumns(10);
@@ -271,7 +277,7 @@ public class VentanaInicio extends JPanel
 		return txtNumeroTicket;
 	}
 	
-	private JLabel getLbCodigoTienda() {
+	public JLabel getLbCodigoTienda() {
 		if (lbCodigoTienda == null) {
 			lbCodigoTienda = new JLabel("");
 			lbCodigoTienda.setFont(new Font("Tahoma", Font.PLAIN, vp.getTexto()));
@@ -292,7 +298,7 @@ public class VentanaInicio extends JPanel
 		return txtCodigoTienda;
 	}
 	
-	private JLabel getLbBienvenido() {
+	public JLabel getLbBienvenido() {
 		if (lbBienvenido == null) {
 			lbBienvenido = new JLabel("");
 			lbBienvenido.setBorder(new EmptyBorder(20, 0, 0, 0));
@@ -302,7 +308,7 @@ public class VentanaInicio extends JPanel
 		}
 		return lbBienvenido;
 	}
-	private JLabel getLbPedirTicket() {
+	public JLabel getLbPedirTicket() {
 		if (lbPedirTicket == null) {
 			lbPedirTicket = new JLabel("");
 			lbPedirTicket.setFont(new Font("Tahoma", Font.PLAIN, vp.getH2()));
@@ -312,17 +318,17 @@ public class VentanaInicio extends JPanel
 		return lbPedirTicket;
 	}
 	
-	private JButton getBtSiguiente() {
+	public JButton getBtSiguiente() {
 		if (btSiguiente == null) {
 			btSiguiente = new JButton("");
 			btSiguiente.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			btSiguiente.setBackground(new Color(0, 204, 255));
 			btSiguiente.setBorder(new EmptyBorder(5, 10, 5, 10));
 			btSiguiente.setActionCommand(VentanaPrincipal.PANTALLA_JUEGO);
-			btSiguiente.setFocusPainted(false); // Elimina la línea naranja			
+			btSiguiente.setFocusPainted(false); // Elimina la lï¿½nea naranja			
 			btSiguiente.setText( vp.getInternacionalizar().getTexto("boton.jugar") );
 			
-			btSiguiente.addActionListener( procesaBotonSiguiente );
+			btSiguiente.addActionListener( pBS );
 		}
 		return btSiguiente;
 	}
@@ -332,13 +338,13 @@ public class VentanaInicio extends JPanel
 		getLbBienvenido().setFont(new Font("Tahoma", Font.BOLD, vp.getH1()));
 		getLbPedirTicket().setFont(new Font("Tahoma", Font.PLAIN, vp.getH2()));
 		
-		vp.tamañoTextos(40, 20, 17, 15);
+		vp.tamanoTextos(40, 20, 17, 15);
 		getLbBienvenido().setBorder(new EmptyBorder(20, 0, 0, 0));
 		
 		if ( this.getWidth() < 980 )
-			vp.tamañoTextos(32, 18, 16, 15);	
+			vp.tamanoTextos(32, 18, 16, 15);	
 			
-		// Aumento el margen superior cuando está en pantalla completa
+		// Aumento el margen superior cuando estÃ¡ en pantalla completa
 		if ( this.getWidth() > 1300 && this.getHeight() > 800 )
 			getLbBienvenido().setBorder(new EmptyBorder(80, 0, 0, 0));
 	}
@@ -346,5 +352,56 @@ public class VentanaInicio extends JPanel
 	private void ajustarImagenTicket()
 	{
 		// TODO
+	}
+	private JPanel getPnEsteInicio() {
+		if (pnEsteInicio == null) {
+			pnEsteInicio = new JPanel();
+			pnEsteInicio.setLayout(new GridLayout(10, 1, 0, 0));
+			pnEsteInicio.add(getPnEspanol());
+			pnEsteInicio.add(getPnIngles());
+		}
+		return pnEsteInicio;
+	}
+	
+	private JPanel getPnEspanol() {
+		if (pnEspanol == null) {
+			pnEspanol = new JPanel();
+			pnEspanol.add(getBtEspanol());
+		}
+		return pnEspanol;
+	}
+	
+	private JButton getBtEspanol() {
+		if (btEspanol == null) {
+			btEspanol = new JButton("");
+			
+			btEspanol.setBounds( new Rectangle(50, 30) );
+			btEspanol.setIcon( vp.ajustarImagen(btEspanol, "/img/espana.png") );
+			btEspanol.setActionCommand("es");
+			
+			btEspanol.addActionListener( vp.getActionCambiarIdioma() );
+		}
+		return btEspanol;
+	}
+	
+	private JPanel getPnIngles() {
+		if (pnIngles == null) {
+			pnIngles = new JPanel();
+			pnIngles.add(getBtIngles());
+		}
+		return pnIngles;
+	}
+	
+	private JButton getBtIngles() {
+		if (btIngles == null) {
+			btIngles = new JButton("");
+			
+			btIngles.setBounds( new Rectangle(50, 30) );
+			btIngles.setIcon( vp.ajustarImagen(btIngles, "/img/inglaterra.png") );
+			btIngles.setActionCommand("en");
+			
+			btIngles.addActionListener( vp.getActionCambiarIdioma() );
+		}
+		return btIngles;
 	}
 }

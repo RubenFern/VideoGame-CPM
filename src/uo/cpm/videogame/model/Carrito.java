@@ -22,6 +22,24 @@ public class Carrito
 		return carrito.toArray( new Premio[carrito.size()] );
 	}
 	
+	/**
+	 * Actualiza el carrito en caso de que se haya cambiado el idioma de la apliaci√≥n
+	 */
+	public void actualizarCarrito(Premio[] listaPremios)
+	{
+		for ( int i = 0; i < carrito.size(); i++ )
+		{
+			for ( int j = 0; j < listaPremios.length; j++ )
+			{
+				if ( carrito.get(i).getCodigo().equals( listaPremios[j].getCodigo() ) )
+				{
+					carrito.get(i).setDenominacion( listaPremios[j].getDenominacion() );
+					carrito.get(i).setDescripcion( listaPremios[j].getDescripcion() );
+				}
+			}			
+		}	
+	}
+	
 	public Premio[] getAccesorios()
 	{
 		return getFiltro( Categoria.ACCESORIOS );
@@ -59,22 +77,22 @@ public class Carrito
 	}
 	
 	/**
-	 * Si el premio est· en el carrito aumenta en 1 las unidades. Sino lo aÒade
+	 * Si el premio est√° en el carrito aumenta en 1 las unidades. Sino lo aÔøΩade
 	 * 
-	 * @param premioAÒadir Premio que se quiere aÒadir al carrito
+	 * @param premioA√±adir Premio que se quiere aÔøΩadir al carrito
 	 */
-	public void aÒadirAlCarrito(Premio premioAÒadir)
+	public void anadirAlCarrito(Premio premioAnadir)
 	{
 		for ( Premio p : carrito )
 		{
-			if ( p.getCodigo().equals( premioAÒadir.getCodigo() ) )
+			if ( p.getCodigo().equals( premioAnadir.getCodigo() ) )
 			{
 				p.setUnidades( p.getUnidades() + 1 );
 				return;
 			}
 		}
 			
-		carrito.add(premioAÒadir);
+		carrito.add(premioAnadir);
 	}
 
 	public void eliminarDelCarrito(Premio premioEliminar)
