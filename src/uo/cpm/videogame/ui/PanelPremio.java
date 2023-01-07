@@ -54,7 +54,8 @@ public class PanelPremio extends JPanel
 		this.gestionPremios = gestionPremios;
 		this.pAP = new ProcesaAnadirPremio();
 		
-		setBorder(new LineBorder( Color.black ));
+		setBorder(new LineBorder( Color.white ));
+		setBackground(VentanaPrincipal.BACKGROUND);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		add(getPnImagen());
 		add(getPnPremio());
@@ -92,6 +93,7 @@ public class PanelPremio extends JPanel
 		if (pnImagen == null) {
 			pnImagen = new JPanel();
 			pnImagen.setLayout(new BorderLayout(0, 0));
+			pnImagen.setBackground(VentanaPrincipal.BACKGROUND);
 			pnImagen.add(getLbImagen());
 		}
 		return pnImagen;
@@ -101,6 +103,7 @@ public class PanelPremio extends JPanel
 			pnPremio = new JPanel();
 			pnPremio.setBorder(new EmptyBorder(5, 5, 5, 5));
 			pnPremio.setLayout(new BorderLayout(0, 0));
+			pnPremio.setBackground(VentanaPrincipal.BACKGROUND);
 			pnPremio.add(getLbDenominacion(), BorderLayout.NORTH);
 			pnPremio.add(getLbDescripcion(), BorderLayout.CENTER);
 			pnPremio.add(getPnInferior(), BorderLayout.SOUTH);
@@ -120,6 +123,7 @@ public class PanelPremio extends JPanel
 	private JLabel getLbDenominacion() {
 		if (lbDenominacion == null) {
 			lbDenominacion = new JLabel("");
+			lbDenominacion.setForeground(new Color(255, 255, 255));
 			lbDenominacion.setBorder(new EmptyBorder(5, 0, 5, 0));
 			lbDenominacion.setText( p.getDenominacion() );
 			lbDenominacion.setFont(new Font("Tahoma", Font.BOLD, vp.getTexto()));
@@ -129,10 +133,13 @@ public class PanelPremio extends JPanel
 	private JTextArea getLbDescripcion() {
 		if (lbDescripcion == null) {
 			lbDescripcion = new JTextArea("");
+			lbDescripcion.setForeground(new Color(255, 255, 255));
+			lbDescripcion.setFocusable(false);
 			lbDescripcion.setBorder(new EmptyBorder(5, 0, 5, 0));
 			lbDescripcion.setEditable(false);
 			lbDescripcion.setLineWrap(true);
 			lbDescripcion.setText( p.getDescripcion() );
+			lbDescripcion.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return lbDescripcion;
 	}
@@ -142,6 +149,7 @@ public class PanelPremio extends JPanel
 			pnInferior = new JPanel();
 			pnInferior.setBorder(new EmptyBorder(5, 0, 5, 0));
 			pnInferior.setLayout(new GridLayout(0, 2, 0, 0));
+			pnInferior.setBackground(VentanaPrincipal.BACKGROUND);
 			pnInferior.add(getLbPuntos());
 			pnInferior.add(getBtAnadir());
 		}
@@ -151,6 +159,8 @@ public class PanelPremio extends JPanel
 	private JLabel getLbPuntos() {
 		if (lbPuntos == null) {
 			lbPuntos = new JLabel("");
+			lbPuntos.setForeground(new Color(255, 255, 255));
+			lbPuntos.setFocusable(false);
 			lbPuntos.setText( vp.getInternacionalizar().getTexto("premios.puntos") + " " + p.getCostePuntos() );
 			lbPuntos.setFont(new Font("Tahoma", Font.BOLD, vp.getTexto()));
 		}
@@ -161,6 +171,7 @@ public class PanelPremio extends JPanel
 			btAnadir = new JButton("");
 			btAnadir.setText( vp.getInternacionalizar().getTexto("boton.anadir") );
 			btAnadir.setFont(new Font("Tahoma", Font.BOLD, vp.getTexto()));
+			btAnadir.setBackground(VentanaPrincipal.BACKGROUND_BOTONES);
 			
 			btAnadir.addActionListener(pAP);
 		}

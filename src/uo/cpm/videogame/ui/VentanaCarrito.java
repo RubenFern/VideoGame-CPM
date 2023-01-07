@@ -84,6 +84,7 @@ public class VentanaCarrito extends JPanel
 		
 		groupFiltro = new ButtonGroup();
 				
+		setBackground(VentanaPrincipal.BACKGROUND);
 		setLayout(new BorderLayout(0, 0));
 		add(getPnNorte(), BorderLayout.NORTH);
 		add(getPnCentro(), BorderLayout.CENTER);
@@ -178,6 +179,7 @@ public class VentanaCarrito extends JPanel
 			pnNorte.add(getPnAtras());
 			pnNorte.add(getPnPuntos());
 			pnNorte.add(getPnConfirmar());
+			pnNorte.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return pnNorte;
 	}
@@ -185,9 +187,11 @@ public class VentanaCarrito extends JPanel
 		if (pnCentro == null) {
 			pnCentro = new JPanel();
 			pnCentro.setLayout(new BorderLayout(0, 0));
+			pnCentro.setBackground(VentanaPrincipal.BACKGROUND);
 			pnCentro.add(getLbPremioSeleccionados(), BorderLayout.NORTH);
 			pnCentro.add(getPnFiltro(), BorderLayout.WEST);
 			pnCentro.add(getScPremios(), BorderLayout.CENTER);
+			pnCentro.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return pnCentro;
 	}
@@ -196,6 +200,7 @@ public class VentanaCarrito extends JPanel
 		if (pnAtras == null) {
 			pnAtras = new JPanel();
 			pnAtras.add(getBtAtras());
+			pnAtras.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return pnAtras;
 	}
@@ -205,6 +210,7 @@ public class VentanaCarrito extends JPanel
 			pnPuntos = new JPanel();
 			pnPuntos.add(getLbPuntos());
 			pnPuntos.add(getTxtPuntos());
+			pnPuntos.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return pnPuntos;
 	}
@@ -212,6 +218,7 @@ public class VentanaCarrito extends JPanel
 		if (pnConfirmar == null) {
 			pnConfirmar = new JPanel();
 			pnConfirmar.add(getBtConfirmar());
+			pnConfirmar.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return pnConfirmar;
 	}
@@ -221,6 +228,8 @@ public class VentanaCarrito extends JPanel
 			btAtras = new JButton("");
 			btAtras.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			btAtras.setText(vp.getInternacionalizar().getTexto("boton.atras"));
+			btAtras.setMnemonic( vp.getInternacionalizar().getTexto("mn.carrito.atras").charAt(0) );
+			btAtras.setBackground(VentanaPrincipal.BACKGROUND_BOTONES);
 			
 			btAtras.addActionListener( pBA );
 		}
@@ -230,6 +239,7 @@ public class VentanaCarrito extends JPanel
 	public JLabel getLbPuntos() {
 		if (lbPuntos == null) {
 			lbPuntos = new JLabel("");
+			lbPuntos.setForeground(new Color(255, 255, 255));
 			lbPuntos.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			lbPuntos.setHorizontalAlignment(SwingConstants.CENTER);
 			lbPuntos.setText(vp.getInternacionalizar().getTexto("premios.puntos"));
@@ -240,11 +250,14 @@ public class VentanaCarrito extends JPanel
 	public JTextField getTxtPuntos() {
 		if (txtPuntos == null) {
 			txtPuntos = new JTextField();
+			txtPuntos.setFocusable(false);
 			txtPuntos.setEditable(false);
 			txtPuntos.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			txtPuntos.setHorizontalAlignment(SwingConstants.CENTER);
 			txtPuntos.setText( String.format("%d", game.getPuntos()) );
 			txtPuntos.setColumns(10);
+			txtPuntos.setBackground(VentanaPrincipal.BACKGROUND);
+			txtPuntos.setForeground(Color.white);
 		}
 		return txtPuntos;
 	}
@@ -254,6 +267,8 @@ public class VentanaCarrito extends JPanel
 			btConfirmar = new JButton("");
 			btConfirmar.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			btConfirmar.setText( vp.getInternacionalizar().getTexto("boton.confirmar") );
+			btConfirmar.setMnemonic( vp.getInternacionalizar().getTexto("mn.carrito.confirmar").charAt(0) );
+			btConfirmar.setBackground(VentanaPrincipal.BACKGROUND_BOTONES);
 			
 			btConfirmar.addActionListener( pCP );
 		}
@@ -262,6 +277,7 @@ public class VentanaCarrito extends JPanel
 	public JLabel getLbPremioSeleccionados() {
 		if (lbPremioSeleccionados == null) {
 			lbPremioSeleccionados = new JLabel("");
+			lbPremioSeleccionados.setForeground(new Color(255, 255, 255));
 			lbPremioSeleccionados.setText( vp.getInternacionalizar().getTexto("carrito.titulo") );
 			lbPremioSeleccionados.setFont(new Font("Tahoma", Font.BOLD, vp.getH1()));
 			lbPremioSeleccionados.setHorizontalAlignment(SwingConstants.CENTER);
@@ -272,6 +288,7 @@ public class VentanaCarrito extends JPanel
 		if (pnFiltro == null) {
 			pnFiltro = new JPanel();
 			pnFiltro.add(getPnFiltro2());
+			pnFiltro.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return pnFiltro;
 	}
@@ -282,6 +299,7 @@ public class VentanaCarrito extends JPanel
 			pnFiltro2.setLayout(new BorderLayout(0, 0));
 			pnFiltro2.add(getPnLabelFiltro(), BorderLayout.NORTH);
 			pnFiltro2.add(getPnCategorias());
+			pnFiltro2.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return pnFiltro2;
 	}
@@ -294,6 +312,7 @@ public class VentanaCarrito extends JPanel
 			pnLabelFiltro.setLayout(new GridLayout(2, 1, 0, 0));
 			pnLabelFiltro.add(getLbFiltrar());
 			pnLabelFiltro.add(getLbCategorias());
+			pnLabelFiltro.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return pnLabelFiltro;
 	}
@@ -303,6 +322,7 @@ public class VentanaCarrito extends JPanel
 			lbFiltrar = new JLabel("");
 			lbFiltrar.setText( vp.getInternacionalizar().getTexto("premios.filtrar") );
 			lbFiltrar.setFont(new Font("Tahoma", Font.BOLD, vp.getH2()));
+			lbFiltrar.setForeground(Color.white);
 		}
 		return lbFiltrar;
 	}
@@ -312,6 +332,7 @@ public class VentanaCarrito extends JPanel
 			lbCategorias = new JLabel("");
 			lbCategorias.setText( vp.getInternacionalizar().getTexto("premios.categorias") );
 			lbCategorias.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
+			lbCategorias.setForeground(Color.white);
 		}
 		return lbCategorias;
 	}
@@ -321,6 +342,7 @@ public class VentanaCarrito extends JPanel
 			pnCategorias = new JPanel();
 			pnCategorias.setBorder(new EmptyBorder(5, 5, 5, 5));
 			pnCategorias.setLayout(new GridLayout(6, 1, 0, 0));
+			pnCategorias.setBackground(VentanaPrincipal.BACKGROUND);
 			
 			pnCategorias.add(getRdTodo());
 			pnCategorias.add(getRdAccesorios());
@@ -339,9 +361,11 @@ public class VentanaCarrito extends JPanel
 	public JRadioButton getRdTodo() {
 		if (rdTodo == null) {
 			rdTodo = new JRadioButton("");
+			rdTodo.setForeground(new Color(255, 255, 255));
 			rdTodo.setSelected(true);
 			rdTodo.setText( vp.getInternacionalizar().getTexto("premios.todo") );
 			rdTodo.setActionCommand(TODO);
+			rdTodo.setMnemonic( vp.getInternacionalizar().getTexto("mn.carrito.todo").charAt(0) );
 			
 			rdTodo.addActionListener(pAFC);
 		}
@@ -350,9 +374,10 @@ public class VentanaCarrito extends JPanel
 	public JRadioButton getRdAccesorios() {
 		if (rdAccesorios == null) {
 			rdAccesorios = new JRadioButton("");
+			rdAccesorios.setForeground(new Color(255, 255, 255));
 			rdAccesorios.setText( vp.getInternacionalizar().getTexto("premios.accesorios") );
-			
 			rdAccesorios.setActionCommand(ACCESORIOS);
+			rdAccesorios.setMnemonic( vp.getInternacionalizar().getTexto("mn.carrito.accesorios").charAt(0) );
 			
 			rdAccesorios.addActionListener(pAFC);
 		}
@@ -361,9 +386,10 @@ public class VentanaCarrito extends JPanel
 	public JRadioButton getRdConsolas() {
 		if (rdConsolas == null) {
 			rdConsolas = new JRadioButton("");
+			rdConsolas.setForeground(new Color(255, 255, 255));
 			rdConsolas.setText( vp.getInternacionalizar().getTexto("premios.consolas") );
-			
 			rdConsolas.setActionCommand(CONSOLAS);
+			rdConsolas.setMnemonic( vp.getInternacionalizar().getTexto("mn.carrito.consolas").charAt(0) );
 			
 			rdConsolas.addActionListener(pAFC);
 		}
@@ -372,9 +398,10 @@ public class VentanaCarrito extends JPanel
 	public JRadioButton getRdVideojuegos() {
 		if (rdVideojuegos == null) {
 			rdVideojuegos = new JRadioButton("");
+			rdVideojuegos.setForeground(new Color(255, 255, 255));
 			rdVideojuegos.setText( vp.getInternacionalizar().getTexto("premios.videojuegos") );
-			
 			rdVideojuegos.setActionCommand(VIDEOJUEGOS);
+			rdVideojuegos.setMnemonic( vp.getInternacionalizar().getTexto("mn.carrito.videojuegos").charAt(0) );
 			
 			rdVideojuegos.addActionListener(pAFC);
 		}
@@ -387,6 +414,7 @@ public class VentanaCarrito extends JPanel
 			scPremios.setBorder(null);
 			scPremios.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			scPremios.setViewportView(getPnPremios());
+			scPremios.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return scPremios;
 	}
@@ -394,6 +422,7 @@ public class VentanaCarrito extends JPanel
 	public JPanel getPnPremios() {
 		if (pnPremios == null) {
 			pnPremios = new JPanel();
+			pnPremios.setBackground(VentanaPrincipal.BACKGROUND);
 			pnPremios.setBorder(new EmptyBorder(10, 10, 10, 10));
 			pnPremios.setLayout(new GridLayout(0, 1, 0, 0));
 			

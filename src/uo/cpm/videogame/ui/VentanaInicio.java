@@ -49,7 +49,7 @@ public class VentanaInicio extends JPanel
 	private JTextField txtNumeroTicket;
 	private JLabel lbCodigoTienda;
 	private JTextField txtCodigoTienda;
-	private JButton btSiguiente;
+	private JButton btJugar;
 	private JLabel lbBienvenido;
 	private JLabel lbPedirTicket;
 	private JPanel pnEsteInicio;
@@ -70,12 +70,12 @@ public class VentanaInicio extends JPanel
 		// Asigno el tamaño por defecto de los textos
 		vp.tamanoTextos(40, 20, 17, 15);
 		
+		setBackground(VentanaPrincipal.BACKGROUND);
 		setLayout(new BorderLayout(0, 0));
 		
 		add(getPnNorteInicio(), BorderLayout.NORTH);
 		add(getPnCentroInicio(), BorderLayout.CENTER);
 		add(getPnBotonesInicio(), BorderLayout.SOUTH);
-		add(getPnEsteInicio(), BorderLayout.EAST);
 		
 		// Escalono la pantalla
 		addComponentListener( pRI );
@@ -183,7 +183,9 @@ public class VentanaInicio extends JPanel
 	private JPanel getPnNorteInicio() {
 		if (pnNorteInicio == null) {
 			pnNorteInicio = new JPanel();
-			pnNorteInicio.setLayout(new GridLayout(2, 1, 0, 0));
+			pnNorteInicio.setLayout(new GridLayout(3, 1, 0, 0));
+			pnNorteInicio.setBackground(VentanaPrincipal.BACKGROUND);
+			pnNorteInicio.add( getPnIdioma() );
 			pnNorteInicio.add(getLbBienvenido());
 			pnNorteInicio.add(getLbPedirTicket());
 		}
@@ -195,6 +197,7 @@ public class VentanaInicio extends JPanel
 			pnCentroInicio = new JPanel();
 			pnCentroInicio.setAlignmentX(Component.LEFT_ALIGNMENT);
 			pnCentroInicio.setLayout(new BorderLayout(0, 0));
+			pnCentroInicio.setBackground(VentanaPrincipal.BACKGROUND);
 			pnCentroInicio.add(getPnCampos());
 			pnCentroInicio.add(getPnImagenTicket(), BorderLayout.SOUTH);
 		}
@@ -205,7 +208,8 @@ public class VentanaInicio extends JPanel
 		if (pnBotonesInicio == null) {
 			pnBotonesInicio = new JPanel();
 			pnBotonesInicio.setBorder(new EmptyBorder(10, 0, 20, 0));
-			pnBotonesInicio.add( getBtSiguiente() );
+			pnBotonesInicio.setBackground(VentanaPrincipal.BACKGROUND);
+			pnBotonesInicio.add( getBtJugar() );
 		}
 		return pnBotonesInicio;
 	}
@@ -214,6 +218,7 @@ public class VentanaInicio extends JPanel
 		if (pnCampos == null) {
 			pnCampos = new JPanel();
 			pnCampos.setLayout(new FlowLayout(FlowLayout.CENTER, 80, 15));
+			pnCampos.setBackground(VentanaPrincipal.BACKGROUND);
 			pnCampos.add(getPnTicket());
 			pnCampos.add(getPnCodigo());
 		}
@@ -222,6 +227,7 @@ public class VentanaInicio extends JPanel
 	private JPanel getPnImagenTicket() {
 		if (pnImagenTicket == null) {
 			pnImagenTicket = new JPanel();
+			pnImagenTicket.setBackground(VentanaPrincipal.BACKGROUND);
 			FlowLayout flowLayout = (FlowLayout) pnImagenTicket.getLayout();
 			flowLayout.setVgap(20);
 			pnImagenTicket.add(getLbImagenTicket());
@@ -245,6 +251,7 @@ public class VentanaInicio extends JPanel
 		if (pnTicket == null) {
 			pnTicket = new JPanel();
 			pnTicket.setLayout(new GridLayout(2, 1, 0, 0));
+			pnTicket.setBackground(VentanaPrincipal.BACKGROUND);
 			pnTicket.add(getLbNumeroTicket());
 			pnTicket.add(getTxtNumeroTicket());
 		}
@@ -255,6 +262,7 @@ public class VentanaInicio extends JPanel
 		if (pnCodigo == null) {
 			pnCodigo = new JPanel();
 			pnCodigo.setLayout(new GridLayout(2, 1, 0, 0));
+			pnCodigo.setBackground(VentanaPrincipal.BACKGROUND);
 			pnCodigo.add(getLbCodigoTienda());
 			pnCodigo.add(getTxtCodigoTienda());
 		}
@@ -264,9 +272,13 @@ public class VentanaInicio extends JPanel
 	public JLabel getLbNumeroTicket() {
 		if (lbNumeroTicket == null) {
 			lbNumeroTicket = new JLabel("");
+			lbNumeroTicket.setForeground(new Color(255, 255, 255));
+			lbNumeroTicket.setLabelFor(getTxtNumeroTicket());
 			lbNumeroTicket.setBorder(new EmptyBorder(10, 0, 5, 30));
 			lbNumeroTicket.setFont(new Font("Tahoma", Font.PLAIN, vp.getTexto()));
 			lbNumeroTicket.setText( vp.getInternacionalizar().getTexto("inicio.pedirTicket") );
+			
+			lbNumeroTicket.setDisplayedMnemonic( vp.getInternacionalizar().getTexto("mn.inicio.numeroticket").charAt(0) );
 		}
 		return lbNumeroTicket;
 	}
@@ -274,6 +286,7 @@ public class VentanaInicio extends JPanel
 	private JTextField getTxtNumeroTicket() {
 		if (txtNumeroTicket == null) {
 			txtNumeroTicket = new JTextField();
+			txtNumeroTicket.setForeground(new Color(0, 0, 0));
 			
 			txtNumeroTicket.addKeyListener( pPNT );
 			
@@ -287,9 +300,12 @@ public class VentanaInicio extends JPanel
 	public JLabel getLbCodigoTienda() {
 		if (lbCodigoTienda == null) {
 			lbCodigoTienda = new JLabel("");
+			lbCodigoTienda.setForeground(new Color(255, 255, 255));
+			lbCodigoTienda.setLabelFor(getTxtCodigoTienda());
 			lbCodigoTienda.setFont(new Font("Tahoma", Font.PLAIN, vp.getTexto()));
 			lbCodigoTienda.setBorder(new EmptyBorder(10, 0, 5, 30));
 			lbCodigoTienda.setText( vp.getInternacionalizar().getTexto("inicio.pedirCodigo") );
+			lbCodigoTienda.setDisplayedMnemonic( vp.getInternacionalizar().getTexto("mn.inicio.codigotienda").charAt(0) );
 		}
 		return lbCodigoTienda;
 	}
@@ -305,6 +321,7 @@ public class VentanaInicio extends JPanel
 	public JLabel getLbBienvenido() {
 		if (lbBienvenido == null) {
 			lbBienvenido = new JLabel("");
+			lbBienvenido.setForeground(new Color(255, 255, 255));
 			lbBienvenido.setBorder(new EmptyBorder(20, 0, 0, 0));
 			lbBienvenido.setHorizontalAlignment(SwingConstants.CENTER);
 			lbBienvenido.setFont(new Font("Tahoma", Font.BOLD, vp.getH1()));
@@ -315,6 +332,7 @@ public class VentanaInicio extends JPanel
 	public JLabel getLbPedirTicket() {
 		if (lbPedirTicket == null) {
 			lbPedirTicket = new JLabel("");
+			lbPedirTicket.setForeground(new Color(255, 255, 255));
 			lbPedirTicket.setFont(new Font("Tahoma", Font.PLAIN, vp.getH2()));
 			lbPedirTicket.setHorizontalAlignment(SwingConstants.CENTER);
 			lbPedirTicket.setText( vp.getInternacionalizar().getTexto("inicio.informacionJuego") );
@@ -322,19 +340,20 @@ public class VentanaInicio extends JPanel
 		return lbPedirTicket;
 	}
 	
-	public JButton getBtSiguiente() {
-		if (btSiguiente == null) {
-			btSiguiente = new JButton("");
-			btSiguiente.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
-			btSiguiente.setBackground(new Color(0, 204, 255));
-			btSiguiente.setBorder(new EmptyBorder(5, 10, 5, 10));
-			btSiguiente.setActionCommand(VentanaPrincipal.PANTALLA_JUEGO);
-			//btSiguiente.setFocusPainted(false); // Elimina la línea naranja			
-			btSiguiente.setText( vp.getInternacionalizar().getTexto("boton.jugar") );
+	public JButton getBtJugar() {
+		if (btJugar == null) {
+			btJugar = new JButton("");
+			btJugar.setForeground(new Color(0, 0, 0));
+			btJugar.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
+			btJugar.setBackground(VentanaPrincipal.BACKGROUND_BOTONES);
+			btJugar.setBorder(new EmptyBorder(5, 10, 5, 10));
+			btJugar.setActionCommand(VentanaPrincipal.PANTALLA_JUEGO);			
+			btJugar.setText( vp.getInternacionalizar().getTexto("boton.jugar") );
+			btJugar.setMnemonic( vp.getInternacionalizar().getTexto("mn.inicio.jugar").charAt(0) );
 			
-			btSiguiente.addActionListener( pBJ );
+			btJugar.addActionListener( pBJ );
 		}
-		return btSiguiente;
+		return btJugar;
 	}
 	
 	private void ajustaTextos()
@@ -343,24 +362,26 @@ public class VentanaInicio extends JPanel
 		getLbPedirTicket().setFont(new Font("Tahoma", Font.PLAIN, vp.getH2()));
 		
 		vp.tamanoTextos(40, 20, 17, 15);
-		getLbBienvenido().setBorder(new EmptyBorder(20, 0, 0, 0));
+		getLbBienvenido().setBorder(new EmptyBorder(10, 0, 0, 0));
 		
 		if ( this.getWidth() < 980 )
 			vp.tamanoTextos(32, 18, 16, 15);	
 			
 		// Aumento el margen superior cuando está en pantalla completa
 		if ( this.getWidth() > 1300 && this.getHeight() > 800 )
-			getLbBienvenido().setBorder(new EmptyBorder(80, 0, 0, 0));
+			getLbBienvenido().setBorder(new EmptyBorder(30, 0, 0, 0));
 	}
 	
 	private void ajustarImagenTicket()
 	{
 		// TODO
 	}
-	private JPanel getPnEsteInicio() {
+	
+	private JPanel getPnIdioma() {
 		if (pnEsteInicio == null) {
 			pnEsteInicio = new JPanel();
-			pnEsteInicio.setLayout(new GridLayout(10, 1, 0, 0));
+			pnEsteInicio.setBackground(VentanaPrincipal.BACKGROUND);
+			pnEsteInicio.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 			pnEsteInicio.add(getPnEspanol());
 			pnEsteInicio.add(getPnIngles());
 		}
@@ -370,18 +391,21 @@ public class VentanaInicio extends JPanel
 	private JPanel getPnEspanol() {
 		if (pnEspanol == null) {
 			pnEspanol = new JPanel();
+			pnEspanol.setBackground(VentanaPrincipal.BACKGROUND);
 			pnEspanol.add(getBtEspanol());
 		}
 		return pnEspanol;
 	}
 	
-	private JButton getBtEspanol() {
+	public JButton getBtEspanol() {
 		if (btEspanol == null) {
 			btEspanol = new JButton("");
 			
 			btEspanol.setBounds( new Rectangle(50, 30) );
 			btEspanol.setIcon( vp.ajustarImagen(btEspanol, "/img/espana.png") );
 			btEspanol.setActionCommand("es");
+			btEspanol.setToolTipText( vp.getInternacionalizar().getTexto("tooltip.inicio.espanol") );
+			btEspanol.setContentAreaFilled(false);
 			
 			btEspanol.addActionListener( vp.getActionCambiarIdioma() );
 		}
@@ -391,18 +415,21 @@ public class VentanaInicio extends JPanel
 	private JPanel getPnIngles() {
 		if (pnIngles == null) {
 			pnIngles = new JPanel();
+			pnIngles.setBackground(VentanaPrincipal.BACKGROUND);
 			pnIngles.add(getBtIngles());
 		}
 		return pnIngles;
 	}
 	
-	private JButton getBtIngles() {
+	public JButton getBtIngles() {
 		if (btIngles == null) {
 			btIngles = new JButton("");
 			
 			btIngles.setBounds( new Rectangle(50, 30) );
 			btIngles.setIcon( vp.ajustarImagen(btIngles, "/img/inglaterra.png") );
 			btIngles.setActionCommand("en");
+			btIngles.setToolTipText( vp.getInternacionalizar().getTexto("tooltip.inicio.ingles") );
+			btIngles.setContentAreaFilled(false);
 			
 			btIngles.addActionListener( vp.getActionCambiarIdioma() );
 		}

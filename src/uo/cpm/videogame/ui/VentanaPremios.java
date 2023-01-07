@@ -92,6 +92,7 @@ public class VentanaPremios extends JPanel
 		
 		groupFiltro = new ButtonGroup();
 				
+		setBackground(VentanaPrincipal.BACKGROUND);
 		setLayout(new BorderLayout(0, 0));
 		add(getPnNorte(), BorderLayout.NORTH);
 		add(getPnCentro(), BorderLayout.CENTER);
@@ -150,8 +151,7 @@ public class VentanaPremios extends JPanel
 	
 	private void mostrarSoloPremiosDisponibles()
 	{
-		if ( gestionPremios.getCarrito().length > 0 )
-			mostrarPremios( this.getCbRegalosDisponibles().isSelected() );
+		mostrarPremios( this.getCbRegalosDisponibles().isSelected() );
 	}
 	
 	private void redimensionarPremios()
@@ -214,6 +214,7 @@ public class VentanaPremios extends JPanel
 			pnNorte = new JPanel();
 			pnNorte.setBorder(new EmptyBorder(20, 0, 0, 0));
 			pnNorte.setLayout(new GridLayout(0, 3, 0, 0));
+			pnNorte.setBackground(VentanaPrincipal.BACKGROUND);
 			pnNorte.add(getPnSalir());
 			pnNorte.add(getPnPuntos());
 			pnNorte.add(getPnCarrito());
@@ -224,6 +225,7 @@ public class VentanaPremios extends JPanel
 	private JPanel getPnSalir() {
 		if (pnSalir == null) {
 			pnSalir = new JPanel();
+			pnSalir.setBackground(VentanaPrincipal.BACKGROUND);
 			pnSalir.add(getBtSalir());
 		}
 		return pnSalir;
@@ -233,6 +235,9 @@ public class VentanaPremios extends JPanel
 			btSalir = new JButton("");
 			btSalir.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			btSalir.setText(vp.getInternacionalizar().getTexto("boton.salir"));
+			btSalir.setMnemonic( vp.getInternacionalizar().getTexto("mn.premios.salir").charAt(0) );
+			btSalir.setToolTipText( vp.getInternacionalizar().getTexto("tooltip.salir") );
+			btSalir.setBackground(VentanaPrincipal.BACKGROUND_BOTONES);
 			
 			btSalir.addActionListener( vp.getProcesaAccionSalir() );
 		}
@@ -241,6 +246,7 @@ public class VentanaPremios extends JPanel
 	private JPanel getPnPuntos() {
 		if (pnPuntos == null) {
 			pnPuntos = new JPanel();
+			pnPuntos.setBackground(VentanaPrincipal.BACKGROUND);
 			pnPuntos.add(getLbPuntos());
 			pnPuntos.add(getTxtPuntos());
 		}
@@ -250,6 +256,7 @@ public class VentanaPremios extends JPanel
 	public JLabel getLbPuntos() {
 		if (lbPuntos == null) {
 			lbPuntos = new JLabel("");
+			lbPuntos.setForeground(new Color(255, 255, 255));
 			lbPuntos.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			lbPuntos.setHorizontalAlignment(SwingConstants.CENTER);
 			lbPuntos.setText(vp.getInternacionalizar().getTexto("premios.puntos"));
@@ -260,11 +267,14 @@ public class VentanaPremios extends JPanel
 	public JTextField getTxtPuntos() {
 		if (txtPuntos == null) {
 			txtPuntos = new JTextField();
+			txtPuntos.setForeground(new Color(255, 255, 255));
+			txtPuntos.setFocusable(false);
 			txtPuntos.setHorizontalAlignment(SwingConstants.CENTER);
 			txtPuntos.setEditable(false);
 			txtPuntos.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			txtPuntos.setColumns(10);
 			txtPuntos.setText( String.format("%d", game.getPuntos()) );
+			txtPuntos.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return txtPuntos;
 	}
@@ -272,6 +282,7 @@ public class VentanaPremios extends JPanel
 	private JPanel getPnCarrito() {
 		if (pnCarrito == null) {
 			pnCarrito = new JPanel();
+			pnCarrito.setBackground(VentanaPrincipal.BACKGROUND);
 			pnCarrito.add(getBtCarrito());
 		}
 		return pnCarrito;
@@ -282,6 +293,8 @@ public class VentanaPremios extends JPanel
 			btCarrito.setIcon( vp.ajustarImagen(25, 25, "/img/carrito.png") );
 			btCarrito.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			btCarrito.setText( "(" + gestionPremios.getNumeroPremios() + ")" );
+			btCarrito.setToolTipText( vp.getInternacionalizar().getTexto("tooltip.carrito") );
+			btCarrito.setBackground(VentanaPrincipal.BACKGROUND_BOTONES);
 			
 			btCarrito.addActionListener(pAC);
 		}
@@ -293,6 +306,7 @@ public class VentanaPremios extends JPanel
 			pnCentro = new JPanel();
 			pnCentro.setBorder(new EmptyBorder(20, 0, 0, 0));
 			pnCentro.setLayout(new BorderLayout(0, 0));
+			pnCentro.setBackground(VentanaPrincipal.BACKGROUND);
 			pnCentro.add(getPnFiltro(), BorderLayout.WEST);
 			pnCentro.add(getScPremios());
 		}
@@ -302,6 +316,7 @@ public class VentanaPremios extends JPanel
 		if (pnFiltro == null) {
 			pnFiltro = new JPanel();
 			pnFiltro.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			pnFiltro.setBackground(VentanaPrincipal.BACKGROUND);
 			pnFiltro.add(getPnFiltro2());
 		}
 		return pnFiltro;
@@ -312,6 +327,7 @@ public class VentanaPremios extends JPanel
 			scPremios.setBorder(null);
 			scPremios.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			scPremios.setViewportView(getPnPremios());
+			scPremios.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return scPremios;
 	}
@@ -320,6 +336,7 @@ public class VentanaPremios extends JPanel
 		if (pnPremios == null) {
 			pnPremios = new JPanel();
 			pnPremios.setBorder(new EmptyBorder(10, 10, 10, 10));
+			pnPremios.setBackground(VentanaPrincipal.BACKGROUND);
 			
 			mostrarPremios(TODO, false);
 		}
@@ -377,6 +394,7 @@ public class VentanaPremios extends JPanel
 			pnFiltro2 = new JPanel();
 			pnFiltro2.setBorder(new LineBorder(new Color(0, 0, 0)));
 			pnFiltro2.setLayout(new BorderLayout(0, 0));
+			pnFiltro2.setBackground(VentanaPrincipal.BACKGROUND);
 			pnFiltro2.add(getPnLabelFiltro(), BorderLayout.NORTH);
 			pnFiltro2.add(getPnCategorias());
 		}
@@ -387,6 +405,7 @@ public class VentanaPremios extends JPanel
 			pnLabelFiltro = new JPanel();
 			pnLabelFiltro.setBorder(new EmptyBorder(5, 5, 5, 5));
 			pnLabelFiltro.setLayout(new GridLayout(0, 1, 0, 0));
+			pnLabelFiltro.setBackground(VentanaPrincipal.BACKGROUND);
 			pnLabelFiltro.add(getLbFiltrar());
 			pnLabelFiltro.add(getLbCategorias());
 		}
@@ -396,6 +415,7 @@ public class VentanaPremios extends JPanel
 	public JLabel getLbFiltrar() {
 		if (lbFiltrar == null) {
 			lbFiltrar = new JLabel("");
+			lbFiltrar.setForeground(new Color(255, 255, 255));
 			lbFiltrar.setText( vp.getInternacionalizar().getTexto("premios.filtrar") );
 			lbFiltrar.setFont(new Font("Tahoma", Font.BOLD, vp.getH2()));
 		}
@@ -405,6 +425,7 @@ public class VentanaPremios extends JPanel
 	public JLabel getLbCategorias() {
 		if (lbCategorias == null) {
 			lbCategorias = new JLabel("");
+			lbCategorias.setForeground(new Color(255, 255, 255));
 			lbCategorias.setText( vp.getInternacionalizar().getTexto("premios.categorias") );
 			lbCategorias.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 		}
@@ -416,6 +437,7 @@ public class VentanaPremios extends JPanel
 			pnCategorias = new JPanel();
 			pnCategorias.setBorder(new EmptyBorder(5, 5, 5, 5));
 			pnCategorias.setLayout(new GridLayout(6, 1, 0, 0));
+			pnCategorias.setBackground(VentanaPrincipal.BACKGROUND);
 			
 			pnCategorias.add(getRdTodo());
 			pnCategorias.add(getRdAccesorios());
@@ -435,9 +457,11 @@ public class VentanaPremios extends JPanel
 	public JRadioButton getRdTodo() {
 		if (rdTodo == null) {
 			rdTodo = new JRadioButton("");
+			rdTodo.setForeground(new Color(255, 255, 255));
 			rdTodo.setSelected(true);
 			rdTodo.setText( vp.getInternacionalizar().getTexto("premios.todo") );
 			rdTodo.setActionCommand(TODO);
+			rdTodo.setMnemonic( vp.getInternacionalizar().getTexto("mn.premios.todo").charAt(0) );
 			
 			rdTodo.addActionListener(pAFC);
 		}
@@ -446,9 +470,10 @@ public class VentanaPremios extends JPanel
 	public JRadioButton getRdAccesorios() {
 		if (rdAccesorios == null) {
 			rdAccesorios = new JRadioButton("");
+			rdAccesorios.setForeground(new Color(255, 255, 255));
 			rdAccesorios.setText( vp.getInternacionalizar().getTexto("premios.accesorios") );
-			
 			rdAccesorios.setActionCommand(ACCESORIOS);
+			rdAccesorios.setMnemonic( vp.getInternacionalizar().getTexto("mn.premios.accesorios").charAt(0) );
 			
 			rdAccesorios.addActionListener(pAFC);
 		}
@@ -457,9 +482,10 @@ public class VentanaPremios extends JPanel
 	public JRadioButton getRdConsolas() {
 		if (rdConsolas == null) {
 			rdConsolas = new JRadioButton("");
+			rdConsolas.setForeground(new Color(255, 255, 255));
 			rdConsolas.setText( vp.getInternacionalizar().getTexto("premios.consolas") );
-			
 			rdConsolas.setActionCommand(CONSOLAS);
+			rdConsolas.setMnemonic( vp.getInternacionalizar().getTexto("mn.premios.consolas").charAt(0) );
 			
 			rdConsolas.addActionListener(pAFC);
 		}
@@ -468,9 +494,10 @@ public class VentanaPremios extends JPanel
 	public JRadioButton getRdVideojuegos() {
 		if (rdVideojuegos == null) {
 			rdVideojuegos = new JRadioButton("");
+			rdVideojuegos.setForeground(new Color(255, 255, 255));
 			rdVideojuegos.setText( vp.getInternacionalizar().getTexto("premios.videojuegos") );
-			
 			rdVideojuegos.setActionCommand(VIDEOJUEGOS);
+			rdVideojuegos.setMnemonic( vp.getInternacionalizar().getTexto("mn.premios.videojuegos").charAt(0) );
 			
 			rdVideojuegos.addActionListener(pAFC);
 		}
@@ -479,13 +506,17 @@ public class VentanaPremios extends JPanel
 	private JSeparator getSpFiltro() {
 		if (spFiltro == null) {
 			spFiltro = new JSeparator();
+			spFiltro.setForeground(new Color(255, 255, 255));
 		}
 		return spFiltro;
 	}
 	public JCheckBox getCbRegalosDisponibles() {
 		if (cbRegalosDisponibles == null) {
 			cbRegalosDisponibles = new JCheckBox("");
+			cbRegalosDisponibles.setForeground(new Color(255, 255, 255));
 			cbRegalosDisponibles.setText( vp.getInternacionalizar().getTexto("premios.regalosdisponibles") );
+			cbRegalosDisponibles.setMnemonic( vp.getInternacionalizar().getTexto("mn.premios.regalosdisponibles").charAt(0) );
+			cbRegalosDisponibles.setToolTipText( vp.getInternacionalizar().getTexto("tooltip.carrito.regalos") );
 			
 			cbRegalosDisponibles.addActionListener( pARD );
 		}

@@ -66,6 +66,7 @@ public class VentanaJuego extends JPanel
 		this.pLT = new ProcesaLabelTablero();
 				
 		setLayout(new BorderLayout(0, 0));
+		setBackground(VentanaPrincipal.BACKGROUND);
 		add(getPnNorte(), BorderLayout.NORTH);
 		add(getPnCentro(), BorderLayout.CENTER);
 		add(getPnSur(), BorderLayout.SOUTH);
@@ -291,6 +292,7 @@ public class VentanaJuego extends JPanel
 			pnNorte = new JPanel();
 			pnNorte.setBorder(new EmptyBorder(15, 0, 20, 0));
 			pnNorte.setLayout(new GridLayout(0, 4, 0, 0));
+			pnNorte.setBackground(VentanaPrincipal.BACKGROUND);
 			pnNorte.add(getPnSalir());
 			pnNorte.add(getPnPuntos());
 			pnNorte.add(getPnRonda());
@@ -302,6 +304,7 @@ public class VentanaJuego extends JPanel
 	private JPanel getPnCentro() {
 		if (pnCentro == null) {
 			pnCentro = new JPanel();
+			pnCentro.setBackground(VentanaPrincipal.BACKGROUND);
 			pnCentro.add(getPnTablero());
 		}
 		return pnCentro;
@@ -312,6 +315,7 @@ public class VentanaJuego extends JPanel
 			pnSur = new JPanel();
 			pnSur.setBorder(new EmptyBorder(20, 0, 25, 0));
 			pnSur.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
+			pnSur.setBackground(VentanaPrincipal.BACKGROUND);
 			pnSur.add(getPnMovimientos());
 		}
 		return pnSur;
@@ -320,6 +324,7 @@ public class VentanaJuego extends JPanel
 	private JPanel getPnSalir() {
 		if (pnSalir == null) {
 			pnSalir = new JPanel();
+			pnSalir.setBackground(VentanaPrincipal.BACKGROUND);
 			pnSalir.add(getBtSalir());
 		}
 		return pnSalir;
@@ -328,8 +333,11 @@ public class VentanaJuego extends JPanel
 	public JButton getBtSalir() {
 		if (btSalir == null) {
 			btSalir = new JButton("");
+			btSalir.setForeground(new Color(0, 0, 0));
 			btSalir.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			btSalir.setText(vp.getInternacionalizar().getTexto("boton.salir"));
+			btSalir.setMnemonic( vp.getInternacionalizar().getTexto("mn.juego.salir").charAt(0) );
+			btSalir.setBackground(VentanaPrincipal.BACKGROUND_BOTONES);
 			
 			btSalir.addActionListener( vp.getProcesaAccionSalir() );
 		}
@@ -339,6 +347,7 @@ public class VentanaJuego extends JPanel
 	private JPanel getPnPuntos() {
 		if (pnPuntos == null) {
 			pnPuntos = new JPanel();
+			pnPuntos.setBackground(VentanaPrincipal.BACKGROUND);
 			pnPuntos.add(getLbPuntos());
 			pnPuntos.add(getTxtPuntos());
 		}
@@ -348,6 +357,7 @@ public class VentanaJuego extends JPanel
 	public JLabel getLbPuntos() {
 		if (lbPuntos == null) {
 			lbPuntos = new JLabel("");
+			lbPuntos.setForeground(new Color(255, 255, 255));
 			lbPuntos.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			lbPuntos.setHorizontalAlignment(SwingConstants.CENTER);
 			lbPuntos.setText(vp.getInternacionalizar().getTexto("juego.puntos"));
@@ -358,6 +368,7 @@ public class VentanaJuego extends JPanel
 	private JPanel getPnRonda() {
 		if (pnRonda == null) {
 			pnRonda = new JPanel();
+			pnRonda.setBackground(VentanaPrincipal.BACKGROUND);
 			pnRonda.add(getLbRonda());
 		}
 		return pnRonda;
@@ -366,6 +377,7 @@ public class VentanaJuego extends JPanel
 	public JLabel getLbRonda() {
 		if (lbRonda == null) {
 			lbRonda = new JLabel("");
+			lbRonda.setForeground(new Color(255, 255, 255));
 			lbRonda.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			lbRonda.setText( String.format("%s %d/%d", vp.getInternacionalizar().getTexto("juego.ronda"), game.getRonda(), Reglas.RONDAS.getValor()) );
 		}
@@ -374,11 +386,14 @@ public class VentanaJuego extends JPanel
 	private JTextField getTxtPuntos() {
 		if (txtPuntos == null) {
 			txtPuntos = new JTextField();
+			txtPuntos.setForeground(new Color(255, 255, 255));
+			txtPuntos.setFocusable(false);
 			txtPuntos.setHorizontalAlignment(SwingConstants.CENTER);
 			txtPuntos.setText( String.format("%d", game.getPuntos()) );
 			txtPuntos.setEditable(false);
 			txtPuntos.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			txtPuntos.setColumns(10);
+			txtPuntos.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return txtPuntos;
 	}
@@ -387,6 +402,7 @@ public class VentanaJuego extends JPanel
 			pnTablero = new JPanel();
 			pnTablero.setBorder(new LineBorder(new Color(0, 0, 0)));
 			pnTablero.setLayout(new GridLayout(7, 7, 0, 0));
+			pnTablero.setBackground(VentanaPrincipal.BACKGROUND);
 		
 			pintaTablero();
 		}
@@ -414,6 +430,7 @@ public class VentanaJuego extends JPanel
 		if (pnMovimientos == null) {
 			pnMovimientos = new JPanel();
 			pnMovimientos.setLayout(new GridLayout(1, 5, 0, 0));
+			pnMovimientos.setBackground(VentanaPrincipal.BACKGROUND);
 			
 			pintaMovimientos();
 		}
@@ -477,6 +494,7 @@ public class VentanaJuego extends JPanel
 	private JPanel getPnComoJugar() {
 		if (pnComoJugar == null) {
 			pnComoJugar = new JPanel();
+			pnComoJugar.setBackground(VentanaPrincipal.BACKGROUND);
 			pnComoJugar.add(getBtComoJugar());
 		}
 		return pnComoJugar;
@@ -484,8 +502,11 @@ public class VentanaJuego extends JPanel
 	public JButton getBtComoJugar() {
 		if (btComoJugar == null) {
 			btComoJugar = new JButton("");
+			btComoJugar.setForeground(new Color(0, 0, 0));
 			btComoJugar.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			btComoJugar.setText( vp.getInternacionalizar().getTexto("boton.comojugar") );
+			btComoJugar.setMnemonic( vp.getInternacionalizar().getTexto("mn.juego.comojugar").charAt(0) );
+			btComoJugar.setBackground(VentanaPrincipal.BACKGROUND_BOTONES);
 		}
 		return btComoJugar;
 	}

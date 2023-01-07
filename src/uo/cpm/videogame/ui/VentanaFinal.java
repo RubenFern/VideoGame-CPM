@@ -19,6 +19,7 @@ import uo.cpm.videogame.service.GestionPremios;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Color;
 
 public class VentanaFinal extends JPanel 
 {
@@ -37,7 +38,7 @@ public class VentanaFinal extends JPanel
 	private JButton btAtras;
 	private JPanel pnLabel;
 	private JLabel lbIntroducirDNI;
-	private JPanel pnTextField;
+	private JPanel pnDNI;
 	private JTextField txtDNI;
 	private JPanel pnRecogerPremios;
 	private JButton btRecogerPremios;
@@ -50,6 +51,7 @@ public class VentanaFinal extends JPanel
 		this.pBA = new ProcesaBotonAtras();
 		this.pCP = new ProcesaConfirmarPremios();
 				
+		setBackground(VentanaPrincipal.BACKGROUND);
 		setLayout(new BorderLayout(0, 0));
 		add(getPnNorte(), BorderLayout.NORTH);
 		add(getPnCentro(), BorderLayout.CENTER);
@@ -120,6 +122,7 @@ public class VentanaFinal extends JPanel
 		if (pnNorte == null) {
 			pnNorte = new JPanel();
 			pnNorte.setLayout(new GridLayout(0, 3, 0, 0));
+			pnNorte.setBackground(VentanaPrincipal.BACKGROUND);
 			pnNorte.add(getPnAtras());
 		}
 		return pnNorte;
@@ -128,6 +131,7 @@ public class VentanaFinal extends JPanel
 		if (pnCentro == null) {
 			pnCentro = new JPanel();
 			pnCentro.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			pnCentro.setBackground(VentanaPrincipal.BACKGROUND);
 			pnCentro.add(getPnLabel());
 		}
 		return pnCentro;
@@ -136,6 +140,7 @@ public class VentanaFinal extends JPanel
 		if (pnAtras == null) {
 			pnAtras = new JPanel();
 			pnAtras.setBorder(new EmptyBorder(20, 0, 0, 0));
+			pnAtras.setBackground(VentanaPrincipal.BACKGROUND);
 			pnAtras.add(getBtAtras());
 		}
 		return pnAtras;
@@ -145,6 +150,8 @@ public class VentanaFinal extends JPanel
 			btAtras = new JButton("");
 			btAtras.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
 			btAtras.setText( vp.getInternacionalizar().getTexto("boton.atras") );
+			btAtras.setMnemonic( vp.getInternacionalizar().getTexto("mn.final.atras").charAt(0) );
+			btAtras.setBackground(VentanaPrincipal.BACKGROUND_BOTONES);
 			
 			btAtras.addActionListener( pBA );
 		}
@@ -155,8 +162,9 @@ public class VentanaFinal extends JPanel
 			pnLabel = new JPanel();
 			pnLabel.setBorder(new EmptyBorder(100, 0, 0, 0));
 			pnLabel.setLayout(new GridLayout(3, 1, 0, 0));
+			pnLabel.setBackground(VentanaPrincipal.BACKGROUND);
 			pnLabel.add(getLbIntroducirDNI());
-			pnLabel.add(getPnTextField());
+			pnLabel.add(getPnDNI());
 			pnLabel.add(getPnRecogerPremios());
 		}
 		return pnLabel;
@@ -164,6 +172,7 @@ public class VentanaFinal extends JPanel
 	public JLabel getLbIntroducirDNI() {
 		if (lbIntroducirDNI == null) {
 			lbIntroducirDNI = new JLabel("");
+			lbIntroducirDNI.setForeground(new Color(255, 255, 255));
 			lbIntroducirDNI.setBorder(new EmptyBorder(30, 25, 20, 25));
 			lbIntroducirDNI.setHorizontalAlignment(SwingConstants.CENTER);
 			lbIntroducirDNI.setText( vp.getInternacionalizar().getTexto("final.introducirdni") );
@@ -171,14 +180,15 @@ public class VentanaFinal extends JPanel
 		}
 		return lbIntroducirDNI;
 	}
-	private JPanel getPnTextField() {
-		if (pnTextField == null) {
-			pnTextField = new JPanel();
-			pnTextField.setBorder(new EmptyBorder(10, 0, 0, 0));
-			pnTextField.setLayout(new GridLayout(3, 1, 0, 0));
-			pnTextField.add(getTxtDNI());
+	private JPanel getPnDNI() {
+		if (pnDNI == null) {
+			pnDNI = new JPanel();
+			pnDNI.setBorder(new EmptyBorder(10, 0, 0, 0));
+			pnDNI.setLayout(new GridLayout(3, 1, 0, 0));
+			pnDNI.setBackground(VentanaPrincipal.BACKGROUND);
+			pnDNI.add(getTxtDNI());
 		}
-		return pnTextField;
+		return pnDNI;
 	}
 	private JTextField getTxtDNI() {
 		if (txtDNI == null) {
@@ -192,6 +202,7 @@ public class VentanaFinal extends JPanel
 		if (pnRecogerPremios == null) {
 			pnRecogerPremios = new JPanel();
 			pnRecogerPremios.add(getBtRecogerPremios());
+			pnRecogerPremios.setBackground(VentanaPrincipal.BACKGROUND);
 		}
 		return pnRecogerPremios;
 	}
@@ -200,6 +211,8 @@ public class VentanaFinal extends JPanel
 			btRecogerPremios = new JButton("");
 			btRecogerPremios.setText( vp.getInternacionalizar().getTexto("boton.recoger") );
 			btRecogerPremios.setFont(new Font("Tahoma", Font.BOLD, vp.getH3()));
+			btRecogerPremios.setMnemonic( vp.getInternacionalizar().getTexto("mn.final.recoger").charAt(0) );
+			btRecogerPremios.setBackground(VentanaPrincipal.BACKGROUND_BOTONES);
 			
 			btRecogerPremios.addActionListener( pCP );
 		}

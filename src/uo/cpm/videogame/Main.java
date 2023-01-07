@@ -32,7 +32,7 @@ public class Main
 					Properties props = new Properties();
 					props.put("logoString", "");
 			    	HiFiLookAndFeel.setCurrentTheme(props);
-					UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
+					UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 					
 					VentanaPrincipal frame = new VentanaPrincipal(game, gestionPremios);
 					frame.setVisible(true);

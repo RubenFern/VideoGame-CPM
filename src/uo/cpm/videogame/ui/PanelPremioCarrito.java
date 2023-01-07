@@ -56,7 +56,8 @@ public class PanelPremioCarrito extends JPanel
 		this.game = vp.getGame();
 		this.pEP = new ProcesaEliminarPremio();
 		
-		setBorder(new LineBorder( Color.black ));
+		setBackground(VentanaPrincipal.BACKGROUND);
+		setBorder(new LineBorder( Color.white ));
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		add(getPnImagen());
 		add(getPnPremio());
@@ -97,6 +98,7 @@ public class PanelPremioCarrito extends JPanel
 		if (pnImagen == null) {
 			pnImagen = new JPanel();
 			pnImagen.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			pnImagen.setBackground(VentanaPrincipal.BACKGROUND);
 			pnImagen.add(getLbImagen());
 		}
 		return pnImagen;
@@ -106,6 +108,7 @@ public class PanelPremioCarrito extends JPanel
 			pnPremio = new JPanel();
 			pnPremio.setBorder(new EmptyBorder(5, 5, 5, 5));
 			pnPremio.setLayout(new BorderLayout(0, 0));
+			pnPremio.setBackground(VentanaPrincipal.BACKGROUND);
 			pnPremio.add(getPnNorte(), BorderLayout.NORTH);
 			pnPremio.add(getLbDescripcion(), BorderLayout.CENTER);
 			pnPremio.add(getPnInferior(), BorderLayout.SOUTH);
@@ -126,6 +129,7 @@ public class PanelPremioCarrito extends JPanel
 		if (pnNorte == null) {
 			pnNorte = new JPanel();
 			pnNorte.setLayout(new GridLayout(0, 2, 0, 0));
+			pnNorte.setBackground(VentanaPrincipal.BACKGROUND);
 			pnNorte.add(getLbDenominacion());
 			pnNorte.add(getLbNumeroUnidades());
 		}
@@ -134,6 +138,7 @@ public class PanelPremioCarrito extends JPanel
 	private JLabel getLbDenominacion() {
 		if (lbDenominacion == null) {
 			lbDenominacion = new JLabel("");
+			lbDenominacion.setForeground(new Color(255, 255, 255));
 			lbDenominacion.setHorizontalAlignment(SwingConstants.CENTER);
 			lbDenominacion.setBorder(new EmptyBorder(5, 0, 5, 0));
 			lbDenominacion.setText( p.getDenominacion() );
@@ -144,6 +149,8 @@ public class PanelPremioCarrito extends JPanel
 	private JTextArea getLbDescripcion() {
 		if (lbDescripcion == null) {
 			lbDescripcion = new JTextArea("");
+			lbDescripcion.setForeground(new Color(255, 255, 255));
+			lbDescripcion.setBackground(VentanaPrincipal.BACKGROUND);
 			lbDescripcion.setLineWrap(true);
 			lbDescripcion.setEditable(false);
 			lbDescripcion.setBorder(new EmptyBorder(5, 0, 5, 0));
@@ -156,6 +163,7 @@ public class PanelPremioCarrito extends JPanel
 			pnInferior = new JPanel();
 			pnInferior.setBorder(new EmptyBorder(5, 0, 5, 0));
 			pnInferior.setLayout(new GridLayout(0, 2, 0, 0));
+			pnInferior.setBackground(VentanaPrincipal.BACKGROUND);
 			pnInferior.add(getLbPuntos());
 			pnInferior.add(getPnBtEliminar());
 		}
@@ -164,6 +172,7 @@ public class PanelPremioCarrito extends JPanel
 	private JLabel getLbPuntos() {
 		if (lbPuntos == null) {
 			lbPuntos = new JLabel("");
+			lbPuntos.setForeground(new Color(255, 255, 255));
 			lbPuntos.setFont(new Font("Tahoma", Font.BOLD, vp.getTexto()));
 			lbPuntos.setText( vp.getInternacionalizar().getTexto("premios.puntos") + " " + p.getCostePuntos() );
 		}
@@ -173,6 +182,7 @@ public class PanelPremioCarrito extends JPanel
 	private JLabel getLbNumeroUnidades() {
 		if (lbNumeroUnidades == null) {
 			lbNumeroUnidades = new JLabel("");
+			lbNumeroUnidades.setForeground(new Color(255, 255, 255));
 			lbNumeroUnidades.setHorizontalAlignment(SwingConstants.CENTER);
 			lbNumeroUnidades.setFont(new Font("Tahoma", Font.PLAIN, vp.getH3()));
 			
@@ -187,6 +197,7 @@ public class PanelPremioCarrito extends JPanel
 	private JPanel getPnBtEliminar() {
 		if (pnBtEliminar == null) {
 			pnBtEliminar = new JPanel();
+			pnBtEliminar.setBackground(VentanaPrincipal.BACKGROUND);
 			pnBtEliminar.add(getBtEliminar());
 		}
 		return pnBtEliminar;
@@ -197,6 +208,7 @@ public class PanelPremioCarrito extends JPanel
 			btEliminar = new JButton();
 			btEliminar.setFont(new Font("Tahoma", Font.BOLD, vp.getTexto()));
 			btEliminar.setText( vp.getInternacionalizar().getTexto("boton.eliminar") );
+			btEliminar.setBackground(VentanaPrincipal.BACKGROUND_BOTONES);
 			
 			btEliminar.addActionListener(pEP);
 		}
