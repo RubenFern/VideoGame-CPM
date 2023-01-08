@@ -25,10 +25,12 @@ public class Game
 	private boolean arrastra;
 	
 	public Game()
-	{	
+	{
 		// Cargo la información de la tienda y de los tickets
 		tienda = new Tienda();
 		tablero = new Tablero();
+		
+		// Uso una casilla para almacenar la casilla que se arrastró y añadirla al tablero
 		casilla = new Casilla();	
 		
 		listaTickets = new ArrayList<Ticket>();
@@ -172,7 +174,7 @@ public class Game
 	
 	public int getNumeroInvasoresTableroMaximo()
 	{
-		// El tama�o total del tablero menos las 5 posiciones no v�lidas del tablero
+		// El tamaño total del tablero menos las 5 posiciones no válidas del tablero
 		return tablero.getDimensionTablero() - Reglas.NUM_POSICIONES_NO_VALIDAS.getValor();
 	}
 	

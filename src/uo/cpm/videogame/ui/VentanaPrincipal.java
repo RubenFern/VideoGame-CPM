@@ -318,11 +318,7 @@ public class VentanaPrincipal extends JFrame
 	private void salir()
 	{
 		if ( confirmarSalir() )
-		{
 			this.inicializarAplicacion();
-			
-			this.mostrarPantallaInicio();
-		}		
 	}
 	
 	private boolean confirmarSalir()
@@ -350,7 +346,7 @@ public class VentanaPrincipal extends JFrame
 	/**
 	 * Reinicia los puntos, ronda, tablero y movimientos
 	 */
-	public void inicializarJuego()
+	private void inicializarJuego()
 	{
 		game.inicializar();
 		

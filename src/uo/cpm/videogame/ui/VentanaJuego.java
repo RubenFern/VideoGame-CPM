@@ -127,16 +127,16 @@ public class VentanaJuego extends JPanel
 		@Override
 		public void propertyChange(PropertyChangeEvent e) 
 		{			
-			// Si hubo un cambio en la propiedad ImageIcon significa que se arrastr� un invasor
+			// Si hubo un cambio en la propiedad ImageIcon significa que se arrastró un invasor
 			if ( e.getPropertyName().equals("icon") && (e.getNewValue() != null) && (e.getNewValue().getClass().toString().contains("ImageIcon") ))
 			{
-				// El usuario arrastr� un invasor
+				// El usuario arrastró un invasor
 				if ( game.isArrastra() )
 				{
 					MiLabel lbPulsada = (MiLabel) e.getSource();
-					lbPulsada.setTransferHandler(null); // Impido volver a colocar un invasor en esa posici�n
+					lbPulsada.setTransferHandler(null); // Impido volver a colocar un invasor en esa posición
 
-					// Guardo la posici�n del tablero donde se coloc� el invasor
+					// Guardo la posición del tablero donde se colocó el invasor
 					int posicionTablero = lbPulsada.getId();
 					game.setPosicionTableroCasilla(posicionTablero);
 					
@@ -153,7 +153,7 @@ public class VentanaJuego extends JPanel
 					if ( game.getCasilla().getInvasor().isLider() )
 						marcarLider(game.getCasilla().getPosicionTablero());
 					
-					// Compruebo el estado de la ronda o si el tablero est� lleno
+					// Compruebo el estado de la ronda o si el tablero está lleno
 					if ( game.getMovimientos() == 0 )
 						siguienteRonda();
 					/*else if ( game.getNumeroInvasoresTablero() == game.getNumeroInvasoresTableroMaximo() )
@@ -191,6 +191,11 @@ public class VentanaJuego extends JPanel
 		}
 	}
 	
+	/**
+	 * Marca un movimeinto como usado y deshabilita la casilla
+	 * 
+	 * @param posicionMovimiento Posición del movimiento
+	 */
 	private void marcarMovimientoUsado(int posicionMovimiento)
 	{
 		MiLabel label = (MiLabel) this.getPnMovimientos().getComponent(posicionMovimiento);
@@ -281,9 +286,8 @@ public class VentanaJuego extends JPanel
 			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("juego.derrota"),
 					game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(game.getIconoTienda()));
 
-			// Inicializa el juego y muestro la pantalla inicio
-			vp.inicializarJuego();
-			vp.mostrarPantallaInicio();
+			// Inicializa la aplicación
+			vp.inicializarAplicacion();
 		}
 	}
 	
@@ -447,7 +451,7 @@ public class VentanaJuego extends JPanel
 		// Asigno la imagen del invasor
 		label.setIcon( vp.ajustarImagen(label, invasor.getImagen()) );
 		
-		// Asigno el n�mero del invasor a la etiqueta
+		// Asigno el número del invasor a la etiqueta
 		label.setNumeroInvasor(invasor.getNumero());
 		label.setId(i);
 				

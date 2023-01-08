@@ -2,35 +2,29 @@
  { 
 	font-size:14pt;
 	font-family: Helvetica, Geneva, Arial, sans-serif;
-	background-color: black;
-	color: white;
+	color: black;
 	padding-left: 20px;
 	padding-bottom: 20px;
 } 
 
 h1 
 { 	
+	font-size: 20px;
 	font-family: Helvetica, Geneva, Arial, sans-serif;
-	color: white; 
+	color: black; 
 } 
 
-p, a, ul
+a
 {
-	color: #DBDBDB;
+	color: rgb(54, 54, 54);
+}
+
+h3
+{
+	font-size: 15px;
 }
 
 ul 
 {	
 	list-style-type: disc;
-}
-
-.invasor 
-{
-	width: 120px;
-}
-
-.center
-{
-	display: flex;
-	justify-content: center;
 }

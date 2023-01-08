@@ -3,7 +3,6 @@ package uo.cpm.videogame.service;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-
 public class Internacionalizar 
 {
 	private ResourceBundle textos;

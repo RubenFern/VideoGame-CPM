@@ -71,7 +71,7 @@ public class Tablero
 		int numeroInvasor = casilla.getInvasor().getNumero();
 		int posicionTablero = casilla.getPosicionTablero();
 		
-		// A�ado el invasor en el tablero y asigno su posici�n como no v�lida
+		// Aado el invasor en el tablero y asigno su posición como no válida
 		if ( posicionesValidas[posicionTablero] )
 		{
 			tablero[posicionTablero].setInvasor( invasores[numeroInvasor - 1] );
@@ -154,7 +154,7 @@ public class Tablero
 		for ( int i = 0; i < this.getDimensionTablero(); i++ )
 			tablero[i] = new Casilla();
 		
-		// Genero los 5 invasores inicialies
+		// Genero los 5 invasores iniciales
 		for ( int i = 0; i < ronda.length; i++ )
 			this.colocarInvasor(ronda[i]);
 	}
@@ -240,7 +240,7 @@ public class Tablero
 		 * Si lo tiene llamo a calcular puntos
 		 */
 		for ( int i = 0; i < this.getDimensionTablero(); i++ )
-			// Si hay un invasor y la casilla no se marc� para borrar compruebo si tiene colonias
+			// Si hay un invasor y la casilla no se marcó para borrar compruebo si tiene colonias
 			if ( tablero[i].getInvasor() != null && !tablero[i].isBorrar() )
 					puntosTotales += comprobarColonia( tablero[i].getInvasor(), i );
 
@@ -268,8 +268,8 @@ public class Tablero
 	}
 	
 	/**
-	 * Cuando se encuentra en el tablero un invasor que tiene un invasor adyacente del mismo tipo se llama a esta funci�n
-	 * que calcula el tama�o de la colonia y suma los puntos
+	 * Cuando se encuentra en el tablero un invasor que tiene un invasor adyacente del mismo tipo se llama a esta función
+	 * que calcula el tamaño de la colonia y suma los puntos
 	 * 
 	 * @return Los puntos de una colonia de invasores
 	 */
@@ -293,6 +293,7 @@ public class Tablero
 			}
 		}
 		
+		// Si tiene un invasor igual debajo suyo
 		if ( abajo < this.getDimensionTablero() && tablero[abajo].getInvasor() != null && tablero[abajo].getInvasor().getNumero() == invasor.getNumero() )
 		{
 			tamanoColonia = this.calcularTamanoColoniaColumna(invasor, abajo);
@@ -342,14 +343,14 @@ public class Tablero
 	}
 	
 	/**
-	 * Calcula el n�mero de invasores iguales en la misma fila
+	 * Calcula el número de invasores iguales en la misma fila
 	 * 
-	 * @param invasor
-	 * @return
+	 * @param invasor Invasor de la colonia
+	 * @return devuelve el tamaño de la colonia
 	 */
 	private int calcularTamanoColoniaFila(Invasor invasor, int posicionTablero)
 	{
-		// Cuando entra en el m�todo siempre hay 2 invasores iguales
+		// Cuando entra en el método siempre hay 2 invasores iguales
 		int tamanoColonia = 2;
 		int i = 1;
 		
@@ -365,14 +366,14 @@ public class Tablero
 	}
 	
 	/**
-	 * Calcula el n�mero de invasores iguales en la misma fila
+	 * Calcula el número de invasores iguales en la misma fila
 	 * 
-	 * @param invasor
-	 * @return
+	 * @param invasor Invasor de la colonia
+	 * @return devuelve el tamaño de la colonia
 	 */
 	private int calcularTamanoColoniaColumna(Invasor invasor, int posicionTablero)
 	{
-		// Cuando entra en el m�todo siempre hay 2 invasores iguales
+		// Cuando entra en el método siempre hay 2 invasores iguales
 		int tamanoColonia = 2;
 		int i = COLUMNAS;
 		

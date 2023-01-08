@@ -361,7 +361,7 @@ public class VentanaInicio extends JPanel
 		getLbBienvenido().setFont(new Font("Tahoma", Font.BOLD, vp.getH1()));
 		getLbPedirTicket().setFont(new Font("Tahoma", Font.PLAIN, vp.getH2()));
 		
-		vp.tamanoTextos(40, 20, 17, 15);
+		vp.tamanoTextos(40, 20, 18, 15);
 		getLbBienvenido().setBorder(new EmptyBorder(10, 0, 0, 0));
 		
 		if ( this.getWidth() < 980 )
@@ -374,7 +374,12 @@ public class VentanaInicio extends JPanel
 	
 	private void ajustarImagenTicket()
 	{
-		// TODO
+		if ( this.getWidth() > 1300 && this.getHeight() > 800 )
+			getLbImagenTicket().setBounds( new Rectangle(500, 380) );
+		else
+			getLbImagenTicket().setBounds( new Rectangle(340, 250) );
+		
+		getLbImagenTicket().setIcon( vp.ajustarImagen(getLbImagenTicket(), "/img/ticket.png") );
 	}
 	
 	private JPanel getPnIdioma() {
