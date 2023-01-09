@@ -103,7 +103,7 @@ public class VentanaInicio extends JPanel
 		{
 			char tecla = e.getKeyChar();
 			
-			// Si no es un dígito evito que se a�ada en el campo de texto
+			// Si no es un dígito evito que se añada en el campo de texto
 			if ( !Character.isDigit(tecla) )
 				e.consume();
 		}
@@ -124,16 +124,16 @@ public class VentanaInicio extends JPanel
 		String codigo = this.getTxtCodigoTienda().getText();
 		String numero = this.getTxtNumeroTicket().getText();
 		
-		if ( codigo.equals("") )
+		if ( numero.equals("") )
 		{
-			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.codigoTicketVacio"),
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.numeroTicketVacio"),
 					game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(game.getIconoTienda()));
 			return;
 		}
 		
-		if ( numero.equals("") )
+		if ( codigo.equals("") )
 		{
-			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.numeroTicketVacio"),
+			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("error.codigoTicketVacio"),
 					game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(game.getIconoTienda()));
 			return;
 		}
@@ -411,6 +411,7 @@ public class VentanaInicio extends JPanel
 			btEspanol.setActionCommand("es");
 			btEspanol.setToolTipText( vp.getInternacionalizar().getTexto("tooltip.inicio.espanol") );
 			btEspanol.setContentAreaFilled(false);
+			btEspanol.setFocusable(false);
 			
 			btEspanol.addActionListener( vp.getActionCambiarIdioma() );
 		}
@@ -435,6 +436,7 @@ public class VentanaInicio extends JPanel
 			btIngles.setActionCommand("en");
 			btIngles.setToolTipText( vp.getInternacionalizar().getTexto("tooltip.inicio.ingles") );
 			btIngles.setContentAreaFilled(false);
+			btIngles.setFocusable(false);
 			
 			btIngles.addActionListener( vp.getActionCambiarIdioma() );
 		}

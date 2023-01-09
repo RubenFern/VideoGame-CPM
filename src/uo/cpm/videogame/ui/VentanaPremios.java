@@ -332,7 +332,7 @@ public class VentanaPremios extends JPanel
 		return scPremios;
 	}
 	
-	private JPanel getPnPremios() {
+	public JPanel getPnPremios() {
 		if (pnPremios == null) {
 			pnPremios = new JPanel();
 			pnPremios.setBorder(new EmptyBorder(10, 10, 10, 10));

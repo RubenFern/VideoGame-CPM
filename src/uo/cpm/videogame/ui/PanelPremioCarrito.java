@@ -76,7 +76,7 @@ public class PanelPremioCarrito extends JPanel
 	{
 		gestionPremios.eliminarDelCarrito(game, p);
 		
-		// Actualizo el n�mero de �rticulos del carrito
+		// Actualizo el número de árticulos del carrito
 		vp.getPnPantallaPremios().getBtCarrito().setText( "(" + gestionPremios.getNumeroPremios() + ")" );
 		
 		// Actualizo los puntos de la pantalla premios y carrito

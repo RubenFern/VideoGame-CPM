@@ -304,7 +304,6 @@ public class VentanaCarrito extends JPanel
 		return pnFiltro2;
 	}
 	
-	
 	private JPanel getPnLabelFiltro() {
 		if (pnLabelFiltro == null) {
 			pnLabelFiltro = new JPanel();
@@ -349,7 +348,7 @@ public class VentanaCarrito extends JPanel
 			pnCategorias.add(getRdConsolas());
 			pnCategorias.add(getRdVideojuegos());
 			
-			// Creo un grupo para seleccionar s�lo uno a la vez
+			// Creo un grupo para seleccionar sólo uno a la vez
 			groupFiltro.add(getRdTodo());
 			groupFiltro.add(getRdAccesorios());
 			groupFiltro.add(getRdConsolas());

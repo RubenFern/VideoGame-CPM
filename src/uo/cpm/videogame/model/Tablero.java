@@ -18,7 +18,7 @@ public class Tablero
 		tablero = new Casilla[ this.getDimensionTablero() ];
 		partida = new Partida();
 		
-		// Genero el tablero que contiene las posiciones v�lidas
+		// Genero el tablero que contiene las posiciones válidas
 		generarPosicionesValidas();
 		
 		// Genero el array con todos los invasores disponibles
@@ -71,7 +71,7 @@ public class Tablero
 		int numeroInvasor = casilla.getInvasor().getNumero();
 		int posicionTablero = casilla.getPosicionTablero();
 		
-		// Aado el invasor en el tablero y asigno su posición como no válida
+		// Añado el invasor en el tablero y asigno su posición como no válida
 		if ( posicionesValidas[posicionTablero] )
 		{
 			tablero[posicionTablero].setInvasor( invasores[numeroInvasor - 1] );
@@ -93,7 +93,7 @@ public class Tablero
 	}
 	
 	/**
-	 * Establece las posiciones inv�lidas del tablero por defecto
+	 * Establece las posiciones inválidas del tablero por defecto
 	 * 
 	 * Por defecto: (0,0) = [0], (6,0) = [6], (3,3) = [24], (0,6) = [42], (6,6) = [48]
 	 */
@@ -107,11 +107,10 @@ public class Tablero
 	}
 	
 	/**
-	 * Devuelve el valor de la matriz de posici�n invalidas
+	 * Indica si la casilla es válida para colocar un invasor
 	 * 
-	 * @param fila
-	 * @param columna
-	 * @return
+	 * @param posicion Posición del tablero
+	 * @return Si la posición es válida
 	 */
 	public boolean EsPosicionValida(int posicion)
 	{
@@ -218,7 +217,7 @@ public class Tablero
 	
 	public void imprimirTablero()
 	{
-		System.out.println("N�mero de invasores: " + this.getNumeroInvasoresEnTablero());
+		System.out.println("Número de invasores: " + this.getNumeroInvasoresEnTablero());
 		
 		for ( int i = 0; i < tablero.length; i++ )
 		{
@@ -291,6 +290,13 @@ public class Tablero
 				
 				puntos += getPuntuacion(tamanoColonia);
 			}
+			
+			// Se elimina una colonia de 5 o más líderes, partida ganada
+			if ( tamanoColonia >= 5 && invasor.isLider() && !partida.isFinalizada() )
+			{
+				puntos += Puntuacion.COLONIA_LIDERES.getPuntos();
+				partida.setFinalizada(true);
+			}	
 		}
 		
 		// Si tiene un invasor igual debajo suyo
@@ -304,14 +310,14 @@ public class Tablero
 				
 				puntos += getPuntuacion(tamanoColonia);
 			}
-		}
-		
-		// Se elimina una colonia de 5 o más líderes, partida ganada
-		if ( tamanoColonia >= 5 && invasor.isLider() )
-		{
-			puntos += Puntuacion.COLONIA_LIDERES.getPuntos();
-			partida.setFinalizada(true);
-		}			
+			
+			// Se elimina una colonia de 5 o más líderes, partida ganada
+			if ( tamanoColonia >= 5 && invasor.isLider() && !partida.isFinalizada() )
+			{
+				puntos += Puntuacion.COLONIA_LIDERES.getPuntos();
+				partida.setFinalizada(true);
+			}	
+		}		
 		
 		return puntos;
 	}
@@ -377,7 +383,7 @@ public class Tablero
 		int tamanoColonia = 2;
 		int i = COLUMNAS;
 		
-		// Mientras coincida el invasor y siga en la misma fila
+		// Mientras coincida el invasor y siga en la misma columna
 		while ((posicionTablero + i) < this.getDimensionTablero() && tablero[posicionTablero + i].getInvasor() != null
 				&& tablero[posicionTablero + i].getInvasor().getNumero() == invasor.getNumero()) 
 		{
@@ -390,11 +396,11 @@ public class Tablero
 	
 	private void reiniciarTablero()
 	{
-		// Reinicio el tablero
-		generarTablero();
-		
 		// Reinicio las posiciones válidas
 		generarPosicionesValidas();
+		
+		// Reinicio el tablero
+		generarTablero();
 	}
 	
 	

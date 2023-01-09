@@ -31,6 +31,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JMenuItem;
 import java.awt.Dimension;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
 
 public class VentanaPrincipal extends JFrame 
 {
@@ -134,12 +137,15 @@ public class VentanaPrincipal extends JFrame
 		HelpBroker hb = hs.createHelpBroker();
 		hb.initPresentation();
 
-		hb.enableHelpKey(getRootPane(), "introduccion", hs); // Escucha el F1 desde toda la aplicaci�n
+		hb.enableHelpKey(getRootPane(), "introduccion", hs); // Escucha el F1 desde toda la aplicación
 		hb.enableHelpOnButton(getMiAyuda(), "introduccion", hs); // La ayuda no funciona con action event
 		hb.enableHelpOnButton( this.getPnPantallaJuego().getBtComoJugar() , "como_jugar", hs);
 		
 		// Ayuda sensible al contexto
 		hb.enableHelp(this.getPnPantallaJuego(), "como_jugar", hs);
+		hb.enableHelp(this.getPnPantallaPremios(), "anadir_premio", hs);
+		hb.enableHelp(this.getPnPantallaCarrito(), "eliminar_premio", hs);
+		hb.enableHelp(this.getPnPantallaFinal(), "recoger_premios", hs);
 	}
 	
 	class ProcesaAccionSalir implements ActionListener
@@ -230,6 +236,7 @@ public class VentanaPrincipal extends JFrame
 		
 		// --- Pantalla de Premios ---
 		gestionPremios.cargarArticulos(internacionalizar); // Recargo los premios internacionalizados
+		this.getPnPantallaPremios().getPnPremios().removeAll();
 		this.getPnPantallaPremios().mostrarPremios(this.getPnPantallaPremios().getCbRegalosDisponibles().isSelected());
 		
 		this.getPnPantallaPremios().getBtSalir().setText(internacionalizar.getTexto("boton.salir"));
@@ -508,6 +515,7 @@ public class VentanaPrincipal extends JFrame
 	private JMenuItem getMiSalir() {
 		if (miSalir == null) {
 			miSalir = new JMenuItem("");
+			miSalir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
 			miSalir.setText( internacionalizar.getTexto("menu.salir") );
 			miSalir.setMnemonic( internacionalizar.getTexto("mn.menu.juego.salir").charAt(0) );
 			miSalir.setToolTipText( internacionalizar.getTexto("tooltip.salir") );
@@ -533,6 +541,7 @@ public class VentanaPrincipal extends JFrame
 	public JMenuItem getMiAyuda() {
 		if (miAyuda == null) {
 			miAyuda = new JMenuItem("");
+			miAyuda.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.CTRL_DOWN_MASK));
 			miAyuda.setText( internacionalizar.getTexto("menu.ayuda") );
 			miAyuda.setMnemonic( internacionalizar.getTexto("mn.menu.ayuda.ayuda").charAt(0) );
 			miAyuda.setToolTipText( internacionalizar.getTexto("tooltip.menu.ayuda") );
@@ -552,6 +561,7 @@ public class VentanaPrincipal extends JFrame
 	private JMenuItem getMiAcercaDe() {
 		if (miAcercaDe == null) {
 			miAcercaDe = new JMenuItem("");
+			miAcercaDe.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
 			miAcercaDe.setText( internacionalizar.getTexto("menu.acercade") );
 			miAcercaDe.setMnemonic( internacionalizar.getTexto("mn.menu.ayuda.acercade").charAt(0) );
 			
@@ -580,6 +590,7 @@ public class VentanaPrincipal extends JFrame
 	private JRadioButtonMenuItem getMiEspanol() {
 		if (miEspanol == null) {
 			miEspanol = new JRadioButtonMenuItem("");
+			miEspanol.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 			miEspanol.setSelected(true);
 			miEspanol.setText( internacionalizar.getTexto("menu.espanol") );
 			miEspanol.setActionCommand("es");
@@ -592,6 +603,7 @@ public class VentanaPrincipal extends JFrame
 	private JRadioButtonMenuItem getMiIngles() {
 		if (miIngles == null) {
 			miIngles = new JRadioButtonMenuItem("");
+			miIngles.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
 			miIngles.setText( internacionalizar.getTexto("menu.ingles") );
 			miIngles.setActionCommand("en");
 			miIngles.setMnemonic( internacionalizar.getTexto("mn.menu.idioma.ingles").charAt(0) );

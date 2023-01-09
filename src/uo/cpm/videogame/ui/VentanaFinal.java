@@ -110,7 +110,12 @@ public class VentanaFinal extends JPanel
 	
 	private boolean confirmarEntrega()
 	{		
-		int respuesta = JOptionPane.showConfirmDialog(this, vp.getInternacionalizar().getTexto("final.preguntaentrega"));
+		int respuesta = 0;
+		
+		if ( game.getPuntos() > 0 )
+			respuesta = JOptionPane.showConfirmDialog(this, vp.getInternacionalizar().getTexto("final.preguntaentregaconpuntos"));
+		else
+			respuesta = JOptionPane.showConfirmDialog(this, vp.getInternacionalizar().getTexto("final.preguntaentrega"));
 		
 		if ( respuesta == JOptionPane.YES_OPTION )
 			return true;

@@ -50,6 +50,8 @@ public class Catalogo
 	
 	public void cargarArticulos(Internacionalizar i)
 	{
+		listaPremios.clear();
+		
 		FileUtil.cargarPremios(i.getTexto("archivos.premios"), listaPremios);
 	}
 }

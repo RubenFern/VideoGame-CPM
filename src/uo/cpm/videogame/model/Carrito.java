@@ -77,9 +77,9 @@ public class Carrito
 	}
 	
 	/**
-	 * Si el premio está en el carrito aumenta en 1 las unidades. Sino lo a�ade
+	 * Si el premio está en el carrito aumenta en 1 las unidades. Sino lo añade
 	 * 
-	 * @param premioAñadir Premio que se quiere a�adir al carrito
+	 * @param premioAñadir Premio que se quiere añadir al carrito
 	 */
 	public void anadirAlCarrito(Premio premioAnadir)
 	{
@@ -95,6 +95,11 @@ public class Carrito
 		carrito.add(premioAnadir);
 	}
 
+	/**
+	 * Si el premio tiene más de una unidad decrementa en uno las unidades, si sólo hay una unidad elimina el premio del carrito
+	 * 
+	 * @param premioEliminar Premio a eliminar
+	 */
 	public void eliminarDelCarrito(Premio premioEliminar)
 	{
 		for ( int i = 0; i < carrito.size(); i++ )

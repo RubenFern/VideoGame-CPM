@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -40,7 +42,9 @@ public class VentanaJuego extends JPanel
 	private VentanaPrincipal vp;
 	private ProcesaDragAndDrop pDAD;
 	private ProcesaLabelTablero pLT;
+	private ProcesaResizeTablero pRT;
 	private int movimiento; // Almacena el movimiento para marcarlo como usado
+	private int tamanoCasilla;
 	
 	private JPanel pnNorte;
 	private JPanel pnCentro;
@@ -62,14 +66,19 @@ public class VentanaJuego extends JPanel
 		this.vp = vp;
 		this.game = vp.getGame();
 
+		this.tamanoCasilla = 70;
+		
 		this.pDAD = new ProcesaDragAndDrop();
 		this.pLT = new ProcesaLabelTablero();
+		this.pRT = new ProcesaResizeTablero();
 				
 		setLayout(new BorderLayout(0, 0));
 		setBackground(VentanaPrincipal.BACKGROUND);
 		add(getPnNorte(), BorderLayout.NORTH);
 		add(getPnCentro(), BorderLayout.CENTER);
 		add(getPnSur(), BorderLayout.SOUTH);
+		
+		addComponentListener(pRT);
 	}
 	
 	// Inicializa los datos de la pantalla
@@ -102,10 +111,10 @@ public class VentanaJuego extends JPanel
 			// Guardo el invasor que se quiere arrastar
 			int numeroInvasor = ((MiLabel) c).getNumeroInvasor();
 			
-			// Posici�n del invasor que se arrastra
+			// Posición del invasor que se arrastra
 			int posicionInvasor = ((MiLabel) c).getId();
 
-			// Bloqueo los dem�s movimientos para que solo pueda colocar invasores en el tablero
+			// Bloqueo los demás movimientos para que solo pueda colocar invasores en el tablero
 			bloqueoMovimientos(posicionInvasor);
 			
 			game.setNumeroInvasorCasilla(numeroInvasor);
@@ -156,8 +165,8 @@ public class VentanaJuego extends JPanel
 					// Compruebo el estado de la ronda o si el tablero está lleno
 					if ( game.getMovimientos() == 0 )
 						siguienteRonda();
-					/*else if ( game.getNumeroInvasoresTablero() == game.getNumeroInvasoresTableroMaximo() )
-						finalizarPartida(false);*/
+					else if ( game.getNumeroInvasoresTablero() == game.getNumeroInvasoresTableroMaximo() )
+						finalizarPartida(false);
 					
 					//game.imprimirTablero();
 										
@@ -165,6 +174,26 @@ public class VentanaJuego extends JPanel
 				}
 			}
 		}
+	}
+	
+	class ProcesaResizeTablero extends ComponentAdapter
+	{
+		@Override
+		public void componentResized(ComponentEvent e) 
+		{
+			redimensionarTablero();
+		}
+	}
+		
+	private void redimensionarTablero()
+	{
+		if ( this.getWidth() > 1300 && this.getHeight() > 820 )
+			tamanoCasilla = 85;
+		else 
+			tamanoCasilla = 70;
+		
+		this.getPnTablero().removeAll();
+		pintaTablero();
 	}
 	
 	private void bloqueoMovimientos(int pos)
@@ -210,7 +239,7 @@ public class VentanaJuego extends JPanel
 	}
 
 	/**
-	 * Comprueba el n�mero de movimientos del usuario, cuado llegan a 0 pasa a la siguiente ronda
+	 * Comprueba el número de movimientos del usuario, cuado llegan a 0 pasa a la siguiente ronda
 	 * y comprueba los puntos 
 	 */
 	private void siguienteRonda()
@@ -240,9 +269,15 @@ public class VentanaJuego extends JPanel
 		}
 	}
 	
+	/**
+	 * Comrpueba si la partida ha finalizado
+	 * 
+	 * @param finalizada Estado de la partida
+	 * @return True si la partida finalizó
+	 */
 	private boolean compruebaFin(boolean finalizada)
 	{	
-		// Si se ha llenado el tablero de invasores (aunque está en la ronda 10 finaliza con derrota)
+		// Si se ha llenado el tablero de invasores (aunque esté en la ronda 10 finaliza con derrota)
 		if ( game.getNumeroInvasoresTablero() == game.getNumeroInvasoresTableroMaximo() )
 		{
 			finalizarPartida(false);
@@ -282,10 +317,9 @@ public class VentanaJuego extends JPanel
 		}
 		else 
 		{
-			game.setPuntos(0);
 			JOptionPane.showMessageDialog(this, vp.getInternacionalizar().getTexto("juego.derrota"),
 					game.getNombreTienda(), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(game.getIconoTienda()));
-
+			
 			// Inicializa la aplicación
 			vp.inicializarAplicacion();
 		}
@@ -466,7 +500,7 @@ public class VentanaJuego extends JPanel
 	{
 		MiLabel label = new MiLabel("");
 		
-		label.setBounds( new Rectangle(70, 70) );
+		label.setBounds( new Rectangle(tamanoCasilla, tamanoCasilla) );
 		label.setBorder( new LineBorder(Color.GRAY) );
 		label.setId(i);
 		
